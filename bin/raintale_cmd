@@ -1,0 +1,133 @@
+#!python
+
+import sys
+import os
+import argparse
+import logging
+
+storytelling_services = []
+
+def get_logger(appname, loglevel, logfile):
+
+    logger = logging.getLogger(appname)
+
+    if logfile == sys.stdout:
+        logging.basicConfig( 
+            format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+            level=loglevel)
+    else:
+        logging.basicConfig( 
+            format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+            level=loglevel,
+            filename=logfile)
+
+    return logger
+
+def calculate_loglevel(verbose=False, quiet=False):
+  
+    # verbose trumps quiet
+    if verbose:
+        return logging.DEBUG
+
+    if quiet:
+        return logging.WARNING
+
+    return logging.INFO
+
+def process_arguments(args):
+
+    parser = argparse.ArgumentParser(prog="{}".format(args[0]),
+        description='Clusters a collection of mementos based on Simhash and slice')
+
+    parser.add_argument('-i', '--input', dest='input_filename',
+        required=True,
+        help="An input file containing the memento URLs for use in the story."
+    )
+
+    parser.add_argument('--storyteller', dest='storyteller',
+        required=True,
+        help="""An output file that contains the story."""
+    )
+
+    parser.add_argument('--storyformat', dest='storyformat',
+        required=True,
+        help="""The type of surrogate to use for the story. Outputs are:
+        * socialcard - a social card used by most social media platforms
+        * urlonly - just a listing of URLs
+        Note: the specified storyteller will use this format in different ways.
+        """
+    )
+
+    parser.add_argument('--title', dest='title',
+        required=False,
+        help="The title used for the story."
+    )
+
+    parser.add_argument('--mementoembed_api', dest='mementoembed_api',
+        required=True,
+        help="The URL of the MementoEmbed instance used for generating surrogates"
+    )
+
+    parser.add_argument('-l', '--logfile', dest='logfile',
+        default=sys.stdout,
+        help="If specified, logging output will be written to this file. "
+            "Otherwise, it will print to the screen."
+    )
+
+    parser.add_argument('-v', '--verbose', dest='verbose',
+        action='store_true',
+        help="This will raise the logging level to debug for more verbose output")
+
+    parser.add_argument('-q', '--quiet', dest='quiet',
+        action='store_true',
+        help="This will lower the logging level to only show warnings or errors")
+
+    args = parser.parse_args()
+
+    return args
+
+def gather_credentials(storyteller):
+    credentials_json = {}
+    return credentials_json
+
+def format_data(input_filename):
+    story_data = {}
+    return story_data
+
+def tell_story(storyteller, storyformat, story_data, mementoembed_api, 
+    credentials):
+    story_data = {
+        'raw_html': ''
+    }
+    return story_data
+
+if __name__ == '__main__':
+
+    args = process_arguments(sys.argv)
+
+    # set up logging for the rest of the system
+    logger = get_logger(
+        __name__, calculate_loglevel(
+            verbose=args.verbose, quiet=args.quiet), 
+        args.logfile)
+
+    logger.info("Beginning raintale to tell your story.")
+
+    credentials = gather_credentials(args.storyteller)
+
+    story_data = format_data(args.input_filename)
+
+    story_output = tell_story(
+        args.storyteller,
+        args.storyformat,
+        story_data,
+        args.mementoembed_api,
+        credentials
+    )
+
+    if args.storyteller not in storytelling_services:
+        storyfile = os.path.expanduser(args.storyteller)
+        with open(storyfile, 'w') as f:
+            f.write(story_output['raw_html'])
+
+    logger.info("Done telling your story.")
