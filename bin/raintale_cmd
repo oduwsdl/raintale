@@ -4,8 +4,15 @@ import sys
 import os
 import argparse
 import logging
+import json
+
+from urllib.parse import urlparse
+
+from raintale.storytellers import storytellers
+from raintale.storygenerators import storygenerators
 
 storytelling_services = []
+logger = logging.getLogger(__name__)
 
 def get_logger(appname, loglevel, logfile):
 
@@ -87,18 +94,71 @@ def process_arguments(args):
     return args
 
 def gather_credentials(storyteller):
+
     credentials_json = {}
+
+    if storyteller not in storytelling_services:
+        credentials_json = {
+            "output_filename": storyteller
+        }
+
     return credentials_json
 
 def format_data(input_filename):
+
     story_data = {}
+
+    logger.info("reading story data from file {}".format(input_filename))
+
+    with open(input_filename) as f:
+
+        try:
+            story_data = json.load(f)
+
+        except json.JSONDecodeError:
+
+            logger.warning("story data is not JSON, attempting to read as "
+                "a list of memento URLs in a text file")
+
+            f.seek(0)
+            story_data['elements'] = []
+
+            for line in f:
+
+                line = line.strip()
+                o = urlparse(line)
+
+                if o.scheme in ['http', 'https']:
+
+                    element = {
+                        'type': 'link',
+                        'value': line
+                    }
+
+                    story_data['elements'].append(element)
+
+                else:
+                    logger.warning(
+                        "Skipping URL with unsupported scheme: {}".format(line)
+                    )
+
     return story_data
 
 def tell_story(storyteller, storyformat, story_data, mementoembed_api, 
     credentials):
-    story_data = {
-        'raw_html': ''
-    }
+
+    logger.info("building story with storyteller {} and format {}".format(
+        storyteller, storyformat
+    ))
+
+    if storyteller not in storytelling_services:
+        storyformat = "rawhtml_{}".format(storyformat)
+        storyteller = "rawhtml"
+
+    sg = storygenerators[storyformat](mementoembed_api)
+    st = storytellers[storyteller](sg, story_data, credentials)
+    st.tell_story()
+
     return story_data
 
 if __name__ == '__main__':
@@ -124,10 +184,5 @@ if __name__ == '__main__':
         args.mementoembed_api,
         credentials
     )
-
-    if args.storyteller not in storytelling_services:
-        storyfile = os.path.expanduser(args.storyteller)
-        with open(storyfile, 'w') as f:
-            f.write(story_output['raw_html'])
 
     logger.info("Done telling your story.")
