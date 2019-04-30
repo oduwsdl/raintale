@@ -7,6 +7,7 @@ import logging
 import json
 
 from urllib.parse import urlparse
+from argparse import RawTextHelpFormatter
 
 from yaml import load, Loader
 
@@ -45,7 +46,9 @@ def calculate_loglevel(verbose=False, quiet=False):
 def process_arguments(args):
 
     parser = argparse.ArgumentParser(prog="{}".format(args[0]),
-        description='Clusters a collection of mementos based on Simhash and slice')
+        description='Clusters a collection of mementos based on Simhash and slice',
+        formatter_class=RawTextHelpFormatter
+        )
 
     parser.add_argument('-i', '--input', dest='input_filename',
         required=True,
@@ -54,7 +57,10 @@ def process_arguments(args):
 
     parser.add_argument('--storyteller', dest='storyteller',
         required=True,
-        help="""An output file that contains the story."""
+        help="""The service used to tell the story. Options are:
+        * twitter
+        * the name of an output filename
+        """
     )
 
     parser.add_argument('--storyformat', dest='storyformat',
