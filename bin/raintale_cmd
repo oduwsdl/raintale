@@ -124,6 +124,7 @@ def gather_credentials(storyteller, credentials_file):
             "output_filename": storyteller
         }
     else:
+        
         with open(credentials_file) as f:
             credentials_json = load(f, Loader=Loader)
 
@@ -197,6 +198,9 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
     if storyteller not in storytelling_services:
         storyformat = "rawhtml_{}".format(storyformat)
         storyteller = "rawhtml"
+
+    if storyteller == "blogger":
+        storyformat = "rawhtml_{}".format(storyformat)
 
     sg = storygenerators[storyformat](mementoembed_api)
     st = storytellers[storyteller](sg, story_data, credentials)

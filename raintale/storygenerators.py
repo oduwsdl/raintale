@@ -12,12 +12,12 @@ class StoryGenerator:
         if mementoembed_api.endswith('/'):
             self.mementoembed_api = mementoembed_api[:-1]
 
-    def get_urielement_rawhtml(self):
+    def get_urielement_rawhtml(self, urim):
         raise NotImplementedError(
             "StoryGenerator class is not meant to be called directly. "
             "Create a child class to use StoryGenerator functionality.")
 
-    def get_urielement_data(self):
+    def get_urielement_data(self, urim):
         raise NotImplementedError(
             "StoryGenerator class is not meant to be called directly. "
             "Create a child class to use StoryGenerator functionality.")
@@ -32,7 +32,11 @@ class RawHTMLSocialcardGenerator(StoryGenerator):
             self.mementoembed_api, urim
         )
 
-        r = requests.get(api_endpoint)
+        headers = {
+            "Prefer": "using_remote_javascript=no"
+        }
+
+        r = requests.get(api_endpoint, headers=headers)
 
         if r.status_code == 200:
             element_data = r.text

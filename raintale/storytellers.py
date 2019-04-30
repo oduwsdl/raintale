@@ -1,7 +1,9 @@
 import logging
 import twitter
+import requests
 
-import sys
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 module_logger = logging.getLogger('raintale.storytellers')
 
@@ -200,6 +202,13 @@ class TwitterStoryTeller(StoryTeller):
                             urim, element_data['errordata']
                         ))
 
+                else:
+
+                    module_logger.warn(
+                        "skipping unsupported story element type of {}".format(
+                            element['type']
+                        ))
+
             except KeyError:
 
                 module_logger.exception(
@@ -212,12 +221,93 @@ class TwitterStoryTeller(StoryTeller):
                     "cannot post tweet for story element {}, skipping".format(element)
                 )
 
+class BloggerStoryTeller(StoryTeller):
+
+    def tell_story(self):
+
+        module_logger.debug("telling story using BloggerStoryTeller")
+
+        client_config = {
+            "installed": {
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://accounts.google.com/o/oauth2/token",
+                "redirect_uris": [],
+                "client_id": self.credentials['clientid'],
+                "client_secret": self.credentials['clientsecret']
+            }
+        }
+
+        flow = InstalledAppFlow.from_client_config(
+            client_config,
+            scopes=['https://www.googleapis.com/auth/blogger'])
+
+        credentials = flow.run_console()
+
+        blogger_service = build('blogger', 'v3', credentials=credentials)
+
+        story_elements = self.get_story_elements()
+
+        blog_post_content = '<p><strong>Story By: </strong>{}</p><p>Collection URL: <a href="{}">{}</a></p>'.format(
+            self.story_data['generated_by'], 
+            self.story_data['collection_url'], self.story_data['collection_url']
+        )
+
+        story_elements = self.get_story_elements()
+
+        for element in story_elements:
+
+            module_logger.debug("examining story element {}".format(element))
+
+            try:
+
+                if element['type'] == 'link':
+
+                    urim = element['value']
+
+                    module_logger.debug(
+                        "getting story data for URI-M {}".format(urim)
+                    )
+
+                    raw_element_html = self.storygenerator.get_urielement_rawhtml(urim)
+
+                    blog_post_content += "<p>\n{}\n</p>\n".format(raw_element_html)
+                
+                else:
+                    module_logger.warn(
+                        "skipping unsupported story element type of {}".format(
+                            element['type']
+                        ))
+
+            except KeyError:
+
+                module_logger.exception(
+                    "cannot process story element data of {}, skipping".format(element)
+                )
+
+        module_logger.info("posting story to blog ID {}".format(self.credentials['blogid']))
+
+        request_body = {
+            "kind": "blogger#post",
+            "title": self.story_data['title'],
+            "content": blog_post_content
+        }
+
+        r = blogger_service.posts().insert(
+            blogId=self.credentials['blogid'],
+            body=request_body
+        ).execute()
+
+        module_logger.info("blog post should be available at {}".format(r['url']))
+
+
 
 storytellers = {
     "rawhtml": RawHTMLStoryTeller,
-    "twitter": TwitterStoryTeller
+    "twitter": TwitterStoryTeller,
+    "blogger": BloggerStoryTeller
 }
 
 storytelling_services = [
-    "twitter"
+    "twitter",
+    "blogger"
 ]

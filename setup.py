@@ -29,9 +29,12 @@ setup(
         'bin/raintale_cmd',
     ],
     install_requires=[
-        'requests',
+        'google-api-python-client',
+        'google_auth_oauthlib',
+        'oauth2client',
         'pyyaml',
-        'python-twitter'
+        'python-twitter',
+        'requests'
     ],
     test_suite="tests",
     zip_safe=True,
