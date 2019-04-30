@@ -17,6 +17,11 @@ class StoryGenerator:
             "StoryGenerator class is not meant to be called directly. "
             "Create a child class to use StoryGenerator functionality.")
 
+    def get_urielement_data(self):
+        raise NotImplementedError(
+            "StoryGenerator class is not meant to be called directly. "
+            "Create a child class to use StoryGenerator functionality.")
+
 class RawHTMLSocialcardGenerator(StoryGenerator):
 
     def get_urielement_rawhtml(self, urim):
@@ -53,6 +58,8 @@ class ComponentSocialcardGenerator(StoryGenerator):
             "errordata": None
         }
 
+        module_logger.debug("calling MementoEmbed contentdata endpoint for URI-M {}".format(urim))
+
         api_endpoint = "{}/services/memento/contentdata/{}".format(
             self.mementoembed_api, urim
         )
@@ -60,11 +67,13 @@ class ComponentSocialcardGenerator(StoryGenerator):
         r = requests.get(api_endpoint)
 
         if r.status_code == 200:
-            element_data["title"] = r.json["title"]
-            element_data["text"] = r.json["snippet"]
-            element_data["memento-datetime"] = r.json["memento-datetime"]
+            element_data["title"] = r.json()["title"]
+            element_data["text"] = r.json()["snippet"]
+            element_data["memento-datetime"] = r.json()["memento-datetime"]
         else:
             element_data["errordata"] = r.text
+
+        module_logger.debug("calling MementoEmbed bestimage endpoint for URI-M {}".format(urim))
 
         api_endpoint = "{}/services/memento/bestimage/{}".format(
             self.mementoembed_api, urim
@@ -73,9 +82,11 @@ class ComponentSocialcardGenerator(StoryGenerator):
         r = requests.get(api_endpoint)
 
         if r.status_code == 200:
-            element_data["image"] = r.json["best-image-uri"]
+            element_data["image"] = r.json()["best-image-uri"]
         else:
             element_data["errordata"] = r.text
+
+        module_logger.debug("calling MementoEmbed archivedata endpoint for URI-M {}".format(urim))
 
         api_endpoint = "{}/services/memento/archivedata/{}".format(
             self.mementoembed_api, urim
@@ -84,17 +95,24 @@ class ComponentSocialcardGenerator(StoryGenerator):
         r = requests.get(api_endpoint)
         
         if r.status_code == 200:
-            element_data["archive"] = r.json["archive-name"]
+            element_data["archive"] = r.json()["archive-name"]
         else:
             element_data["errordata"] = r.text
 
+        api_endpoint = "{}/services/memento/originalresourcedata/{}".format(
+            self.mementoembed_api, urim
+        )
+
+        r = requests.get(api_endpoint)
+
         if r.status_code == 200:
-            element_data["original-uri"] = r.json["original-uri"]
+            element_data["original-uri"] = r.json()["original-uri"]
         else:
             element_data["errordata"] = r.text
         
         return element_data
 
 storygenerators = {
-    "rawhtml_socialcard": RawHTMLSocialcardGenerator
+    "rawhtml_socialcard": RawHTMLSocialcardGenerator,
+    "socialcard": ComponentSocialcardGenerator
 }

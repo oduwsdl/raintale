@@ -28,6 +28,11 @@ setup(
     scripts=[
         'bin/raintale_cmd',
     ],
+    install_requires=[
+        'requests',
+        'pyyaml',
+        'python-twitter'
+    ],
     test_suite="tests",
     zip_safe=True,
     classifiers=[
