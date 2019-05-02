@@ -27,5 +27,7 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 # Building raintale
 
 Raintale uses ```pip``` for build and installation. From the root of the source code, just type:
+
 ```pip install .``` 
+
 to install the version from the source code on your machine.
