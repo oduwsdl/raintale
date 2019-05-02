@@ -15,4 +15,17 @@ Raintale supports the following storytellers:
 * rawhtml - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
 * twitter - the resulting story with be a tweet and its replies, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
 
+# Running raintale
 
+Raintale uses docker-compose to load and execute all dependencies. To run raintale, do the following:
+1. Create a directory on your system
+2. Copy docker-compose.yml from this repository into that directory
+3. Open a terminal
+4. Type: ```docker-compose run raintale bash```
+5. Type all future commands from that prompt
+
+# Building raintale
+
+Raintale uses ```pip``` for build and installation. From the root of the source code, just type:
+```pip install .``` 
+to install the version from the source code on your machine.
