@@ -5,7 +5,7 @@ services:
         image: oduwsdl/mementoembed:latest
         restart: always
         ports:
-            - "80:5550"
+            - "5550"
 
     raintale:
         depends_on:
