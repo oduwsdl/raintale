@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+    mementoembed:
+        image: oduwsdl/mementoembed:latest
+        restart: always
+        ports:
+            - "80:5550"
+
+    raintale:
+        depends_on:
+            - mementoembed
+        image: raintale:latest
+        restart: always
+        volumes: 
+            - .:/raintale-work
+        stdin_open: true
