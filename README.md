@@ -3,7 +3,7 @@
 
 # Raintale
 
-Raintale is a utility for creating social media stories from groups of archived web pages (mementos). Raintale uses MementoEmbed to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
+Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses MementoEmbed to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
 
 Raintale accepts the following inputs:
 * a file containing a list of memento URLs (URI-Ms) (required)</li>
@@ -12,7 +12,7 @@ Raintale accepts the following inputs:
 * the author, organization, or algorithm that generated the story (optional)</li>
 
 Raintale creates stories using different formats. These formats influence the content available to a given storyteller. Raintale supports the following story formats:
-* social card - content from cards for individual mementos, like those seen in social media and produced by MementoEmbed
+* social card (default) - content from cards for individual mementos, like those seen in social media and produced by MementoEmbed
 
 Raintale supports the following storytellers:
 * rawhtml - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
@@ -30,9 +30,24 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 For example to create a raw HTML story suitable for pasting, type the following within that prompt:
 
 ``
-raintale_cmd -i story-mementos.txt --storyteller mystory.html --storyformat socialcard --title "This is My Story Title"	--mementoembed_api http://mementoembed:5550 --collection-url http://example.com/mycollection --generated-by "Me"
+raintale_cmd -i story-mementos.txt --storyteller mystory.html --storyformat socialcard --title "This is My Story Title"	--generated-by "Me"
 ``
 
+The output will be stored in ``mystory.html``.
+
+To create a twitter story, you will need to create a Twitter app. Log into Twitter from a web browser and visit https://developer.twitter.com/en/apps for more information. Once you have created an app, make a file named ``twitter-credentials.yml`` and fill it with the following content.
+``
+consumer_key: XXXXXX
+consumer_secret: XXXXXX
+access_token_key: XXXXXX
+access_token_secret: XXXXXX
+``
+Replace the ``XXXXXX`` values with the corresponding values as displayed on your Twitter app page.
+
+Once that is done, type the following within the Docker prompt:
+``
+raintale_cmd -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me”
+``
 
 # Building raintale
 
