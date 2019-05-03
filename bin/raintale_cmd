@@ -49,7 +49,7 @@ def calculate_loglevel(verbose=False, quiet=False):
 def process_arguments(args):
 
     parser = argparse.ArgumentParser(prog="{}".format(args[0]),
-        description='Given a list of story elements, including URLs to archived web pages, raintale publishes them to a specified service.',
+        description='Given a list of story elements, including URLs to archived web pages, raintale publishes them to the specified service.',
         formatter_class=RawTextHelpFormatter
         )
 
@@ -75,7 +75,7 @@ def process_arguments(args):
     )
 
     parser.add_argument('--title', dest='title',
-        required=False,
+        required=True,
         help="The title used for the story."
     )
 
@@ -153,9 +153,14 @@ def gather_credentials(storyteller, credentials_file, output_filename):
     credentials_json = {}
 
     if credentials_file is None:
-        credentials_json = {
-            "output_filename": output_filename
-        }
+
+        if output_filename is not None:
+            credentials_json = {
+                "output_filename": output_filename
+            }
+        else:
+            logger.error("No credentials and no output file. Cannot continue...")
+            sys.exit(errno.EINVAL)
     else:
         
         with open(credentials_file) as f:

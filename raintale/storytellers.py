@@ -320,7 +320,6 @@ class BloggerStoryTeller(StoryTeller):
 
         module_logger.info("blog post should be available at {}".format(r['url']))
 
-
 storytellers = {
     "rawhtml": RawHTMLStoryTeller,
     "twitter": TwitterStoryTeller,
