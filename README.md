@@ -27,12 +27,12 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 For example to create a raw HTML story suitable for pasting, type the following within that prompt:
 
 ``
-raintale_cmd -i story-mementos.txt --storyteller mystory.html --title "This is My Story Title"	--generated-by "Me"
+raintale_cmd -i story-mementos.txt --storyteller rawhtml -o mystory.html --title "This is My Story Title"	--generated-by "Me"
 ``
 
 The output will be stored in ``mystory.html``.
 
-To create a twitter story, you will need to create a Twitter app. Log into Twitter from a web browser and visit https://developer.twitter.com/en/apps for more information. Once you have created an app, make a file named ``twitter-credentials.yml`` and fill it with the following content.
+To create a twitter story, you will need to create a Twitter app. Log into Twitter from a web browser and visit https://developer.twitter.com/en/apps for more information. Once you have created an app, make a file named ``twitter-credentials.yml``, save it in the same directory, and fill it with the following content.
 
 ```
 consumer_key: XXXXXX
@@ -46,7 +46,7 @@ Replace the ``XXXXXX`` values with the corresponding values as displayed on your
 Once that is done, type the following within the Docker prompt:
 
 ``
-raintale_cmd -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me”
+raintale_cmd -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me” -c twitter-credentials.yml
 ``
 
 # Building raintale
