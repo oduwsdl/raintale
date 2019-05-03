@@ -34,12 +34,12 @@ The output will be stored in ``mystory.html``.
 
 To create a twitter story, you will need to create a Twitter app. Log into Twitter from a web browser and visit https://developer.twitter.com/en/apps for more information. Once you have created an app, make a file named ``twitter-credentials.yml`` and fill it with the following content.
 
-``
+```
 consumer_key: XXXXXX
 consumer_secret: XXXXXX
 access_token_key: XXXXXX
 access_token_secret: XXXXXX
-``
+```
 
 Replace the ``XXXXXX`` values with the corresponding values as displayed on your Twitter app page.
 
