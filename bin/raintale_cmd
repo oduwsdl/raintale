@@ -49,7 +49,7 @@ def calculate_loglevel(verbose=False, quiet=False):
 def process_arguments(args):
 
     parser = argparse.ArgumentParser(prog="{}".format(args[0]),
-        description='Clusters a collection of mementos based on Simhash and slice',
+        description='Given a list of story elements, including URLs to archived web pages, raintale publishes them to a specified service.',
         formatter_class=RawTextHelpFormatter
         )
 
