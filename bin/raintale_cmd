@@ -5,9 +5,12 @@ import os
 import argparse
 import logging
 import json
+import errno
 
 from urllib.parse import urlparse
 from argparse import RawTextHelpFormatter
+
+import requests
 
 from yaml import load, Loader
 
@@ -58,16 +61,15 @@ def process_arguments(args):
     parser.add_argument('--storyteller', dest='storyteller',
         required=True,
         help="""The service used to tell the story. Options are:
-        * twitter
-        * the name of an output filename
+        * rawhtml - write raw HTML output to a file, requires -o option to specify the filename
+        * twitter - publish tweets containing story data, requries -c option to specify the credentials file
         """
     )
 
     parser.add_argument('--storyformat', dest='storyformat',
-        required=True,
+        required=False, default="socialcard",
         help="""The type of surrogate to use for the story. Outputs are:
         * socialcard - a social card used by most social media platforms
-        * urlonly - just a listing of URLs
         Note: the specified storyteller will use this format in different ways.
         """
     )
@@ -88,7 +90,8 @@ def process_arguments(args):
     )
 
     parser.add_argument('--mementoembed_api', dest='mementoembed_api',
-        required=True,
+        required=False, 
+        default=["http://localhost:5550", "http://mementoembed:5550"],
         help="The URL of the MementoEmbed instance used for generating surrogates"
     )
 
@@ -111,17 +114,47 @@ def process_arguments(args):
         action='store_true',
         help="This will lower the logging level to only show warnings or errors")
 
+    parser.add_argument('-o', '--output-file', dest='output_file',
+        required=False, default=None,
+        help="If needed by the storyteller, the output file to which raintale will write the story contents."
+    )
+
     args = parser.parse_args()
+
+    if args.storyteller in storytelling_services:
+        if args.credentials_file is None:
+            parser.error(
+                "storyteller of type {} requires a credentials file, please supply a credentials file with the -c option".format(args.storyteller)
+            )
+    else:
+        if args.output_file is None:
+            parser.error(
+                'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(args.storyteller)
+            )
 
     return args
 
-def gather_credentials(storyteller, credentials_file):
+def test_mementoembed_endpoint(url):
+
+    status = False
+
+    logger.info("testing MementoEmbed endpoint at {}".format(url))
+
+    try:
+        requests.get(url)
+        status = True
+    except requests.ConnectionError:
+        logger.error("Failed to connect to MementoEmbed endpoint at {}".format(url))
+
+    return status
+
+def gather_credentials(storyteller, credentials_file, output_filename):
 
     credentials_json = {}
 
-    if storyteller not in storytelling_services:
+    if credentials_file is None:
         credentials_json = {
-            "output_filename": storyteller
+            "output_filename": output_filename
         }
     else:
         
@@ -186,10 +219,36 @@ def format_data(input_filename, title, collection_url, generated_by):
                         "Skipping URL with unsupported scheme: {}".format(line)
                     )
 
+            logger.warning("list of memento URLs has been built successfully")
+
     return story_data
 
 def tell_story(storyteller, storyformat, story_data, mementoembed_api, 
     credentials):
+
+    if type(mementoembed_api) == list:
+        statusii = []
+        for url in mementoembed_api:
+            status = test_mementoembed_endpoint(url)
+            statusii.append(status)
+
+            if status == True:
+                logger.info("Successfully connected to MementoEmbed API at {}, using this endpoint".format(url))
+                mementoembed_api = url
+                break
+
+        if True not in statusii:
+            logger.error("Failed to connect to MementoEmbed API, cannot continue.")
+            sys.exit(errno.EHOSTDOWN)
+        
+    else:
+        status = test_mementoembed_endpoint(mementoembed_api)
+
+        if status == False:
+            logger.error("Failed to connect to MementoEmbed API, cannot continue.")
+            sys.exit(errno.EHOSTDOWN)
+
+    logger.info("For building story elements, using MementoEmbedAPI at {}".format(mementoembed_api))
 
     logger.info("building story with storyteller {} and format {}".format(
         storyteller, storyformat
@@ -220,7 +279,7 @@ if __name__ == '__main__':
 
     logger.info("Beginning raintale to tell your story.")
 
-    credentials = gather_credentials(args.storyteller, args.credentials_file)
+    credentials = gather_credentials(args.storyteller, args.credentials_file, args.output_file)
 
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by)
 
@@ -232,4 +291,4 @@ if __name__ == '__main__':
         credentials
     )
 
-    logger.info("Done telling your story.")
+    logger.info("Done telling your story. Output is now at {}.".format(args.storyteller))

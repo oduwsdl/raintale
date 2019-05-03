@@ -58,10 +58,29 @@ class RawHTMLStoryTeller(StoryTeller):
 
         story_elements = self.get_story_elements()
 
+        story_output += '<p><h1>{}</h1></p>\n'.format(
+            self.story_data['title'])
+
+        if self.story_data['generated_by'] is not None:
+            story_output += '<p><strong>Story By:</strong> {}</p>\n'.format(
+                self.story_data['generated_by'])
+        
+        if self.story_data['collection_url'] is not None:
+            story_output += '<p><strong>Collection URL:</strong> <a href="{}">{}</a></p>\n'.format(
+                self.story_data['collection_url'], 
+                self.story_data['collection_url']
+            )
+
         module_logger.info("preparing to iterate through {} story "
             "elements".format(len(story_elements)))
 
+        elementcounter = 1
+
         for element in story_elements:
+
+            module_logger.info("processing element {} of {}".format(
+                elementcounter, len(story_elements))
+            )
 
             module_logger.debug("examining story element {}".format(element))
 
@@ -73,7 +92,7 @@ class RawHTMLStoryTeller(StoryTeller):
                         self.storygenerator.get_urielement_rawhtml(
                             element['value'])
 
-                    story_output += "<p>\n{}\n</p>\n".format(raw_element_html)
+                    story_output += "<hr>\n<p>\n{}\n</p>\n".format(raw_element_html)
 
                 else:
                     module_logger.warn(
@@ -86,6 +105,8 @@ class RawHTMLStoryTeller(StoryTeller):
                 module_logger.error(
                     "cannot process story element data of {}, skipping".format(element)
                 )
+            
+            elementcounter += 1
 
         with open(output_filename, 'w') as f:
             f.write(story_output)
@@ -298,7 +319,6 @@ class BloggerStoryTeller(StoryTeller):
         ).execute()
 
         module_logger.info("blog post should be available at {}".format(r['url']))
-
 
 
 storytellers = {
