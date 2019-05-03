@@ -11,9 +11,6 @@ Raintale accepts the following inputs:
 * the URL of the underlying collection (optional)</li>
 * the author, organization, or algorithm that generated the story (optional)</li>
 
-Raintale creates stories using different formats. These formats influence the content available to a given storyteller. Raintale supports the following story formats:
-* social card (default) - content from cards for individual mementos, like those seen in social media and produced by MementoEmbed
-
 Raintale supports the following storytellers:
 * rawhtml - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
 * twitter - the resulting story with be a tweet and its replies, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
@@ -30,7 +27,7 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 For example to create a raw HTML story suitable for pasting, type the following within that prompt:
 
 ``
-raintale_cmd -i story-mementos.txt --storyteller mystory.html --storyformat socialcard --title "This is My Story Title"	--generated-by "Me"
+raintale_cmd -i story-mementos.txt --storyteller mystory.html --title "This is My Story Title"	--generated-by "Me"
 ``
 
 The output will be stored in ``mystory.html``.
@@ -45,6 +42,7 @@ access_token_secret: XXXXXX
 Replace the ``XXXXXX`` values with the corresponding values as displayed on your Twitter app page.
 
 Once that is done, type the following within the Docker prompt:
+
 ``
 raintale_cmd -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me”
 ``
