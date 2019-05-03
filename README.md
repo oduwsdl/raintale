@@ -33,4 +33,8 @@ Raintale uses ```pip``` for build and installation. From the root of the source 
 
 ```pip install .``` 
 
-to install the version from the source code on your machine.
+to build and install the version from the source code on your machine.
+
+# The future of Raintale
+
+We are working on additional storytellers and story formats. For example, in the near future we plan to add ``thumbnail`` as an story format. Storytellers must be either a file format or an online service that supports an API. The choice in storyteller is highly dependent upon the capabilities and terms of that online service's API.
