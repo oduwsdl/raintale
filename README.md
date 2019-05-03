@@ -25,7 +25,14 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 2. Copy docker-compose.yml from this repository into that directory
 3. Open a terminal
 4. Type: ```docker-compose run raintale bash```
-5. Type all future commands from that prompt
+5. In that prompt, type ``raintale-cmd --help`` to find the list of options
+
+For example to create a raw HTML story suitable for pasting, type the following within that prompt:
+
+``
+raintale_cmd -i story-mementos.txt --storyteller mystory.html --storyformat socialcard --title "This is My Story Title"	--mementoembed_api http://mementoembed:5550 --collection-url http://example.com/mycollection --generated-by "Me"
+``
+
 
 # Building raintale
 
