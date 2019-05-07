@@ -31,6 +31,7 @@ setup(
     install_requires=[
         'google-api-python-client',
         'google_auth_oauthlib',
+        'jinja2',
         'oauth2client',
         'pyyaml',
         'python-twitter',

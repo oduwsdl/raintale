@@ -1,9 +1,15 @@
 import logging
+import re
+
 import twitter
 import requests
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
+
+from jinja2 import Template, Environment, meta
+
+from .surrogatedata import get_memento_data, get_template_surrogate_fields
 
 module_logger = logging.getLogger('raintale.storytellers')
 
@@ -320,10 +326,83 @@ class BloggerStoryTeller(StoryTeller):
 
         module_logger.info("blog post should be available at {}".format(r['url']))
 
+class FileTemplateStoryTeller(StoryTeller):
+
+    def tell_story(self):
+
+        module_logger.debug("telling story using FileTemplateStoryTeller")
+
+        try:
+            with open(self.credentials['story_template']) as f:
+                story_template_string = f.read()
+        except KeyError:
+            msg = "Credentials do not contain a story template filename"
+            module_logger.exception(msg)
+            raise StoryTellerCredentialParseError(msg)
+
+        try:
+            output_filename = self.credentials['output_filename']
+        except KeyError:
+            msg = "Credentials do not contain output filename"
+            module_logger.exception(msg)
+            raise StoryTellerCredentialParseError(msg)
+
+        story_elements = self.get_story_elements()
+
+        surrogates = []
+
+        module_logger.info("preparing to iterate through {} story "
+            "elements".format(len(story_elements)))
+
+        elementcounter = 1
+
+        template_surrogate_fields = get_template_surrogate_fields(story_template_string)
+
+        for element in story_elements:
+
+            module_logger.info("processing element {} of {}".format(
+                elementcounter, len(story_elements))
+            )
+
+            module_logger.debug("examining story element {}".format(element))
+
+            try:
+
+                if element['type'] == 'link':
+
+                    urim = element['value']
+
+                    memento_data = get_memento_data(
+                        template_surrogate_fields, 
+                        self.storygenerator.mementoembed_api, 
+                        urim)
+
+                    surrogates.append(memento_data)
+
+            except KeyError as e:
+
+                raise e
+
+                module_logger.error(
+                    "cannot process story element data of {}, skipping".format(element)
+                )
+
+            elementcounter += 1
+
+        with open(output_filename, 'w') as f:
+            f.write(Template(story_template_string).render(
+                title=self.story_data['title'],
+                generated_by=self.story_data['generated_by'],
+                collection_url=self.story_data['collection_url'],
+                surrogates=surrogates
+            ))
+
+
 storytellers = {
     "rawhtml": RawHTMLStoryTeller,
     "twitter": TwitterStoryTeller,
-    "blogger": BloggerStoryTeller
+    "blogger": BloggerStoryTeller,
+    "template": FileTemplateStoryTeller
 }
 
 storytelling_services = [

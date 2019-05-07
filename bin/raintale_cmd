@@ -15,7 +15,8 @@ import requests
 from yaml import load, Loader
 
 from raintale.storytellers import storytellers, storytelling_services
-from raintale.storygenerators import storygenerators
+from raintale.storygenerators import storygenerators, StoryGenerator
+from raintale import package_directory
 
 logger = logging.getLogger(__name__)
 
@@ -66,12 +67,9 @@ def process_arguments(args):
         """
     )
 
-    parser.add_argument('--storyformat', dest='storyformat',
-        required=False, default="socialcard",
-        help="""The type of surrogate to use for the story. Outputs are:
-        * socialcard - a social card used by most social media platforms
-        Note: the specified storyteller will use this format in different ways.
-        """
+    parser.add_argument('--story-template', dest='story_template',
+        required=False,
+        help="The file containing the template for the story in Jinja2 format."
     )
 
     parser.add_argument('--title', dest='title',
@@ -132,6 +130,12 @@ def process_arguments(args):
                 'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(args.storyteller)
             )
 
+        if args.storyteller == 'template':
+            if args.story_template is None:
+                parser.error(
+                    "storyteller of type {} requires a story template file, please supply a story template file with the --story-template option".format(args.storyteller)
+                )
+
     return args
 
 def test_mementoembed_endpoint(url):
@@ -148,23 +152,25 @@ def test_mementoembed_endpoint(url):
 
     return status
 
-def gather_credentials(storyteller, credentials_file, output_filename):
+def gather_credentials(args):
 
     credentials_json = {}
 
-    if credentials_file is None:
+    if args.credentials_file is None:
 
-        if output_filename is not None:
-            credentials_json = {
-                "output_filename": output_filename
-            }
+        if args.output_file is not None:
+            credentials_json["output_filename"] = args.output_file
+
         else:
             logger.error("No credentials and no output file. Cannot continue...")
             sys.exit(errno.EINVAL)
     else:
         
-        with open(credentials_file) as f:
+        with open(args.credentials_file) as f:
             credentials_json = load(f, Loader=Loader)
+
+    if args.story_template is not None:
+        credentials_json['story_template'] = args.story_template
 
     return credentials_json
 
@@ -260,14 +266,21 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
     ))
 
     if storyteller not in storytelling_services:
-        storyformat = "rawhtml_{}".format(storyformat)
-        storyteller = "rawhtml"
+
+        if storyteller != 'template':
+            storyformat = "rawhtml_{}".format(storyformat)
+            storyteller = "rawhtml"
 
     if storyteller == "blogger":
         storyformat = "rawhtml_{}".format(storyformat)
 
-    sg = storygenerators[storyformat](mementoembed_api)
-    st = storytellers[storyteller](sg, story_data, credentials)
+    if storyteller == 'template':
+        sg = StoryGenerator(mementoembed_api)
+        st = storytellers[storyteller](sg, story_data, credentials)
+    else:
+        sg = storygenerators[storyformat](mementoembed_api)
+        st = storytellers[storyteller](sg, story_data, credentials)        
+
     st.tell_story()
 
     return story_data
@@ -284,16 +297,19 @@ if __name__ == '__main__':
 
     logger.info("Beginning raintale to tell your story.")
 
-    credentials = gather_credentials(args.storyteller, args.credentials_file, args.output_file)
+    credentials = gather_credentials(args)
 
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by)
 
     story_output = tell_story(
         args.storyteller,
-        args.storyformat,
+        "socialcard",
         story_data,
         args.mementoembed_api,
         credentials
     )
 
-    logger.info("Done telling your story. Output is now at {}.".format(args.storyteller))
+    if args.output_file is not None:
+        logger.info("Done telling your story. Output is now at {}.".format(args.output_file))
+    else:
+        logger.info("Done telling your story. Output is now at {}.".format(args.storyteller))
