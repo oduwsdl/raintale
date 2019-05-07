@@ -65,6 +65,13 @@ def process_arguments(args):
         * rawhtml - write raw HTML output to a file, requires -o option to specify the filename
         * twitter - publish tweets containing story data, requries -c option to specify the credentials file
         """
+    ) # TOOD: automatically list file formats based on templates
+
+    parser.add_argument('--preset', dest='storytelling_preset',
+        required=False, default='socialcard',
+        help="""The preset used for a given story, typically reflecting the 
+        surrogate used to tell the story and the layout of the story.
+        """
     )
 
     parser.add_argument('--story-template', dest='story_template',
@@ -152,27 +159,46 @@ def test_mementoembed_endpoint(url):
 
     return status
 
-def gather_credentials(args):
+def gather_storyteller_data(args):
 
-    credentials_json = {}
+    storyteller_data = {}
 
-    if args.credentials_file is None:
+    # Use the storytelling service, even if they specify a template
+    if args.storyteller in storytelling_services:
 
-        if args.output_file is not None:
-            credentials_json["output_filename"] = args.output_file
+        with open(args.credentials_file) as f:
+            storyteller_data = load(f, Loader=Loader)
+
+    else:
+
+        # Use the template, even if they specify another storyteller
+        if args.story_template is not None:
+
+            storyteller_data['story_template'] = args.story_template
+            storyteller_data['output_filename'] = args.output_file
+            args.storyteller = 'template'
 
         else:
-            logger.error("No credentials and no output file. Cannot continue...")
-            sys.exit(errno.EINVAL)
-    else:
-        
-        with open(args.credentials_file) as f:
-            credentials_json = load(f, Loader=Loader)
 
-    if args.story_template is not None:
-        credentials_json['story_template'] = args.story_template
+            template_dir = "{}/templates".format(package_directory)
 
-    return credentials_json
+            for filename in os.listdir(template_dir):
+
+                surrogate, fileformat = filename.split('.')
+
+                if fileformat == args.storyteller and surrogate == args.storytelling_preset:
+                    args.storyteller = 'template'
+                    storyteller_data['story_template'] = "{}/{}".format(template_dir, filename)
+                    storyteller_data['output_filename'] = args.output_file
+                    break
+            
+            if 'story_template' not in storyteller_data:
+                logger.error("There are no storytellers of type {} with a preset of {} available, cannot continue".format(
+                    args.storyteller, args.storytelling_preset
+                ))
+                sys.exit(errno.EINVAL)
+
+    return storyteller_data
 
 def format_data(input_filename, title, collection_url, generated_by):
 
@@ -297,7 +323,7 @@ if __name__ == '__main__':
 
     logger.info("Beginning raintale to tell your story.")
 
-    credentials = gather_credentials(args)
+    credentials = gather_storyteller_data(args)
 
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by)
 

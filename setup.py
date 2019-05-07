@@ -28,6 +28,7 @@ setup(
     scripts=[
         'bin/raintale_cmd',
     ],
+    include_package_data=True,
     install_requires=[
         'google-api-python-client',
         'google_auth_oauthlib',

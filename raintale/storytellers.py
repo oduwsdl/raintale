@@ -399,7 +399,6 @@ class FileTemplateStoryTeller(StoryTeller):
 
 
 storytellers = {
-    "rawhtml": RawHTMLStoryTeller,
     "twitter": TwitterStoryTeller,
     "blogger": BloggerStoryTeller,
     "template": FileTemplateStoryTeller
