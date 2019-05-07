@@ -47,6 +47,21 @@ def calculate_loglevel(verbose=False, quiet=False):
 
     return logging.INFO
 
+def generate_list_of_storytellers_and_presets():
+
+    storytellers = []
+    presets = []
+
+    template_dir = "{}/templates".format(package_directory)
+
+    for filename in os.listdir(template_dir):
+
+        preset, fileformat = filename.split('.')
+        storytellers.append(fileformat)
+        presets.append(preset)
+
+    return storytellers, presets
+
 def process_arguments(args):
 
     parser = argparse.ArgumentParser(prog="{}".format(args[0]),
@@ -59,19 +74,30 @@ def process_arguments(args):
         help="An input file containing the memento URLs for use in the story."
     )
 
+    storytellers, presets = generate_list_of_storytellers_and_presets()
+
+    formatted_storytellers_list = ""
+    for storyteller in storytellers:
+        formatted_storytellers_list += "* {} - requires -o option to specify the output file\n\t".format(storyteller)
+
+    formatted_preset_list = ""
+    for preset in list(set(presets)):
+        formatted_preset_list += "* {}\n\t".format(preset)
+
     parser.add_argument('--storyteller', dest='storyteller',
         required=True,
-        help="""The service used to tell the story. Options are:
-        * rawhtml - write raw HTML output to a file, requires -o option to specify the filename
+        help="""The service or file format used to tell the story. Options are:
         * twitter - publish tweets containing story data, requries -c option to specify the credentials file
-        """
-    ) # TOOD: automatically list file formats based on templates
+        {}
+        """.format(formatted_storytellers_list)
+    )
 
     parser.add_argument('--preset', dest='storytelling_preset',
         required=False, default='socialcard',
         help="""The preset used for a given story, typically reflecting the 
         surrogate used to tell the story and the layout of the story.
-        """
+        {}
+        """.format(formatted_preset_list)
     )
 
     parser.add_argument('--story-template', dest='story_template',
@@ -184,9 +210,9 @@ def gather_storyteller_data(args):
 
             for filename in os.listdir(template_dir):
 
-                surrogate, fileformat = filename.split('.')
+                preset, fileformat = filename.split('.')
 
-                if fileformat == args.storyteller and surrogate == args.storytelling_preset:
+                if fileformat == args.storyteller and preset == args.storytelling_preset:
                     args.storyteller = 'template'
                     storyteller_data['story_template'] = "{}/{}".format(template_dir, filename)
                     storyteller_data['output_filename'] = args.output_file
