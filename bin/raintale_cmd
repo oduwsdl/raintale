@@ -88,6 +88,7 @@ def process_arguments(args):
         required=True,
         help="""The service or file format used to tell the story. Options are:
         * twitter - publish tweets containing story data, requries -c option to specify the credentials file
+        * template - use a template specified by --story-template to generate the output in a file specified by -o
         {}
         """.format(formatted_storytellers_list)
     )
