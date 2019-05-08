@@ -77,11 +77,11 @@ def process_arguments(args):
     storytellers, presets = generate_list_of_storytellers_and_presets()
 
     formatted_storytellers_list = ""
-    for storyteller in storytellers:
+    for storyteller in sorted(list(set(storytellers))):
         formatted_storytellers_list += "* {} - requires -o option to specify the output file\n\t".format(storyteller)
 
     formatted_preset_list = ""
-    for preset in list(set(presets)):
+    for preset in sorted(list(set(presets))):
         formatted_preset_list += "* {}\n\t".format(preset)
 
     parser.add_argument('--storyteller', dest='storyteller',
