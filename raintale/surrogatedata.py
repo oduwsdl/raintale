@@ -1,8 +1,11 @@
 import re
+import logging
 
 from datetime import datetime
 
 import requests
+
+module_logger = logging.getLogger('raintale.surrogatedata')
 
 fieldname_to_endpoint = {
     
@@ -21,12 +24,12 @@ fieldname_to_endpoint = {
     "original_domain": "/services/memento/originalresourcedata/",   
     "original_favicon": "/services/memento/originalresourcedata/",
     "original_linkstatus": "/services/memento/originalresourcedata/",
-    "archive_uri": "/services/memento/archivedata",
-    "archive_name": "/services/memento/archivedata",
-    "archive_favicon": "/services/memento/archivedata",
-    "archive_collection_id": "/services/memento/archivedata",
-    "archive_collection_name": "/services/memento/archivedata",
-    "archive_collection_uri": "/services/memento/archivedata",
+    "archive_uri": "/services/memento/archivedata/",
+    "archive_name": "/services/memento/archivedata/",
+    "archive_favicon": "/services/memento/archivedata/",
+    "archive_collection_id": "/services/memento/archivedata/",
+    "archive_collection_name": "/services/memento/archivedata/",
+    "archive_collection_uri": "/services/memento/archivedata/",
     "best_image_uri": "/services/memento/bestimage/",
     "title": "/services/memento/contentdata/",
     "snippet": "/services/memento/contentdata/",
@@ -60,14 +63,22 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
     service_list = list(set(service_list))
 
+    module_logger.debug("service list: {}".format(service_list))
+
     for service in service_list:
 
-        r = requests.get("{}{}{}".format(mementoembed_api, service, urim))
+        endpoint = "{}{}{}".format(mementoembed_api, service, urim)
+
+        module_logger.debug("querying endpoint {}".format(endpoint))
+
+        r = requests.get(endpoint)
 
         if r.status_code == 200:
 
             for key in r.json():
                 memento_data[ key.replace('-', '_') ] = r.json()[key]
+
+        # TODO: what do we do if not 200? what is one service is 200, but another not?
 
     memento_data['urim'] = urim
     memento_data['creation_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
