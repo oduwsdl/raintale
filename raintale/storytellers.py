@@ -379,11 +379,13 @@ class FileTemplateStoryTeller(StoryTeller):
 
                     surrogates.append(memento_data)
 
-            except KeyError:
+            except KeyError as e:
 
-                module_logger.extension(
+                module_logger.exception(
                     "cannot process story element data of {}, skipping".format(element)
                 )
+
+                raise e
 
             elementcounter += 1
 

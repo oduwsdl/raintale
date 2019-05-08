@@ -1,5 +1,6 @@
 import re
 import logging
+import base64
 
 from datetime import datetime
 
@@ -33,7 +34,8 @@ fieldname_to_endpoint = {
     "best_image_uri": "/services/memento/bestimage/",
     "title": "/services/memento/contentdata/",
     "snippet": "/services/memento/contentdata/",
-    "memento_datetime": "/services/memento/contentdata/"
+    "memento_datetime": "/services/memento/contentdata/",
+    "thumbnail": "/services/product/thumbnail/"
 
 }
 
@@ -43,6 +45,10 @@ def get_template_surrogate_fields(story_template_string):
         list(set(sorted(re.findall(r'{{ surrogate\.[^}]* }}', story_template_string))))
 
     return template_surrogate_fields
+
+def png_to_datauri(data):
+
+    return 
 
 def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
@@ -69,20 +75,27 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
         endpoint = "{}{}{}".format(mementoembed_api, service, urim)
 
-        module_logger.debug("querying endpoint {}".format(endpoint))
+        module_logger.info("querying endpoint {}".format(endpoint))
 
         r = requests.get(endpoint)
 
         if r.status_code == 200:
 
-            for key in r.json():
-                memento_data[ key.replace('-', '_') ] = r.json()[key]
+            if service == '/services/product/thumbnail/':
+                memento_data['thumbnail'] = "data:image/png;base64,{}".format(
+                    base64.encodebytes(r.content).decode("utf-8")
+                )
+            else:
+                for key in r.json():
+                    memento_data[ key.replace('-', '_') ] = r.json()[key]
 
         # TODO: what do we do if not 200? what is one service is 200, but another not?
 
     memento_data['urim'] = urim
     memento_data['creation_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    memento_data['memento_datetime_14num'] = \
-        datetime.strptime(memento_data['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
+
+    if 'memento_datetime' in memento_data:
+        memento_data['memento_datetime_14num'] = \
+            datetime.strptime(memento_data['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
 
     return memento_data
