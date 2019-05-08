@@ -14,8 +14,8 @@ import requests
 
 from yaml import load, Loader
 
-from raintale.storytellers import storytellers, storytelling_services
-from raintale.storygenerators import storygenerators, StoryGenerator
+from raintale.storytellers.storytellers import storytellers
+from raintale.storytellers.template_storyteller import FileTemplateStoryTeller
 from raintale import package_directory
 
 logger = logging.getLogger(__name__)
@@ -74,14 +74,14 @@ def process_arguments(args):
         help="An input file containing the memento URLs for use in the story."
     )
 
-    storytellers, presets = generate_list_of_storytellers_and_presets()
+    discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
 
     formatted_storytellers_list = ""
-    for storyteller in sorted(list(set(storytellers))):
+    for storyteller in sorted(list(set(discovered_storytellers))):
         formatted_storytellers_list += "* {} - requires -o option to specify the output file\n\t".format(storyteller)
 
     formatted_preset_list = ""
-    for preset in sorted(list(set(presets))):
+    for preset in sorted(list(set(discovered_presets))):
         formatted_preset_list += "* {}\n\t".format(preset)
 
     parser.add_argument('--storyteller', dest='storyteller',
@@ -101,7 +101,7 @@ def process_arguments(args):
         """.format(formatted_preset_list)
     )
 
-    parser.add_argument('--story-template', dest='story_template',
+    parser.add_argument('--story-template', dest='story_template_filename',
         required=False,
         help="The file containing the template for the story in Jinja2 format."
     )
@@ -153,24 +153,7 @@ def process_arguments(args):
 
     args = parser.parse_args()
 
-    if args.storyteller in storytelling_services:
-        if args.credentials_file is None:
-            parser.error(
-                "storyteller of type {} requires a credentials file, please supply a credentials file with the -c option".format(args.storyteller)
-            )
-    else:
-        if args.output_file is None:
-            parser.error(
-                'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(args.storyteller)
-            )
-
-        if args.storyteller == 'template':
-            if args.story_template is None:
-                parser.error(
-                    "storyteller of type {} requires a story template file, please supply a story template file with the --story-template option".format(args.storyteller)
-                )
-
-    return args
+    return parser, args
 
 def test_mementoembed_endpoint(url):
 
@@ -186,46 +169,43 @@ def test_mementoembed_endpoint(url):
 
     return status
 
-def gather_storyteller_data(args):
+def get_storyteller(parser, args):
 
-    storyteller_data = {}
+    storyteller = None
 
-    # Use the storytelling service, even if they specify a template
-    if args.storyteller in storytelling_services:
+    discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
 
-        with open(args.credentials_file) as f:
-            storyteller_data = load(f, Loader=Loader)
-
+    if args.storyteller in storytellers:
+        storyteller_class = storytellers[args.storyteller]
     else:
+        if args.storyteller in  discovered_storytellers:
+            storyteller_class = FileTemplateStoryTeller
 
-        # Use the template, even if they specify another storyteller
-        if args.story_template is not None:
+    if storyteller_class.requires_file == True:
 
-            storyteller_data['story_template'] = args.story_template
-            storyteller_data['output_filename'] = args.output_file
-            args.storyteller = 'template'
-
+        if args.output_file is None:
+            parser.error(
+                'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(
+                    args.storyteller)
+            )
         else:
+            logger.info("creating Storyteller of type {} with output file {}".format(storyteller_class, args.output_file))
+            storyteller = storyteller_class(args.output_file)
+            logger.info("output file for storyteller {} is {}".format(storyteller, storyteller.output_filename))
+    
+    if storyteller_class.requires_credentials == True:
+    
+        if args.credentials_file is None:
+            parser.error(
+                "storyteller of type {} requires a credentials file, please supply a credentials file with the -c option".format(
+                    args.storyteller)
+            )
+        else:
+            storyteller = storyteller_class(args.credentials_file)
 
-            template_dir = "{}/templates".format(package_directory)
+    logger.info("output file for storyteller {} is {}".format(storyteller, storyteller.output_filename))
 
-            for filename in os.listdir(template_dir):
-
-                preset, fileformat = filename.split('.')
-
-                if fileformat == args.storyteller and preset == args.storytelling_preset:
-                    args.storyteller = 'template'
-                    storyteller_data['story_template'] = "{}/{}".format(template_dir, filename)
-                    storyteller_data['output_filename'] = args.output_file
-                    break
-            
-            if 'story_template' not in storyteller_data:
-                logger.error("There are no storytellers of type {} with a preset of {} available, cannot continue".format(
-                    args.storyteller, args.storytelling_preset
-                ))
-                sys.exit(errno.EINVAL)
-
-    return storyteller_data
+    return storyteller
 
 def format_data(input_filename, title, collection_url, generated_by):
 
@@ -287,12 +267,13 @@ def format_data(input_filename, title, collection_url, generated_by):
 
     return story_data
 
-def tell_story(storyteller, storyformat, story_data, mementoembed_api, 
-    credentials):
+def choose_mementoembed_api(mementoembed_api_candidates):
 
-    if type(mementoembed_api) == list:
+    mementoembed_api = ""
+
+    if type(mementoembed_api_candidates) == list:
         statusii = []
-        for url in mementoembed_api:
+        for url in mementoembed_api_candidates:
             status = test_mementoembed_endpoint(url)
             statusii.append(status)
 
@@ -304,9 +285,9 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
         if True not in statusii:
             logger.error("Failed to connect to MementoEmbed API, cannot continue.")
             sys.exit(errno.EHOSTDOWN)
-        
+
     else:
-        status = test_mementoembed_endpoint(mementoembed_api)
+        status = test_mementoembed_endpoint(mementoembed_api_candidates)
 
         if status == False:
             logger.error("Failed to connect to MementoEmbed API, cannot continue.")
@@ -314,33 +295,41 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
 
     logger.info("For building story elements, using MementoEmbedAPI at {}".format(mementoembed_api))
 
-    logger.info("building story with storyteller {} and format {}".format(
-        storyteller, storyformat
-    ))
+    return mementoembed_api
 
-    if storyteller not in storytelling_services:
+def choose_story_template(storyteller, preset, given_story_template_filename):
 
-        if storyteller != 'template':
-            storyformat = "rawhtml_{}".format(storyformat)
-            storyteller = "rawhtml"
+    story_template = ""
 
-    if storyteller == "blogger":
-        storyformat = "rawhtml_{}".format(storyformat)
+    if given_story_template_filename is None:
 
-    if storyteller == 'template':
-        sg = StoryGenerator(mementoembed_api)
-        st = storytellers[storyteller](sg, story_data, credentials)
-    else:
-        sg = storygenerators[storyformat](mementoembed_api)
-        st = storytellers[storyteller](sg, story_data, credentials)        
+        story_template_filename = "{}/templates/{}.{}".format(
+            package_directory, args.storytelling_preset, args.storyteller
+        )
 
-    st.tell_story()
+    logger.info("using story template filename {}".format(story_template_filename))
 
-    return story_data
+    try:
+
+        with open(story_template_filename) as f:
+            story_template = f.read()
+
+    except FileNotFoundError:
+
+        if given_story_template_filename is None:
+            logger.error("Unsupported preset {} for storyteller {}".format(preset, storyteller))
+            print("EXITING DUE TO ERROR.")
+            sys.exit(errno.EINVAL)
+        else:
+            logger.error("Cannot locate given template filename of {}".format(story_template_filename))
+            print("EXITING DUE TO ERROR.")
+            sys.exit(errno.EINVAL)
+
+    return story_template
 
 if __name__ == '__main__':
 
-    args = process_arguments(sys.argv)
+    parser, args = process_arguments(sys.argv)
 
     # set up logging for the rest of the system
     logger = get_logger(
@@ -350,17 +339,12 @@ if __name__ == '__main__':
 
     logger.info("Beginning raintale to tell your story.")
 
-    credentials = gather_storyteller_data(args)
-
+    storyteller = get_storyteller(parser, args)
+    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    story_template = choose_story_template(args.storyteller, args.storytelling_preset, args.story_template_filename)
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by)
 
-    story_output = tell_story(
-        args.storyteller,
-        "socialcard",
-        story_data,
-        args.mementoembed_api,
-        credentials
-    )
+    storyteller.tell_story(story_data, mementoembed_api, story_template)
 
     if args.output_file is not None:
         logger.info("Done telling your story. Output is now at {}.".format(args.output_file))

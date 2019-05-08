@@ -1,1 +1,1 @@
-include raintale/templates/*
+graft raintale/templates
