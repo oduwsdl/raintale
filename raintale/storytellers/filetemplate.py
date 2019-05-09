@@ -5,15 +5,11 @@ from jinja2 import Template
 from .storyteller import FileStoryteller, get_story_elements
 from ..surrogatedata import get_memento_data, get_template_surrogate_fields
 
-module_logger = logging.getLogger('raintale.storytellers.template_storyteller')
+module_logger = logging.getLogger('raintale.storytellers.filetemplate')
 
 class FileTemplateStoryTeller(FileStoryteller):
     
     description = "Given input data and a template file, this storyteller generates a story formatted based on the template."
-
-    @staticmethod
-    def test_template_format(story_template):
-        pass
 
     def generate_story(self, story_data, mementoembed_api, story_template):
 
@@ -48,6 +44,11 @@ class FileTemplateStoryTeller(FileStoryteller):
                         urim)
 
                     surrogates.append(memento_data)
+
+                else:
+                    module_logger.warning(
+                        "element of type {} is unsupported, skipping...".format(element['type'])
+                    )
 
             except KeyError as e:
 

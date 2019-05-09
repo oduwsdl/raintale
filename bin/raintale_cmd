@@ -15,7 +15,7 @@ import requests
 from yaml import load, Loader
 
 from raintale.storytellers.storytellers import storytellers
-from raintale.storytellers.template_storyteller import FileTemplateStoryTeller
+from raintale.storytellers.filetemplate import FileTemplateStoryTeller
 from raintale import package_directory
 
 logger = logging.getLogger(__name__)
@@ -180,6 +180,9 @@ def get_storyteller(parser, args):
     else:
         if args.storyteller in  discovered_storytellers:
             storyteller_class = FileTemplateStoryTeller
+        else:
+            logger.critical("Unknown storyteller {}, cannot continue...".format(args.storyteller))
+            sys.exit(errno.EINVAL)
 
     if storyteller_class.requires_file == True:
 
@@ -202,8 +205,6 @@ def get_storyteller(parser, args):
             )
         else:
             storyteller = storyteller_class(args.credentials_file)
-
-    logger.info("output file for storyteller {} is {}".format(storyteller, storyteller.output_filename))
 
     return storyteller
 

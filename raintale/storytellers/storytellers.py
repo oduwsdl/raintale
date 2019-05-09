@@ -1,8 +1,9 @@
 
-from .template_storyteller import FileTemplateStoryTeller
+from .filetemplate import FileTemplateStoryTeller
+from .twitter import TwitterStoryTeller
 
 storytellers = {
-    # "twitter": TwitterStoryTeller,
+    "twitter": TwitterStoryTeller,
     # "blogger": BloggerStoryTeller,
     "template": FileTemplateStoryTeller
 }

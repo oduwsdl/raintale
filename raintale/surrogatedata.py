@@ -39,6 +39,15 @@ fieldname_to_endpoint = {
 
 }
 
+class DataURIParseError(Exception):
+    pass
+
+class DataURISchemeError(DataURIParseError):
+    pass
+
+class DataURIUnsupportedEncoding(DataURIParseError):
+    pass
+
 def get_template_surrogate_fields(story_template_string):
 
     template_surrogate_fields = \
@@ -46,9 +55,27 @@ def get_template_surrogate_fields(story_template_string):
 
     return template_surrogate_fields
 
-def png_to_datauri(data):
+def png_to_datauri(imgdata):
+    datauri = "data:image/png;base64,{}".format(
+        base64.encodebytes(imgdata).decode("utf-8")
+    )
+    return datauri
 
-    return 
+def datauri_to_data(datauri):
+
+    if datauri[0:5] != 'data:':
+        raise DataURISchemeError("Non-data URI submitted for decoding")
+    else:
+        data = ""
+
+        mimetype, dataheader = datauri[5:].split(';', 1)
+
+        base64header, base64data = dataheader.split(',', 1)
+
+        if base64header != 'base64':
+            raise DataURIUnsupportedEncoding
+        else:
+            return mimetype, base64.decodebytes(base64data.encode("utf-8"))
 
 def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
@@ -60,6 +87,8 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
     service_list = []
 
     for template_surrogate_field in template_surrogate_fields:
+
+        module_logger.info("template_surrogate_field: {}".format(template_surrogate_field))
 
         data_field = template_surrogate_field.replace('{{ surrogate.', '')
         data_field = data_field.replace(' }}', '')
@@ -82,9 +111,7 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
         if r.status_code == 200:
 
             if service == '/services/product/thumbnail/':
-                memento_data['thumbnail'] = "data:image/png;base64,{}".format(
-                    base64.encodebytes(r.content).decode("utf-8")
-                )
+                memento_data['thumbnail'] = png_to_datauri(r.content)
             else:
                 for key in r.json():
                     memento_data[ key.replace('-', '_') ] = r.json()[key]

@@ -1,5 +1,7 @@
 import logging
 
+from yaml import load, Loader
+
 module_logger = logging.getLogger('raintale.storytellers.storyteller')
 
 class StoryTellerException(Exception):
@@ -9,6 +11,9 @@ class StoryTellerCredentialParseError(StoryTellerException):
     pass
 
 class StoryTellerStoryParseError(StoryTellerException):
+    pass
+
+class StoryTellerMultipartTemplateParseError(StoryTellerException):
     pass
 
 def get_story_elements(story_data):
@@ -21,15 +26,52 @@ def get_story_elements(story_data):
         module_logger.exception(msg)
         raise StoryTellerStoryParseError(msg)
 
+def split_multipart_template(template_contents):
+
+    if template_contents[0:34] != '{# RAINTALE MULTIPART TEMPLATE #}\n':
+        msg = "Multipart Template required, but not submitted, cannot continue..."
+        module_logger.critical(msg)
+        raise StoryTellerMultipartTemplateParseError(msg)
+
+    template_contents = template_contents[34:]
+
+    if template_contents[0:26] != '{# RAINTALE TITLE PART #}\n':
+        msg = "Raintale Title Part required in Multipart Template, but not present, cannot continue..."
+        module_logger.critical(msg)
+        raise StoryTellerMultipartTemplateParseError(msg)
+
+    template_contents = template_contents[26:]
+
+    try:
+        title_template, element_template = template_contents.split('{# RAINTALE ELEMENT PART #}\n')
+    except ValueError:
+        msg = "Raintale Element Part required in Multipart Template, but not present, cannot continue..."
+        module_logger.critical(msg)
+        raise StoryTellerMultipartTemplateParseError(msg)
+
+    try:
+        element_template, media_template = element_template.split('{# RAINTALE ELEMENT MEDIA #}')
+        media_list = media_template.split('\n')
+        
+        # TODO: this should not be necessary
+        cleaned_media_list = []
+        module_logger.debug("media_list: {}".format(media_list))
+
+        for item in media_list:
+
+            if item != '':
+                cleaned_media_list.append(item)
+
+        module_logger.debug("cleaned_media_list: {}".format(cleaned_media_list))
+
+    except ValueError:
+        media_list = []
+
+    return title_template, element_template, cleaned_media_list
+
 class Storyteller:
 
     description = "ERROR"
-
-    @staticmethod
-    def test_template_format(story_template):
-        raise NotImplementedError(
-            "StoryTeller class is not meant to be called directly. "
-            "Create a child class to use StoryTeller functionality.")
 
     def generate_story(self, story_data, mementoembed_api, story_template):
         raise NotImplementedError(
@@ -51,15 +93,15 @@ class ServiceStoryteller(Storyteller):
     requires_file = False
     requires_credentials = True
 
-    def __init__(self, credentials):
-        self.credentials = credentials
+    def __init__(self, credentials_filename):
+        self.credentials_filename = credentials_filename
+        self.load_credentials_filename()
         self.auth()
 
-    @staticmethod
-    def get_required_credentials():
-        raise NotImplementedError(
-            "ServiceStoryTeller class is not meant to be called directly. "
-            "Create a child class to use ServiceStoryTeller functionality.")
+    def load_credentials_filename(self):
+
+        with open(self.credentials_filename) as f:
+            self.credentials = load(f, Loader=Loader)
 
     def auth(self):
         raise NotImplementedError(
