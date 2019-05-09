@@ -2,7 +2,7 @@ import logging
 import mimetypes
 import tempfile
 import os
-import sys
+import time
 
 import twitter
 
@@ -200,6 +200,9 @@ class TwitterStoryTeller(ServiceStoryteller):
                 if type(item) == "tempfile._TemporaryFileWrapper":
                     item.close()
                     os.unlink(item.name)
+
+            module_logger.info("sleeping for 2 seconds for Twitter's benefit...")
+            time.sleep(2)
 
         module_logger.info(
             "Your story has been told on Twitter. Find it at https://twitter.com/{}/status/{}".format(
