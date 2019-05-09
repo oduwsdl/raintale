@@ -209,5 +209,3 @@ class TwitterStoryTeller(ServiceStoryteller):
                 title_post.user.screen_name, title_post.id
             )
         )
-
-        # TODO: remember to close the files
