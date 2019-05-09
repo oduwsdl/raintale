@@ -29,6 +29,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
+        'facebook-sdk',
         'google-api-python-client',
         'google_auth_oauthlib',
         'jinja2',
