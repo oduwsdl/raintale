@@ -73,3 +73,9 @@ class FileTemplateStoryTeller(FileStoryteller):
 
         with open(self.output_filename, 'w') as f:
             f.write(story_output_data)
+
+        module_logger.info(
+            "Your story has been told to file {}".format(
+                self.output_filename
+            )
+        )

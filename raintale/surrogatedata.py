@@ -88,7 +88,7 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
     for template_surrogate_field in template_surrogate_fields:
 
-        module_logger.info("template_surrogate_field: {}".format(template_surrogate_field))
+        module_logger.debug("template_surrogate_field: {}".format(template_surrogate_field))
 
         data_field = template_surrogate_field.replace('{{ surrogate.', '')
         data_field = data_field.replace(' }}', '')
@@ -104,7 +104,7 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
         endpoint = "{}{}{}".format(mementoembed_api, service, urim)
 
-        module_logger.info("querying endpoint {}".format(endpoint))
+        module_logger.info("querying MementoEmbed endpoint {}".format(endpoint))
 
         r = requests.get(endpoint)
 

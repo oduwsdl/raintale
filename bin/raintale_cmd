@@ -330,6 +330,9 @@ def choose_story_template(storyteller, preset, given_story_template_filename):
 
 if __name__ == '__main__':
 
+    start_message = "Beginning raintale to tell your story."
+    print(start_message)
+
     parser, args = process_arguments(sys.argv)
 
     # set up logging for the rest of the system
@@ -338,7 +341,7 @@ if __name__ == '__main__':
             verbose=args.verbose, quiet=args.quiet), 
         args.logfile)
 
-    logger.info("Beginning raintale to tell your story.")
+    logger.info(start_message)
 
     storyteller = get_storyteller(parser, args)
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
@@ -347,7 +350,6 @@ if __name__ == '__main__':
 
     storyteller.tell_story(story_data, mementoembed_api, story_template)
 
-    if args.output_file is not None:
-        logger.info("Done telling your story. Output is now at {}.".format(args.output_file))
-    else:
-        logger.info("Done telling your story. Output is now at {}.".format(args.storyteller))
+    end_message = "Done telling your story. THE END."
+    logger.info(end_message)
+    print(end_message)

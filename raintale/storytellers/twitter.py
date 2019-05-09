@@ -1,6 +1,7 @@
 import logging
 import mimetypes
 import tempfile
+import os
 import sys
 
 import twitter
@@ -49,10 +50,7 @@ class TwitterStoryTeller(ServiceStoryteller):
 
         story_elements = get_story_elements(story_data)
 
-        module_logger.info("preparing to iterate through {} story "
-            "elements".format(len(story_elements)))
-
-        module_logger.info("media_template_list: {}".format(media_template_list))
+        module_logger.debug("media_template_list: {}".format(media_template_list))
         
         story_output_data = {
             "main_tweet": "",
@@ -76,7 +74,10 @@ class TwitterStoryTeller(ServiceStoryteller):
                 get_template_surrogate_fields(field)[0]
             )
 
-        module_logger.info("template_media_fields: {}".format(template_media_fields))
+        module_logger.debug("template_media_fields: {}".format(template_media_fields))
+
+        module_logger.info("preparing to iterate through {} story "
+            "elements".format(len(story_elements)))
 
         for element in story_elements:
 
@@ -99,7 +100,7 @@ class TwitterStoryTeller(ServiceStoryteller):
 
                     for field in template_media_fields:
 
-                        module_logger.info("field: {}".format(field))
+                        module_logger.debug("field: {}".format(field))
                         field_data = get_memento_data(
                             [field],
                             mementoembed_api,
@@ -173,7 +174,7 @@ class TwitterStoryTeller(ServiceStoryteller):
                     ext = mimetypes.guess_extension(mimetype)
                     f = tempfile.NamedTemporaryFile(prefix='raintale-', suffix=ext, delete=False)
                     f.write(filedata)
-                    module_logger.info("temporary file name is {}".format(f.name))
+                    module_logger.debug("temporary file name is {}".format(f.name))
                     tweet_media.append(f)
                 else:
                     tweet_media.append(media_uri)
@@ -194,5 +195,16 @@ class TwitterStoryTeller(ServiceStoryteller):
                 module_logger.exception(
                     "cannot post tweet for element data {} (note that media will not be shown), skipping".format(thread_tweet["text"])
                 )
+
+            for item in tweet_media:
+                if type(item) == "tempfile._TemporaryFileWrapper":
+                    item.close()
+                    os.unlink(item.name)
+
+        module_logger.info(
+            "Your story has been told on Twitter. Find it at https://twitter.com/{}/status/{}".format(
+                title_post.user.screen_name, title_post.id
+            )
+        )
 
         # TODO: remember to close the files
