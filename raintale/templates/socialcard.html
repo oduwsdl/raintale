@@ -1,0 +1,206 @@
+<p><h1>{{ title }}</h1></p>
+
+{% if generated_by is defined %}
+<p><strong>Story By:</strong> {{ generated_by }}</p>
+{% endif %}
+
+{% if collection_url is defined %}
+<p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
+{% endif %}
+
+{% for surrogate in surrogates %}
+<hr>
+
+<blockquote 
+    class="mementoembed"
+    data-versionurl="{{ surrogate.urim }}"
+    data-originalurl="{{ surrogate.original_uri }}"
+    data-surrogate-creation-time="{{ surrogate.creation_time }}"
+    data-image="{{ surrogate.best_image_uri }}"
+    data-archive-name="{{ surrogate.archive_name }}"
+    data-archive-favicon="{{ surrogate.archive_favicon }}"
+    data-archive-uri="{{ surrogate.archive_uri }}"
+    data-archive-collection-id="{{ surrogate.archive_collection_id }}"
+    data-archive-collection-uri="{{ surrogate.archive_collection_uri }}"
+    data-archive-collection-name="{{ surrogate.archive_collection_name }}"
+    data-original-favicon="{{ surrogate.original_favicon }}"
+    data-original-domain="{{ surrogate.original_domain }}"
+    data-original-link-status="{{ surrogate.original_linkstatus }}"
+    data-versiondate="{{ surrogate.memento_datetime }}"
+    style="
+        width: 445px; 
+        font-size: 12px;
+        border: 1px solid rgb(231, 231, 231);
+        background: center center no-repeat fixed rgb(255, 255, 255);
+        margin: 0px;
+        padding: 0px;
+        min-height: 200px;
+        line-height: 19.6px;"
+        data-processed="true"
+        >
+    <div class="me-image" style="
+        color: rgb(51, 51, 51);
+        display: inline;
+        float: left;
+        margin: 0px 30px 5px 0px;
+        padding: 1px;
+        max-height: 96px;
+        max-width: 96px;
+        width: 96px;
+        background: center center no-repeat fixed rgb(255, 255, 255);"
+        >
+        <img
+            style="max-width: 96px; max-height: 96px;"
+            src="{{ surrogate.best_image_uri }}">
+    </div>
+    <div class="me-textright">
+        <p
+            class="me-title"
+            style="
+                text-align: left;
+                color: rgb(9, 116, 255);
+                font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 19.6px;
+                padding: 0px;
+                margin: 0px 0px 1px;
+                background: center center no-repeat fixed rgb(255, 255, 255);"
+                >
+                <a class="me-title-link"
+                    data-originalurl="{{ surrogate.original_uri }}"
+                    data-versiondate="{{ surrogate.memento_datetime }}"
+                    href="{{ surrogate.urim }}"
+                    style="
+                        text-decoration: none;
+                        color: rgb(9, 116, 255);
+                        background: center center no-repeat fixed rgb(255, 255, 255);
+                        margin: 0px;
+                        padding: 0px;
+                        ">{{ surrogate.title }}</a>
+        </p>
+        <div 
+            class="me-belowtitle"
+            style="
+                color: rgb(153, 153, 153);
+                font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+                font-size: 10px;
+                text-align: left;
+                margin: 0px;
+                padding: 0px;
+                background: center center no-repeat fixed rgb(255, 255, 255);">
+                <img 
+                    class="me-favicon"
+                    src="{{ surrogate.archive_favicon }}"
+                    alt="{{ surrogate.archive_name }}"
+                    width="16"
+                    style="
+                        background: center center no-repeat fixed rgb(255, 255, 255);
+                        margin: 0px;
+                        padding: 0px;
+                        font-size: 10px;
+                        border-width: 0px;
+                        border-style: none;
+                        line-height: 15px;
+                        border-image-repeat: initial;
+                        border-image-width: 0;
+                        font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+                        font-stretch: initial;
+                        font-weight: 400;
+                        vertical-align: middle;">
+                &nbsp;&nbsp;Preserved by <a
+                    class="me-archive-link"
+                    href="{{ surrogate.archive_uri }}"
+                    style="
+                        text-decoration: none;
+                        color: rgb(9, 116, 255);
+                        background: center center no-repeat fixed rgb(255, 255, 255);
+                        margin: 0px;
+                        padding: 0px;">{{ surrogate.archive_name }}</a>
+                {% if surrogate.collection_name is defined %}
+                <br>
+                Member of the Collection 
+                <a class="me-archive-link" style="
+                    text-decoration: none;
+                    color: rgb(9, 116, 255);
+                    background: center center no-repeat fixed rgb(255, 255, 255);
+                    margin: 0px;
+                    padding: 0px;"
+                    href="{{ surrogate.archive_collection_uri }}">{{ surrogate.archive_collection_name }}</a>
+                {% endif %}
+        </div><br>
+        <p 
+        class="me-snippet"
+        style="
+            color: rgb(51, 51, 51);
+            font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+            font-size: 12px;
+            line-height: 18px;
+            text-align: left; margin: 0px;
+            padding: 0px;
+            background: center center no-repeat fixed rgb(255, 255, 255);">{{ surrogate.snippet }}</p>
+    </div>
+    <div 
+        class="me-footer" 
+        style="
+            color: rgb(153, 153, 153);
+            font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+            font-size: 10px;
+            text-align:left;
+            margin: 10px 0px 0px;
+            padding: 10px 0px 0px;
+            background: center center no-repeat fixed rgb(255, 255, 255);">&nbsp;&nbsp;
+            <img
+                class="me-favicon"
+                src="{{ surrogate.original_favicon }}"
+                width="16"
+                style="
+                    background: center center no-repeat fixed rgb(255, 255, 255);
+                    margin: 0px;
+                    padding: 0px;
+                    font-size: 10px;
+                    border-width: 0px;
+                    border-style: none;
+                    line-height: 15px;
+                    border-image-repeat: initial;
+                    border-image-width: 0;
+                    font-family: &quot;Museo Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;
+                    font-stretch: initial;
+                    font-weight: 400;
+                    vertical-align: middle;">&nbsp;&nbsp;
+            <a
+                class="me-pubdate"
+                data-originalurl="{{ surrogate.original_uri }}"
+                data-versiondate="{{ surrogate.memento_datetime }}"
+                href="{{ surrogate.urim }}"
+                style="
+                    text-decoration: none;
+                    color: rgb(9, 116, 255);
+                    background: center center no-repeat fixed rgb(255, 255, 255);
+                    margin: 0px;
+                    padding: 0px;">{{ surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ surrogate.memento_datetime }}</a><br> &nbsp; 
+            <a 
+                class="me-allversions"
+                href="http://timetravel.mementoweb.org/list/{{ surrogate.memento_datetime_14num }}Z/{{ surrogate.original_uri }}"
+                style="
+                    text-decoration: none;
+                    color: rgb(9, 116, 255);
+                    background: center center no-repeat fixed rgb(255, 255, 255);
+                    margin: 0px;
+                    padding: 0px;">Other Versions</a>&nbsp; || 
+            <a 
+                class="me-livestatus"
+                data-versionurl="{{ surrogate.urim }}" 
+                data-versiondate="{{ surrogate.memento_datetime }}"
+                href="{{ surrogate.original_uri }}"
+                style="
+                    text-decoration: none;
+                    color: rgb(9, 116, 255);
+                    background: center center no-repeat fixed rgb(255, 255, 255);
+                    margin: 0px;
+                    padding: 0px;">Current version</a>
+    </div>
+</blockquote>
+
+
+{% endfor %}

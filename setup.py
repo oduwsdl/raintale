@@ -1,5 +1,4 @@
-from setuptools import setup
-from setuptools.command.install import install as _install
+from setuptools import setup, find_packages
 from os import path
 
 # to get pylint to shut up
@@ -24,13 +23,15 @@ setup(
     author='Shawn M. Jones',
     author_email='jones.shawn.m@gmail.com',
     license='MIT',
-    packages=['raintale'],
+    packages=find_packages(),
     scripts=[
         'bin/raintale_cmd',
     ],
+    include_package_data=True,
     install_requires=[
         'google-api-python-client',
         'google_auth_oauthlib',
+        'jinja2',
         'oauth2client',
         'pyyaml',
         'python-twitter',

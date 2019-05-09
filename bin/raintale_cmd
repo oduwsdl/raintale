@@ -14,8 +14,9 @@ import requests
 
 from yaml import load, Loader
 
-from raintale.storytellers import storytellers, storytelling_services
-from raintale.storygenerators import storygenerators
+from raintale.storytellers.storytellers import storytellers
+from raintale.storytellers.filetemplate import FileTemplateStoryTeller
+from raintale import package_directory
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,21 @@ def calculate_loglevel(verbose=False, quiet=False):
 
     return logging.INFO
 
+def generate_list_of_storytellers_and_presets():
+
+    storytellers = []
+    presets = []
+
+    template_dir = "{}/templates".format(package_directory)
+
+    for filename in os.listdir(template_dir):
+
+        preset, fileformat = filename.split('.')
+        storytellers.append(fileformat)
+        presets.append(preset)
+
+    return storytellers, presets
+
 def process_arguments(args):
 
     parser = argparse.ArgumentParser(prog="{}".format(args[0]),
@@ -58,20 +74,36 @@ def process_arguments(args):
         help="An input file containing the memento URLs for use in the story."
     )
 
+    discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
+
+    formatted_storytellers_list = ""
+    for storyteller in sorted(list(set(discovered_storytellers))):
+        formatted_storytellers_list += "* {} - requires -o option to specify the output file\n\t".format(storyteller)
+
+    formatted_preset_list = ""
+    for preset in sorted(list(set(discovered_presets))):
+        formatted_preset_list += "* {}\n\t".format(preset)
+
     parser.add_argument('--storyteller', dest='storyteller',
         required=True,
-        help="""The service used to tell the story. Options are:
-        * rawhtml - write raw HTML output to a file, requires -o option to specify the filename
+        help="""The service or file format used to tell the story. Options are:
         * twitter - publish tweets containing story data, requries -c option to specify the credentials file
-        """
+        * template - use a template specified by --story-template to generate the output in a file specified by -o
+        {}
+        """.format(formatted_storytellers_list)
     )
 
-    parser.add_argument('--storyformat', dest='storyformat',
-        required=False, default="socialcard",
-        help="""The type of surrogate to use for the story. Outputs are:
-        * socialcard - a social card used by most social media platforms
-        Note: the specified storyteller will use this format in different ways.
-        """
+    parser.add_argument('--preset', dest='storytelling_preset',
+        required=False, default='socialcard',
+        help="""The preset used for a given story, typically reflecting the 
+        surrogate used to tell the story and the layout of the story.
+        {}
+        """.format(formatted_preset_list)
+    )
+
+    parser.add_argument('--story-template', dest='story_template_filename',
+        required=False,
+        help="The file containing the template for the story in Jinja2 format."
     )
 
     parser.add_argument('--title', dest='title',
@@ -121,18 +153,7 @@ def process_arguments(args):
 
     args = parser.parse_args()
 
-    if args.storyteller in storytelling_services:
-        if args.credentials_file is None:
-            parser.error(
-                "storyteller of type {} requires a credentials file, please supply a credentials file with the -c option".format(args.storyteller)
-            )
-    else:
-        if args.output_file is None:
-            parser.error(
-                'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(args.storyteller)
-            )
-
-    return args
+    return parser, args
 
 def test_mementoembed_endpoint(url):
 
@@ -148,25 +169,44 @@ def test_mementoembed_endpoint(url):
 
     return status
 
-def gather_credentials(storyteller, credentials_file, output_filename):
+def get_storyteller(parser, args):
 
-    credentials_json = {}
+    storyteller = None
 
-    if credentials_file is None:
+    discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
 
-        if output_filename is not None:
-            credentials_json = {
-                "output_filename": output_filename
-            }
-        else:
-            logger.error("No credentials and no output file. Cannot continue...")
-            sys.exit(errno.EINVAL)
+    if args.storyteller in storytellers:
+        storyteller_class = storytellers[args.storyteller]
     else:
-        
-        with open(credentials_file) as f:
-            credentials_json = load(f, Loader=Loader)
+        if args.storyteller in  discovered_storytellers:
+            storyteller_class = FileTemplateStoryTeller
+        else:
+            logger.critical("Unknown storyteller {}, cannot continue...".format(args.storyteller))
+            sys.exit(errno.EINVAL)
 
-    return credentials_json
+    if storyteller_class.requires_file == True:
+
+        if args.output_file is None:
+            parser.error(
+                'storyteller of type {} requires an output file, please supply an output file with the -o option'.format(
+                    args.storyteller)
+            )
+        else:
+            logger.info("creating Storyteller of type {} with output file {}".format(storyteller_class, args.output_file))
+            storyteller = storyteller_class(args.output_file)
+            logger.info("output file for storyteller {} is {}".format(storyteller, storyteller.output_filename))
+    
+    if storyteller_class.requires_credentials == True:
+    
+        if args.credentials_file is None:
+            parser.error(
+                "storyteller of type {} requires a credentials file, please supply a credentials file with the -c option".format(
+                    args.storyteller)
+            )
+        else:
+            storyteller = storyteller_class(args.credentials_file)
+
+    return storyteller
 
 def format_data(input_filename, title, collection_url, generated_by):
 
@@ -228,12 +268,13 @@ def format_data(input_filename, title, collection_url, generated_by):
 
     return story_data
 
-def tell_story(storyteller, storyformat, story_data, mementoembed_api, 
-    credentials):
+def choose_mementoembed_api(mementoembed_api_candidates):
 
-    if type(mementoembed_api) == list:
+    mementoembed_api = ""
+
+    if type(mementoembed_api_candidates) == list:
         statusii = []
-        for url in mementoembed_api:
+        for url in mementoembed_api_candidates:
             status = test_mementoembed_endpoint(url)
             statusii.append(status)
 
@@ -245,9 +286,9 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
         if True not in statusii:
             logger.error("Failed to connect to MementoEmbed API, cannot continue.")
             sys.exit(errno.EHOSTDOWN)
-        
+
     else:
-        status = test_mementoembed_endpoint(mementoembed_api)
+        status = test_mementoembed_endpoint(mementoembed_api_candidates)
 
         if status == False:
             logger.error("Failed to connect to MementoEmbed API, cannot continue.")
@@ -255,26 +296,44 @@ def tell_story(storyteller, storyformat, story_data, mementoembed_api,
 
     logger.info("For building story elements, using MementoEmbedAPI at {}".format(mementoembed_api))
 
-    logger.info("building story with storyteller {} and format {}".format(
-        storyteller, storyformat
-    ))
+    return mementoembed_api
 
-    if storyteller not in storytelling_services:
-        storyformat = "rawhtml_{}".format(storyformat)
-        storyteller = "rawhtml"
+def choose_story_template(storyteller, preset, given_story_template_filename):
 
-    if storyteller == "blogger":
-        storyformat = "rawhtml_{}".format(storyformat)
+    story_template = ""
 
-    sg = storygenerators[storyformat](mementoembed_api)
-    st = storytellers[storyteller](sg, story_data, credentials)
-    st.tell_story()
+    if given_story_template_filename is None:
 
-    return story_data
+        story_template_filename = "{}/templates/{}.{}".format(
+            package_directory, args.storytelling_preset, args.storyteller
+        )
+
+    logger.info("using story template filename {}".format(story_template_filename))
+
+    try:
+
+        with open(story_template_filename) as f:
+            story_template = f.read()
+
+    except FileNotFoundError:
+
+        if given_story_template_filename is None:
+            logger.error("Unsupported preset {} for storyteller {}".format(preset, storyteller))
+            print("EXITING DUE TO ERROR.")
+            sys.exit(errno.EINVAL)
+        else:
+            logger.error("Cannot locate given template filename of {}".format(story_template_filename))
+            print("EXITING DUE TO ERROR.")
+            sys.exit(errno.EINVAL)
+
+    return story_template
 
 if __name__ == '__main__':
 
-    args = process_arguments(sys.argv)
+    start_message = "Beginning raintale to tell your story."
+    print(start_message)
+
+    parser, args = process_arguments(sys.argv)
 
     # set up logging for the rest of the system
     logger = get_logger(
@@ -282,18 +341,15 @@ if __name__ == '__main__':
             verbose=args.verbose, quiet=args.quiet), 
         args.logfile)
 
-    logger.info("Beginning raintale to tell your story.")
+    logger.info(start_message)
 
-    credentials = gather_credentials(args.storyteller, args.credentials_file, args.output_file)
-
+    storyteller = get_storyteller(parser, args)
+    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    story_template = choose_story_template(args.storyteller, args.storytelling_preset, args.story_template_filename)
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by)
 
-    story_output = tell_story(
-        args.storyteller,
-        args.storyformat,
-        story_data,
-        args.mementoembed_api,
-        credentials
-    )
+    storyteller.tell_story(story_data, mementoembed_api, story_template)
 
-    logger.info("Done telling your story. Output is now at {}.".format(args.storyteller))
+    end_message = "Done telling your story. THE END."
+    logger.info(end_message)
+    print(end_message)

@@ -1,0 +1,30 @@
+---
+layout: post
+title: {{ title }}
+---
+
+<p><h1>{{ title }}</h1></p>
+
+{% if generated_by is defined %}
+<p><strong>Story By:</strong> {{ generated_by }}</p>
+{% endif %}
+
+{% if collection_url is defined %}
+<p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
+{% endif %}
+
+<hr>
+
+<table border="0">
+<tr>
+{% for surrogate in surrogates %}
+
+    <td><img src="{{ surrogate.thumbnail }}"></td>
+
+    {% if loop.index is divisibleby 3 %}
+        </tr><tr>
+    {% endif %}
+
+{% endfor %}
+</table>
+
