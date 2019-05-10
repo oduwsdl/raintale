@@ -15,7 +15,7 @@ module_logger = logging.getLogger('raintale.storytellers.facebook')
 
 class FacebookStoryTeller(ServiceStoryteller):
 
-    description = "Given input data and a template file, this storyteller publishes a story as a Facebook thread."
+    description = "(EXPERIMENTAL) Given input data and a template file, this storyteller publishes a story as a Facebook thread."
 
     def load_credentials_filename(self):
 

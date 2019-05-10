@@ -77,18 +77,30 @@ def process_arguments(args):
     discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
 
     formatted_storytellers_list = ""
+    storytellers_already_in_help = []
+
+    for storyteller in storytellers:
+        helptext = "* {} - {}\n\t".format(
+            storyteller, storytellers[storyteller].description
+        )
+        formatted_storytellers_list += helptext
+        storytellers_already_in_help.append(storyteller)
+
     for storyteller in sorted(list(set(discovered_storytellers))):
-        formatted_storytellers_list += "* {} - requires -o option to specify the output file\n\t".format(storyteller)
+
+        if storyteller not in storytellers_already_in_help:
+            formatted_storytellers_list += "* {} - writes output to this file format, " \
+                "requires -o option to specify the output filename.\n\t".format(storyteller)
+            storytellers_already_in_help.append(storyteller)
 
     formatted_preset_list = ""
     for preset in sorted(list(set(discovered_presets))):
         formatted_preset_list += "* {}\n\t".format(preset)
 
+
     parser.add_argument('--storyteller', dest='storyteller',
         required=True,
         help="""The service or file format used to tell the story. Options are:
-        * twitter - publish tweets containing story data, requries -c option to specify the credentials file
-        * template - use a template specified by --story-template to generate the output in a file specified by -o
         {}
         """.format(formatted_storytellers_list)
     )
