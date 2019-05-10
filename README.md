@@ -12,6 +12,7 @@ Raintale accepts the following inputs:
 * the author, organization, or algorithm that generated the story (optional)
 * an output file for saving the story (if applicable)
 * a credential file for the a social media service (if applicable)
+* a template file allowing the user to format their story differently than the defaults (optional)
 
 Raintale supports the following storytellers:
 * facebook - (EXPERIMENTAL) this storyteller publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
@@ -27,6 +28,8 @@ Railtale also supports a number of presets for formatting a story for output to 
 * socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format
 * thumbnails3col - provides a 3 column layout containing thumbnails of the submitted mementos
 * thumbnails4col - provides a 4 column layout containing thumbnails of the submitted mementos
+
+Note that not all file formats support all presets.
 
 # Running raintale
 
