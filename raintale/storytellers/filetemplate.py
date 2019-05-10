@@ -9,7 +9,7 @@ module_logger = logging.getLogger('raintale.storytellers.filetemplate')
 
 class FileTemplateStoryTeller(FileStoryteller):
     
-    description = "Given input data and a template file, this storyteller generates a story formatted based on the template."
+    description = "Given input data and a template file, this storyteller generates a story formatted based on the template and saves it to an output file."
 
     def generate_story(self, story_data, mementoembed_api, story_template):
 
