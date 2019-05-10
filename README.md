@@ -38,7 +38,7 @@ Raintale uses docker-compose to load and execute all dependencies. To run rainta
 For example to create a raw HTML story suitable for pasting, type the following within that prompt:
 
 ``
-raintale_cmd -i story-mementos.txt --storyteller rawhtml -o mystory.html --title "This is My Story Title"	--generated-by "Me"
+raintale_cmd -i story-mementos.txt --storyteller html -o mystory.html --title "This is My Story Title"	--generated-by "Me"
 ``
 
 The output will be stored in ``mystory.html``.
