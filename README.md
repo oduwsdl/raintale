@@ -12,8 +12,19 @@ Raintale accepts the following inputs:
 * the author, organization, or algorithm that generated the story (optional)</li>
 
 Raintale supports the following storytellers:
-* rawhtml - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
-* twitter - the resulting story with be a tweet and its replies, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
+* facebook - (EXPERIMENTAL) this storyteller publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
+* html - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
+* twitter - this storyteller publishes a story as a Twitter thread, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
+* template - given input data and a template file, this storyteller generates a story formatted based on the template and saves it to the given output file, allowing the end user to format their own stories
+* jekyll-html - writes output to Jekyll HTML file format, suitable for use with Jekyll and GitHub pages
+* jekyll-markdown - writes output to Jekyll Markdown file format, suitable for use with Jekyll and GitHub pages
+* markdown - writes output to the markdown file format, suitable for pasting into GitHub
+* mediawiki - writes output to this MediaWiki file format, suitable for pasting into MediaWiki pages
+
+Railtale also supports a number of presets for formatting a story for output to a specific file format:
+* socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format
+* thumbnails3col - provides a 3 column layout containing thumbnails of the submitted mementos
+* thumbnails4col - provides a 4 column layout containing thumbnails of the submitted mementos
 
 # Running raintale
 
@@ -51,7 +62,7 @@ raintale_cmd -i story_mementos.txt --storyteller twitter --title "This is My Sto
 
 # Building raintale
 
-Raintale uses ```pip``` for build and installation. From the root of the source code, just type:
+Raintale uses ```pip``` for build and installation. Clone this repository and type the following from the root of the source code:
 
 ```pip install .``` 
 
@@ -59,4 +70,4 @@ to build and install the version from the source code on your machine.
 
 # The future of Raintale
 
-We are working on additional storytellers and story formats. For example, in the near future we plan to add ``thumbnail`` as an story format. Storytellers must be either a file format or an online service that supports an API. The choice in storyteller is highly dependent upon the capabilities and terms of that online service's API.
+We are working on additional storytellers and presets. Storytellers must be either a file format or an online service that supports an API. The choice in storyteller is highly dependent upon the capabilities and terms of that online service's API.
