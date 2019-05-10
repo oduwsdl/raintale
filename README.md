@@ -6,10 +6,12 @@
 Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses MementoEmbed to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
 
 Raintale accepts the following inputs:
-* a file containing a list of memento URLs (URI-Ms) (required)</li>
-* a title for your story (required)</li>
-* the URL of the underlying collection (optional)</li>
-* the author, organization, or algorithm that generated the story (optional)</li>
+* a file containing a list of memento URLs (URI-Ms) (required)
+* a title for your story (required)
+* the URL of the underlying collection (optional)
+* the author, organization, or algorithm that generated the story (optional)
+* an output file for saving the story (if applicable)
+* a credential file for the a social media service (if applicable)
 
 Raintale supports the following storytellers:
 * facebook - (EXPERIMENTAL) this storyteller publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
