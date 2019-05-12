@@ -3,7 +3,8 @@
 
 # Raintale
 
-Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses MementoEmbed to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
+Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses [MementoEmbed](https://www.google.com)
+ to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
 
 Raintale accepts the following inputs:
 * a file containing a list of memento URLs (URI-Ms) (required)
@@ -19,10 +20,10 @@ Raintale supports the following storytellers:
 * html - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
 * twitter - this storyteller publishes a story as a Twitter thread, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
 * template - given input data and a template file, this storyteller generates a story formatted based on the template and saves it to the given output file, allowing the end user to format their own stories
-* jekyll-html - writes output to Jekyll HTML file format, suitable for use with Jekyll and GitHub pages
-* jekyll-markdown - writes output to Jekyll Markdown file format, suitable for use with Jekyll and GitHub pages
-* markdown - writes output to the markdown file format, suitable for pasting into GitHub
-* mediawiki - writes output to this MediaWiki file format, suitable for pasting into MediaWiki pages
+* jekyll-html - writes output to [Jekyll](https://jekyllrb.com/) HTML file format, suitable for use with Jekyll and GitHub pages
+* jekyll-markdown - writes output to [Jekyll](https://jekyllrb.com/) Markdown file format, suitable for use with Jekyll and GitHub pages
+* markdown - writes output to the [GitHub Flavored Markdown](https://github.github.com/gfm/) file format, suitable for pasting into GitHub
+* mediawiki - writes output to this [MediaWiki](https://www.mediawiki.org/wiki/Help:Formatting) file format, suitable for pasting into MediaWiki pages
 
 Railtale also supports a number of presets for formatting a story for output to a specific file format:
 * socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format
