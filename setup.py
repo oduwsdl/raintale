@@ -24,6 +24,9 @@ setup(
     author_email='jones.shawn.m@gmail.com',
     license='MIT',
     packages=find_packages(),
+    package_data={
+        'raintale': [ 'templates/*' ]
+    },
     scripts=[
         'bin/raintale_cmd',
     ],
