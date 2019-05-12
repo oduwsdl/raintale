@@ -10,7 +10,7 @@ services:
     raintale:
         depends_on:
             - mementoembed
-        image: raintale:latest
+        image: oduwsdl/raintale:latest
         restart: always
         volumes: 
             - .:/raintale-work
