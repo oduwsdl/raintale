@@ -92,12 +92,18 @@ class FileTemplateStoryTeller(FileStoryteller):
             pprint.pformat(elements)
         ))
 
+        if 'metadata' in story_data:
+            metadata = story_data['metadata']
+        else:
+            metadata = None
+
         env = Environment()
         template = env.from_string(story_template)
         rendered_story = template.render(
             title=story_data['title'],
             generated_by=story_data['generated_by'],
             collection_url=story_data['collection_url'],
+            metadata=metadata,
             elements=elements
         )
 

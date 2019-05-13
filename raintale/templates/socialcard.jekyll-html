@@ -13,6 +13,16 @@ title: {{ title }}
 <p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
 {% endif %}
 
+{% if metadata is defined %}
+
+{% for key, value in metadata.items() %}
+
+    <p><strong>{{ key|title }}</strong>: {{ value }}</p>
+
+{% endfor %}
+
+{% endif %}
+
 {% for element in elements %}
 <hr>
 

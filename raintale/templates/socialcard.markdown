@@ -9,6 +9,16 @@
 **Collection URL:** [{{ collection_url }}]({{ collection_url }})
 {% endif %}
 
+{% if metadata is defined %}
+
+{% for key, value in metadata.items() %}
+
+**{{ key|title }}**: {{ value }}
+
+{% endfor %}
+
+{% endif %}
+
 {% for element in elements %}
 
 ---
