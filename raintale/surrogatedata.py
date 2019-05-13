@@ -13,7 +13,7 @@ fieldname_to_endpoint = {
     "timemap_uri": "/services/memento/seeddata/",
     "timegate_uri": "/services/memento/seeddata/",
     "human_timegate_uri": "/services/memento/seeddata/",
-    "original_uri": "/services/memento/seeddata/",
+    "original_uri": "/services/memento/originalresourcedata/",
     "memento_count": "/services/memento/seeddata/",
     "first_memento_datetime": "/services/memento/seeddata/",
     "last_memento_datetime": "/services/memento/seeddata/",
@@ -51,7 +51,7 @@ class DataURIUnsupportedEncoding(DataURIParseError):
 def get_template_surrogate_fields(story_template_string):
 
     template_surrogate_fields = \
-        list(set(sorted(re.findall(r'{{ surrogate\.[^}]* }}', story_template_string))))
+        list(set(sorted(re.findall(r'{{ element.surrogate\.[^}]* }}', story_template_string))))
 
     return template_surrogate_fields
 
@@ -90,8 +90,10 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
 
         module_logger.debug("template_surrogate_field: {}".format(template_surrogate_field))
 
-        data_field = template_surrogate_field.replace('{{ surrogate.', '')
+        data_field = template_surrogate_field.replace('{{ element.surrogate.', '')
         data_field = data_field.replace(' }}', '')
+
+        module_logger.debug("data field: {}".format(data_field))
 
         if data_field not in ['urim', 'creation_time', 'memento_datetime_14num']:
             service_list.append( fieldname_to_endpoint[data_field] )

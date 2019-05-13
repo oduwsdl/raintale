@@ -9,22 +9,36 @@
 '''Collection URL:''' [{{ collection_url }} {{ collection_url }}]
 {% endif %}
 
-{% for surrogate in surrogates %}
+{% for element in elements %}
 
 ----
 
-'''[{{ surrogate.urim }} {{ surrogate.title }}]'''
+{% if element.type == 'link' %}
 
-Preserved by [{{ surrogate.archive_uri }} {{ surrogate.archive_name }}]
+'''[{{ element.surrogate.urim }} {{ element.surrogate.title }}]'''
 
-{% if surrogate.collection_name is defined %}
-Member of the Collection [{{ surrogate.archive_collection_uri }} {{ surrogate.archive_collection_name }}]
+Preserved by [{{ element.surrogate.archive_uri }} {{ element.surrogate.archive_name }}]
+
+{% if element.surrogate.collection_name is defined %}
+Member of the Collection [{{ element.surrogate.archive_collection_uri }} {{ element.surrogate.archive_collection_name }}]
 {% endif %}
 
-{{ surrogate.snippet }}
+{{ element.surrogate.snippet }}
 
-[{{ surrogate.urim }} {{ surrogate.original_domain }}  @  {{ surrogate.memento_datetime }}]
+[{{ element.surrogate.urim }} {{ element.surrogate.original_domain }}  @  {{ element.surrogate.memento_datetime }}]
 
-[http://timetravel.mementoweb.org/list/{{ surrogate.memento_datetime_14num }}Z/{{ surrogate.original_uri }} Other Versions] || [{{ surrogate.original_uri }} Current Version]
+[http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }} Other Versions] || [{{ element.surrogate.original_uri }} Current Version]
+
+{% else %}
+
+{{ element.text }}
+
+{% endif %}
 
 {% endfor %}
+
+----
+
+<div style="text-align: right">
+Story visualized with the help of [https://github.com/oduwsdl/raintale Raintale]
+</div>

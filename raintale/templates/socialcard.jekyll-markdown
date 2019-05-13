@@ -3,6 +3,7 @@ layout: post
 title: {{ title }}
 ---
 
+
 **{{ title }}**
 
 {% if generated_by is defined %}
@@ -13,24 +14,38 @@ title: {{ title }}
 **Collection URL:** [{{ collection_url }}]({{ collection_url }})
 {% endif %}
 
-{% for surrogate in surrogates %}
+{% for element in elements %}
 
 ---
 
-<img height="96px" src="{{ surrogate.best_image_uri }}">
+{% if element.type == 'link' %}
 
-**[{{ surrogate.title }}]({{ surrogate.urim }})**
+<img height="96px" src="{{ element.surrogate.best_image_uri }}">
 
-Preserved by <img src="{{ surrogate.archive_favicon }}" width="16"> [{{ surrogate.archive_name }}]({{ surrogate.archive_uri }})
+**[{{ element.surrogate.title }}]({{ element.surrogate.urim }})**
 
-{% if surrogate.collection_name is defined %}
-Member of the Collection [{{ surrogate.archive_collection_name }}]({{ surrogate.archive_collection_uri }})
+Preserved by <img src="{{ element.surrogate.archive_favicon }}" width="16"> [{{ element.surrogate.archive_name }}]({{ element.surrogate.archive_uri }})
+
+{% if element.surrogate.collection_name is defined %}
+Member of the Collection [{{ element.surrogate.archive_collection_name }}]({{ element.surrogate.archive_collection_uri }})
 {% endif %}
 
-{{ surrogate.snippet }}
+{{ element.surrogate.snippet }}
 
-<img src="{{ surrogate.original_favicon }}" width="16"> [{{ surrogate.original_domain }}  @  {{ surrogate.memento_datetime }}]({{ surrogate.urim }})
+<img src="{{ element.surrogate.original_favicon }}" width="16"> [{{ element.surrogate.original_domain }}  @  {{ element.surrogate.memento_datetime }}]({{ element.surrogate.urim }})
 
-[Other Versions](http://timetravel.mementoweb.org/list/{{ surrogate.memento_datetime_14num }}Z/{{ surrogate.original_uri }}) || [Current Version]({{ surrogate.original_uri }})
+[Other Versions](http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }}) || [Current Version]({{ element.surrogate.original_uri }})
+
+{% else %}
+
+{{ element.text }}
+
+{% endif %}
 
 {% endfor %}
+
+---
+
+<div style="text-align: right">
+Story visualized with the help of [Raintale](https://github.com/oduwsdl/raintale)
+</div>
