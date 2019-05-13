@@ -1,30 +1,38 @@
 
-'''{{ title }}'''
+= {{ title }} =
+{% if generated_by is defined %}'''Story By:''' {{ generated_by }}{% endif %}
 
-{% if generated_by is defined %}
-'''Story By:''' {{ generated_by }}
+{% if collection_url is defined %}'''Collection URL:''' [{{ collection_url }} {{ collection_url }}]{% endif %}
+
+{% if metadata is defined %}{% for key, value in metadata.items() %}'''{{ key|title }}''': {{ value }}
+
+{% endfor %}{% endif %}
+{% for element in elements %}
+----
+{% if element.type == 'link' %}
+
+'''[{{ element.surrogate.urim }} {{ element.surrogate.title }}]'''
+
+Preserved by [{{ element.surrogate.archive_uri }} {{ element.surrogate.archive_name }}]
+
+{% if element.surrogate.collection_name is defined %}
+Member of the Collection [{{ element.surrogate.archive_collection_uri }} {{ element.surrogate.archive_collection_name }}]
 {% endif %}
 
-{% if collection_url is defined %}
-'''Collection URL:''' [{{ collection_url }} {{ collection_url }}]
+{{ element.surrogate.snippet }}
+
+[{{ element.surrogate.urim }} {{ element.surrogate.original_domain }}  @  {{ element.surrogate.memento_datetime }}]
+
+[http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }} Other Versions] || [{{ element.surrogate.original_uri }} Current Version]
+{% else %}
+
+{{ element.text }}
 {% endif %}
 
-{% for surrogate in surrogates %}
+{% endfor %}
 
 ----
 
-'''[{{ surrogate.urim }} {{ surrogate.title }}]'''
-
-Preserved by [{{ surrogate.archive_uri }} {{ surrogate.archive_name }}]
-
-{% if surrogate.collection_name is defined %}
-Member of the Collection [{{ surrogate.archive_collection_uri }} {{ surrogate.archive_collection_name }}]
-{% endif %}
-
-{{ surrogate.snippet }}
-
-[{{ surrogate.urim }} {{ surrogate.original_domain }}  @  {{ surrogate.memento_datetime }}]
-
-[http://timetravel.mementoweb.org/list/{{ surrogate.memento_datetime_14num }}Z/{{ surrogate.original_uri }} Other Versions] || [{{ surrogate.original_uri }} Current Version]
-
-{% endfor %}
+<div style="text-align: right">
+Story visualized with the help of [https://github.com/oduwsdl/raintale Raintale]
+</div>

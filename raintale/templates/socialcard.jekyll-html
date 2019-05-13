@@ -13,25 +13,37 @@ title: {{ title }}
 <p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
 {% endif %}
 
-{% for surrogate in surrogates %}
+{% if metadata is defined %}
+
+{% for key, value in metadata.items() %}
+
+    <p><strong>{{ key|title }}</strong>: {{ value }}</p>
+
+{% endfor %}
+
+{% endif %}
+
+{% for element in elements %}
 <hr>
+
+{% if element.type == 'link' %}
 
 <blockquote 
     class="mementoembed"
-    data-versionurl="{{ surrogate.urim }}"
-    data-originalurl="{{ surrogate.original_uri }}"
-    data-surrogate-creation-time="{{ surrogate.creation_time }}"
-    data-image="{{ surrogate.best_image_uri }}"
-    data-archive-name="{{ surrogate.archive_name }}"
-    data-archive-favicon="{{ surrogate.archive_favicon }}"
-    data-archive-uri="{{ surrogate.archive_uri }}"
-    data-archive-collection-id="{{ surrogate.archive_collection_id }}"
-    data-archive-collection-uri="{{ surrogate.archive_collection_uri }}"
-    data-archive-collection-name="{{ surrogate.archive_collection_name }}"
-    data-original-favicon="{{ surrogate.original_favicon }}"
-    data-original-domain="{{ surrogate.original_domain }}"
-    data-original-link-status="{{ surrogate.original_linkstatus }}"
-    data-versiondate="{{ surrogate.memento_datetime }}"
+    data-versionurl="{{ element.surrogate.urim }}"
+    data-originalurl="{{ element.surrogate.original_uri }}"
+    data-surrogate-creation-time="{{ element.surrogate.creation_time }}"
+    data-image="{{ element.surrogate.best_image_uri }}"
+    data-archive-name="{{ element.surrogate.archive_name }}"
+    data-archive-favicon="{{ element.surrogate.archive_favicon }}"
+    data-archive-uri="{{ element.surrogate.archive_uri }}"
+    data-archive-collection-id="{{ element.surrogate.archive_collection_id }}"
+    data-archive-collection-uri="{{ element.surrogate.archive_collection_uri }}"
+    data-archive-collection-name="{{ element.surrogate.archive_collection_name }}"
+    data-original-favicon="{{ element.surrogate.original_favicon }}"
+    data-original-domain="{{ element.surrogate.original_domain }}"
+    data-original-link-status="{{ element.surrogate.original_linkstatus }}"
+    data-versiondate="{{ element.surrogate.memento_datetime }}"
     style="
         width: 445px; 
         font-size: 12px;
@@ -56,7 +68,7 @@ title: {{ title }}
         >
         <img
             style="max-width: 96px; max-height: 96px;"
-            src="{{ surrogate.best_image_uri }}">
+            src="{{ element.surrogate.best_image_uri }}">
     </div>
     <div class="me-textright">
         <p
@@ -73,16 +85,16 @@ title: {{ title }}
                 background: center center no-repeat fixed rgb(255, 255, 255);"
                 >
                 <a class="me-title-link"
-                    data-originalurl="{{ surrogate.original_uri }}"
-                    data-versiondate="{{ surrogate.memento_datetime }}"
-                    href="{{ surrogate.urim }}"
+                    data-originalurl="{{ element.surrogate.original_uri }}"
+                    data-versiondate="{{ element.surrogate.memento_datetime }}"
+                    href="{{ element.surrogate.urim }}"
                     style="
                         text-decoration: none;
                         color: rgb(9, 116, 255);
                         background: center center no-repeat fixed rgb(255, 255, 255);
                         margin: 0px;
                         padding: 0px;
-                        ">{{ surrogate.title }}</a>
+                        ">{{ element.surrogate.title }}</a>
         </p>
         <div 
             class="me-belowtitle"
@@ -96,8 +108,8 @@ title: {{ title }}
                 background: center center no-repeat fixed rgb(255, 255, 255);">
                 <img 
                     class="me-favicon"
-                    src="{{ surrogate.archive_favicon }}"
-                    alt="{{ surrogate.archive_name }}"
+                    src="{{ element.surrogate.archive_favicon }}"
+                    alt="{{ element.surrogate.archive_name }}"
                     width="16"
                     style="
                         background: center center no-repeat fixed rgb(255, 255, 255);
@@ -115,14 +127,14 @@ title: {{ title }}
                         vertical-align: middle;">
                 &nbsp;&nbsp;Preserved by <a
                     class="me-archive-link"
-                    href="{{ surrogate.archive_uri }}"
+                    href="{{ element.surrogate.archive_uri }}"
                     style="
                         text-decoration: none;
                         color: rgb(9, 116, 255);
                         background: center center no-repeat fixed rgb(255, 255, 255);
                         margin: 0px;
-                        padding: 0px;">{{ surrogate.archive_name }}</a>
-                {% if surrogate.collection_name is defined %}
+                        padding: 0px;">{{ element.surrogate.archive_name }}</a>
+                {% if element.surrogate.collection_name is defined %}
                 <br>
                 Member of the Collection 
                 <a class="me-archive-link" style="
@@ -131,7 +143,7 @@ title: {{ title }}
                     background: center center no-repeat fixed rgb(255, 255, 255);
                     margin: 0px;
                     padding: 0px;"
-                    href="{{ surrogate.archive_collection_uri }}">{{ surrogate.archive_collection_name }}</a>
+                    href="{{ element.surrogate.archive_collection_uri }}">{{ element.surrogate.archive_collection_name }}</a>
                 {% endif %}
         </div><br>
         <p 
@@ -143,7 +155,7 @@ title: {{ title }}
             line-height: 18px;
             text-align: left; margin: 0px;
             padding: 0px;
-            background: center center no-repeat fixed rgb(255, 255, 255);">{{ surrogate.snippet }}</p>
+            background: center center no-repeat fixed rgb(255, 255, 255);">{{ element.surrogate.snippet }}</p>
     </div>
     <div 
         class="me-footer" 
@@ -157,7 +169,7 @@ title: {{ title }}
             background: center center no-repeat fixed rgb(255, 255, 255);">&nbsp;&nbsp;
             <img
                 class="me-favicon"
-                src="{{ surrogate.original_favicon }}"
+                src="{{ element.surrogate.original_favicon }}"
                 width="16"
                 style="
                     background: center center no-repeat fixed rgb(255, 255, 255);
@@ -175,18 +187,18 @@ title: {{ title }}
                     vertical-align: middle;">&nbsp;&nbsp;
             <a
                 class="me-pubdate"
-                data-originalurl="{{ surrogate.original_uri }}"
-                data-versiondate="{{ surrogate.memento_datetime }}"
-                href="{{ surrogate.urim }}"
+                data-originalurl="{{ element.surrogate.original_uri }}"
+                data-versiondate="{{ element.surrogate.memento_datetime }}"
+                href="{{ element.surrogate.urim }}"
                 style="
                     text-decoration: none;
                     color: rgb(9, 116, 255);
                     background: center center no-repeat fixed rgb(255, 255, 255);
                     margin: 0px;
-                    padding: 0px;">{{ surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ surrogate.memento_datetime }}</a><br> &nbsp; 
+                    padding: 0px;">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a><br> &nbsp; 
             <a 
                 class="me-allversions"
-                href="http://timetravel.mementoweb.org/list/{{ surrogate.memento_datetime_14num }}Z/{{ surrogate.original_uri }}"
+                href="http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }}"
                 style="
                     text-decoration: none;
                     color: rgb(9, 116, 255);
@@ -195,9 +207,9 @@ title: {{ title }}
                     padding: 0px;">Other Versions</a>&nbsp; || 
             <a 
                 class="me-livestatus"
-                data-versionurl="{{ surrogate.urim }}" 
-                data-versiondate="{{ surrogate.memento_datetime }}"
-                href="{{ surrogate.original_uri }}"
+                data-versionurl="{{ element.surrogate.urim }}" 
+                data-versiondate="{{ element.surrogate.memento_datetime }}"
+                href="{{ element.surrogate.original_uri }}"
                 style="
                     text-decoration: none;
                     color: rgb(9, 116, 255);
@@ -207,5 +219,16 @@ title: {{ title }}
     </div>
 </blockquote>
 
+{% else %}
+
+{{ element.text }}
+
+{% endif %}
 
 {% endfor %}
+
+<hr />
+<div style="text-align: right">
+Story visualized with the help of <a href="https://github.com/oduwsdl/raintale">Raintale</a> 
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAABkmlDQ1BJQ0MgUHJvZmlsZQAAKJF9kLlLA1EQxr8cEpEECwUtRBaMVonE2GhnEiEEIoQYwaiFe+WAZLPsblDBUrCxCFh4NF6FjbW2KWwFQVEEsfE/8GokrPOykUTFDDzmx/dm5s37APsWr6oFZwAoKoaWjIa5+fQC53qGE4PwwIU+XtTVUCIRB8V3/hkfd7CxfONns/7etw2PJOsiYOOIp0RVM4iXiYdWDJXxBnGvRksR7zLOWnzGWLC4Wq9JJSPEt8ScmOMl4jdin5jTioCdzfdKRYl0+7TFCuMcY6GlN9vCxUJZbOzJfuiWlblZVk9nAFHEMIMEOAgoI48CDPgpK6ToSNJ92JBXDdYcKalrWj6bM7gQOSRzMUUc9XHBwNgkwPz+7WNTKx0CE++Ao9LUhB3gYhPof2hq3gOgm7w6v1R5ja9LDjr2TAZ4OSWb00DPNdC1qGfGg9aP3GGg48k0X4cB1zZQq5jm55Fp1o6p+RGoKpZ3jVk4uQdS60D8CtjbB0ay9ObSPx511j1q+NC2puHjF0eKd8kwoFOOAAAACXBIWXMAAAuJAAALiQE3ycutAAAK1WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczpJcHRjNHhtcEV4dD0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcEV4dC8yMDA4LTAyLTI5LyIKICAgICAgICAgICAgeG1sbnM6cGx1cz0iaHR0cDovL25zLnVzZXBsdXMub3JnL2xkZi94bXAvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgICAgICAgICB4bWxuczpHSU1QPSJodHRwOi8vd3d3LmdpbXAub3JnL3htcC8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIj4KICAgICAgICAgPElwdGM0eG1wRXh0OkxvY2F0aW9uQ3JlYXRlZD4KICAgICAgICAgICAgPHJkZjpCYWcvPgogICAgICAgICA8L0lwdGM0eG1wRXh0OkxvY2F0aW9uQ3JlYXRlZD4KICAgICAgICAgPElwdGM0eG1wRXh0OkxvY2F0aW9uU2hvd24+CiAgICAgICAgICAgIDxyZGY6QmFnLz4KICAgICAgICAgPC9JcHRjNHhtcEV4dDpMb2NhdGlvblNob3duPgogICAgICAgICA8SXB0YzR4bXBFeHQ6UmVnaXN0cnlJZD4KICAgICAgICAgICAgPHJkZjpCYWcvPgogICAgICAgICA8L0lwdGM0eG1wRXh0OlJlZ2lzdHJ5SWQ+CiAgICAgICAgIDxJcHRjNHhtcEV4dDpBcnR3b3JrT3JPYmplY3Q+CiAgICAgICAgICAgIDxyZGY6QmFnLz4KICAgICAgICAgPC9JcHRjNHhtcEV4dDpBcnR3b3JrT3JPYmplY3Q+CiAgICAgICAgIDxwbHVzOkltYWdlU3VwcGxpZXI+CiAgICAgICAgICAgIDxyZGY6U2VxLz4KICAgICAgICAgPC9wbHVzOkltYWdlU3VwcGxpZXI+CiAgICAgICAgIDxwbHVzOkxpY2Vuc29yPgogICAgICAgICAgICA8cmRmOlNlcS8+CiAgICAgICAgIDwvcGx1czpMaWNlbnNvcj4KICAgICAgICAgPHBsdXM6SW1hZ2VDcmVhdG9yPgogICAgICAgICAgICA8cmRmOlNlcS8+CiAgICAgICAgIDwvcGx1czpJbWFnZUNyZWF0b3I+CiAgICAgICAgIDxwbHVzOkNvcHlyaWdodE93bmVyPgogICAgICAgICAgICA8cmRmOlNlcS8+CiAgICAgICAgIDwvcGx1czpDb3B5cmlnaHRPd25lcj4KICAgICAgICAgPGRjOkZvcm1hdD5pbWFnZS9wbmc8L2RjOkZvcm1hdD4KICAgICAgICAgPEdJTVA6VGltZVN0YW1wPjE1NTY2NTA0MTE5MjU3MDI8L0dJTVA6VGltZVN0YW1wPgogICAgICAgICA8R0lNUDpQbGF0Zm9ybT5NYWMgT1M8L0dJTVA6UGxhdGZvcm0+CiAgICAgICAgIDxHSU1QOlZlcnNpb24+Mi4xMC4xMDwvR0lNUDpWZXJzaW9uPgogICAgICAgICA8R0lNUDpBUEk+Mi4wPC9HSU1QOkFQST4KICAgICAgICAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDphZDU4OTA4Yi1lZmRkLTRiZDItYWM1YS1iN2ZhZWE0ZGMxMjE8L3htcE1NOkluc3RhbmNlSUQ+CiAgICAgICAgIDx4bXBNTTpIaXN0b3J5PgogICAgICAgICAgICA8cmRmOlNlcT4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpjaGFuZ2VkPi88L3N0RXZ0OmNoYW5nZWQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpzb2Z0d2FyZUFnZW50PkdpbXAgMi4xMCAoTWFjIE9TKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxOS0wNC0zMFQxMjo1MzozMS0wNjowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDpkNzBlOWMzZS04YjkyLTQxOTEtOTkxZC1jMzVlZjZhZTA4Mzc8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOlNlcT4KICAgICAgICAgPC94bXBNTTpIaXN0b3J5PgogICAgICAgICA8eG1wTU06RG9jdW1lbnRJRD5naW1wOmRvY2lkOmdpbXA6YmUyODFhMWItYmExNy00YjcyLTg5ZTItZDgzZTFkOTFkMzk3PC94bXBNTTpEb2N1bWVudElEPgogICAgICAgICA8eG1wTU06T3JpZ2luYWxEb2N1bWVudElEPnhtcC5kaWQ6MzMxYjZmMGMtZmNmMi00NjE5LWJkNjgtZDIyZjc4Yjc0NDEzPC94bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+CiAgICAgICAgIDx0aWZmOkNvbXByZXNzaW9uPjU8L3RpZmY6Q29tcHJlc3Npb24+CiAgICAgICAgIDx0aWZmOlJlc29sdXRpb25Vbml0PjI8L3RpZmY6UmVzb2x1dGlvblVuaXQ+CiAgICAgICAgIDx0aWZmOlBob3RvbWV0cmljSW50ZXJwcmV0YXRpb24+MjwvdGlmZjpQaG90b21ldHJpY0ludGVycHJldGF0aW9uPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8eG1wOkNyZWF0b3JUb29sPkdJTVAgMi4xMDwveG1wOkNyZWF0b3JUb29sPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4K9x92LAAAAvFJREFUKBU1U0tME1EUvfNm3sx0CkNpC3TaUpBC+BQR+UhiipTCAtSCMdFglGhMZOFCSYxh4cqdmmhCIhoXrogajQuDCxYGqZjyMWkIRBMkmCKBBhRhoS3QzzzfFOYmZ+7NuefeeZ/7APaNJ4QwBzHYSxsDAMbnIDrHAfLHAPBQaa3Xp+epR3rM+Hw+LhgMpg4IpaX95ENHgfVCs/c4SJIBBEGA9fUN+ByagujGn8GpiQ/9erHm9eKaE/7OgeqqslZR4JU2v490dHTGk8kkRzUknU6rDocifRyfuJlIqSvhybFHTU2d8szM6F+WChou9l4JnTvbVZedJWUXFbkSra1+JhKJCNoPaDEXj8dxeXl5cnk5wq6uruVHfiw+W1tb2qN5QL72U/fa/S0GQcD/YrFYcmdnh6c8K0kSGRkZgbm5OWBZFmgjTFcERkk8VNPQ/ArAeo3qGM5pz6+gAcRicQNCiOV5HjDG4HA4mEAgkIlpM1BVNdPI3+I1ZctyTzS63jP8+p2bNVmVjtoaj5vH3B7GPIpGo6rFYlEVRVFpoUoPUaVN1XA4rC4sLKg2m40gxMQsZrOwuxszsz8jS99kk+Wq0+kQDKKIaBGanZ1F9FrR1tYW2t7eRnQbKBQKIbfbjYDyHOaEWHwXJqfDQf3u67y+87c9FYpHFFkbMExqbn4eB6dXiNVk2q6vyZMPV3u4RCJBN4sYhIT496XFr6Pv396ghEc7NM1kig4KE0VxceN1W9+temt1E/TaSo9WUc5O4aKwUJyhKKI4MDu4CorvbpZUPpjQKc2bnT19RttjUlJ1uk3nW9qg2VU2mC4u77+vcyAW3HkDLCFgnPwFTjimJaRC6ObkLwkkECLYLj/NiC3gYEwvNulsEdY89EnjMjOtErkKYQBeXE3JAmxlxATy6BowgwkwaOW3xsk5IHFsroWlI8bhyG5Gp32kQtwgKoGXkr20e5/MPCxksHcOCHb/kxwX5Opi0Xnkkqh0DWcVQaXG/QclOfZUewTcKgAAAABJRU5ErkJggg==" alt="Raintale Logo" />
+</div>

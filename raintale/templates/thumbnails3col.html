@@ -12,14 +12,21 @@
 
 <table border="0">
 <tr>
-{% for surrogate in surrogates %}
+{% for element in elements %}
 
-    <td><img src="{{ surrogate.thumbnail }}"></td>
+{% if element.type == 'link' %}
+
+    <td><img src="{{ element.surrogate.thumbnail }}"></td>
 
     {% if loop.index is divisibleby 3 %}
         </tr><tr>
     {% endif %}
 
+{% else %}
+
+<!-- Element type {{ element.type }} is unsupported by the thubmnails3col template -->
+
+{% endif %}
+
 {% endfor %}
 </table>
-
