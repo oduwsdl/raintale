@@ -14,5 +14,5 @@
 {{ element.surrogate.urim }}
 
 {# RAINTALE ELEMENT MEDIA #}
-
+{{ element.surrogate.thumbnail }}
 {{ element.surrogate.best_image_uri }}
