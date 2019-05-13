@@ -124,7 +124,8 @@ class ServiceStoryteller(Storyteller):
         story_output_data["main_post"] = Template(title_template).render(
                 title=story_data['title'],
                 generated_by=story_data['generated_by'],
-                collection_url=story_data['collection_url']
+                collection_url=story_data['collection_url'],
+                metadata=story_data['metadata']
         )
 
         template_surrogate_fields = get_template_surrogate_fields(element_template)
