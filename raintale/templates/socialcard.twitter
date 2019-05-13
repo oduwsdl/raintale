@@ -1,16 +1,18 @@
 {# RAINTALE MULTIPART TEMPLATE #}
 {# RAINTALE TITLE PART #}
 {{ title }}
+
 {% if generated_by is defined %}Story By: {{ generated_by }}{% endif %}
+
 {% if collection_url is defined %}{{ collection_url }}{% endif %}
 {# RAINTALE ELEMENT PART #}
 
-{{ surrogate.title }}
+{{ element.surrogate.title }}
 
-{{ surrogate.memento_datetime }}
+{{ element.surrogate.memento_datetime }}
 
-{{ surrogate.urim }}
+{{ element.surrogate.urim }}
 
 {# RAINTALE ELEMENT MEDIA #}
-{{ surrogate.thumbnail }}
-{{ surrogate.best_image_uri }}
+{{ element.surrogate.thumbnail }}
+{{ element.surrogate.best_image_uri }}

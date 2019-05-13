@@ -7,14 +7,14 @@
 {% if collection_url is defined %}{{ collection_url }}{% endif %}
 {# RAINTALE ELEMENT PART #}
 
-{{ surrogate.urim }}
+{{ element.surrogate.urim }}
 
-{{ surrogate.title }}
+{{ element.surrogate.title }}
 
-{{ surrogate.snippet }}
+{{ element.surrogate.snippet }}
 
-{{ surrogate.original_domain }}  @  {{ surrogate.memento_datetime }}
+{{ element.surrogate.original_domain }}  @  {{ element.surrogate.memento_datetime }}
 
-Preserved by {{ surrogate.archive_name }}
+Preserved by {{ element.surrogate.archive_name }}
 
 {# RAINTALE ELEMENT MEDIA #}
