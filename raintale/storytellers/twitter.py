@@ -3,6 +3,8 @@ import mimetypes
 import tempfile
 import os
 import time
+import sys
+import pprint
 
 import twitter
 
@@ -76,7 +78,7 @@ class TwitterStoryTeller(ServiceStoryteller):
 
         module_logger.debug("template_media_fields: {}".format(template_media_fields))
 
-        module_logger.info("preparing to iterate through {} story "
+        module_logger.debug("preparing to iterate through {} story "
             "elements".format(len(story_elements)))
 
         for element in story_elements:
@@ -106,9 +108,12 @@ class TwitterStoryTeller(ServiceStoryteller):
                             mementoembed_api,
                             urim
                         )
+                        module_logger.debug("field_data: {}".format(field_data))
                         media_uris.append(
                                 Template(field).render(
-                                surrogate=field_data
+                                element={
+                                    "surrogate": field_data
+                                }
                         ))
 
                     module_logger.debug("media_uris: {}".format(media_uris))
@@ -116,9 +121,22 @@ class TwitterStoryTeller(ServiceStoryteller):
                     story_output_data["thread_tweets"].append(
                         {
                             "text": Template(element_template).render(
-                                surrogate=memento_data
+                                {
+                                    "element": {
+                                        'surrogate': memento_data 
+                                    }
+                                }
                             ),
                             "media": media_uris
+                        }
+                    )
+
+                elif element['type'] == 'text':
+
+                    story_output_data["thread_tweets"].append(
+                        {
+                            "text": element['value'],
+                            "media": []
                         }
                     )
 
@@ -132,6 +150,10 @@ class TwitterStoryTeller(ServiceStoryteller):
                 module_logger.exception(
                     "cannot process story element data of {}, skipping".format(element)
                 )
+
+        module_logger.info(
+            "story_output_data: {}".format(pprint.pformat(story_output_data))
+        )
 
         return story_output_data
 
