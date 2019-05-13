@@ -1,6 +1,11 @@
 import logging
+import sys # for debugging
+import pprint # for debugging
 
 from yaml import load, Loader
+from jinja2 import Template
+
+from ..surrogatedata import get_memento_data, get_template_surrogate_fields
 
 module_logger = logging.getLogger('raintale.storytellers.storyteller')
 
@@ -103,6 +108,116 @@ class ServiceStoryteller(Storyteller):
         with open(self.credentials_filename) as f:
             self.credentials = load(f, Loader=Loader)
 
+    def generate_story(self, story_data, mementoembed_api, story_template):
+
+        title_template, element_template, media_template_list = split_multipart_template(story_template)
+
+        story_elements = get_story_elements(story_data)
+
+        module_logger.debug("media_template_list: {}".format(media_template_list))
+        
+        story_output_data = {
+            "main_post": "",
+            "comment_posts": []
+        }
+
+        story_output_data["main_post"] = Template(title_template).render(
+                title=story_data['title'],
+                generated_by=story_data['generated_by'],
+                collection_url=story_data['collection_url']
+        )
+
+        template_surrogate_fields = get_template_surrogate_fields(element_template)
+
+        template_media_fields = []
+        
+        for field in media_template_list:
+
+            # there should only be one
+            template_media_fields.append(
+                get_template_surrogate_fields(field)[0]
+            )
+
+        module_logger.debug("template_media_fields: {}".format(template_media_fields))
+
+        module_logger.info("preparing to iterate through {} story "
+            "elements".format(len(story_elements)))
+
+        for element in story_elements:
+
+            try:
+
+                if element['type'] == 'link':
+
+                    urim = element['value']
+
+                    memento_data = get_memento_data(
+                        template_surrogate_fields, 
+                        mementoembed_api, 
+                        urim)
+
+                    module_logger.debug("memento_data: {}".format(memento_data))
+
+                    media_uris = []
+
+                    module_logger.debug("template_media_fields: {}".format(template_media_fields))
+
+                    for field in template_media_fields:
+
+                        module_logger.debug("field: {}".format(field))
+                        field_data = get_memento_data(
+                            [field],
+                            mementoembed_api,
+                            urim
+                        )
+                        media_uris.append(
+                                Template(field).render(
+                                element={
+                                    "surrogate": field_data
+                                }
+                        ))
+
+                    module_logger.debug("media_uris: {}".format(media_uris))
+
+                    story_output_data["comment_posts"].append(
+                        {
+                            "text": Template(element_template).render(
+                                {
+                                    "element": {
+                                        "surrogate": memento_data
+                                    }
+                                }
+                            ),
+                            "media": media_uris
+                        }
+                    )
+
+                elif element['type'] == 'text':
+
+                    story_output_data["comment_posts"].append(
+                        {
+                            "text": element['value'],
+                            "media": []
+                        }
+                    )
+
+                else:
+                    module_logger.warning(
+                        "element of type {} is unsupported, skipping...".format(element['type'])
+                    )
+
+            except KeyError:
+
+                module_logger.exception(
+                    "cannot process story element data of {}, skipping".format(element)
+                )
+
+        module_logger.debug(
+            "story_output_data: {}".format(pprint.pformat(story_output_data))
+        )
+
+        return story_output_data
+
     def auth(self):
         raise NotImplementedError(
             "ServiceStoryTeller class is not meant to be called directly. "
@@ -112,7 +227,6 @@ class ServiceStoryteller(Storyteller):
         raise NotImplementedError(
             "ServiceStoryTeller class is not meant to be called directly. "
             "Create a child class to use ServiceStoryTeller functionality.")
-
 
 class FileStoryteller(Storyteller):
 

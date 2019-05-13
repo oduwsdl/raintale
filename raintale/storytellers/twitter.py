@@ -3,8 +3,8 @@ import mimetypes
 import tempfile
 import os
 import time
-import sys
-import pprint
+import sys # for debugging
+import pprint # for debugging
 
 import twitter
 
@@ -78,7 +78,7 @@ class TwitterStoryTeller(ServiceStoryteller):
 
         module_logger.debug("template_media_fields: {}".format(template_media_fields))
 
-        module_logger.debug("preparing to iterate through {} story "
+        module_logger.info("preparing to iterate through {} story "
             "elements".format(len(story_elements)))
 
         for element in story_elements:
