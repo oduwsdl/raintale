@@ -129,7 +129,7 @@
                         background: center center no-repeat fixed rgb(255, 255, 255);
                         margin: 0px;
                         padding: 0px;">{{ element.surrogate.archive_name }}</a>
-                {% if element.surrogate.collection_name is defined %}
+                {% if element.surrogate.archive_collection_name is not none %}
                 <br>
                 Member of the Collection 
                 <a class="me-archive-link" style="
