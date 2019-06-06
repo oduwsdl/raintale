@@ -32,6 +32,10 @@ fieldname_to_endpoint = {
     "archive_collection_name": "/services/memento/archivedata/",
     "archive_collection_uri": "/services/memento/archivedata/",
     "best_image_uri": "/services/memento/bestimage/",
+    "ranked_image_1": "/services/memento/imagedata/",
+    "ranked_image_2": "/services/memento/imagedata/",
+    "ranked_image_3": "/services/memento/imagedata/",
+    "ranked_image_4": "/services/memento/imagedata/",
     "title": "/services/memento/contentdata/",
     "snippet": "/services/memento/contentdata/",
     "memento_datetime": "/services/memento/contentdata/",
@@ -113,12 +117,25 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
         if r.status_code == 200:
 
             if service == '/services/product/thumbnail/':
+
                 memento_data['thumbnail'] = png_to_datauri(r.content)
+
+            elif service == '/services/memento/imagedata/':
+                jsondata = r.json()
+
+                # module_logger.debug("jsondata for images: \n{}".format(jsondata))
+
+                for imagecounter in range(0, len(jsondata['ranked images'])):
+                    memento_data['ranked_image_{}'.format(imagecounter + 1)] = \
+                        jsondata['ranked images'][imagecounter]
+                    
             else:
                 for key in r.json():
                     memento_data[ key.replace('-', '_') ] = r.json()[key]
 
         # TODO: what do we do if not 200? what is one service is 200, but another not?
+        else:
+            module_logger.error("failed to retrieve data from endpoint {}".format(endpoint))
 
     memento_data['urim'] = urim
     memento_data['creation_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")

@@ -15,4 +15,6 @@
 
 {# RAINTALE ELEMENT MEDIA #}
 {{ element.surrogate.thumbnail }}
-{{ element.surrogate.best_image_uri }}
+{{ element.surrogate.ranked_image_1 }}
+{{ element.surrogate.ranked_image_2 }}
+{{ element.surrogate.ranked_image_3 }}

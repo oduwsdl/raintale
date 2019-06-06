@@ -146,6 +146,8 @@ class ServiceStoryteller(Storyteller):
 
         for element in story_elements:
 
+            module_logger.debug("working on story element {}".format(element))
+
             try:
 
                 if element['type'] == 'link':
