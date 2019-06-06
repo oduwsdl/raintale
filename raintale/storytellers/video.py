@@ -67,7 +67,7 @@ def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_w
             (0, math.floor(frame_height) + 45),
             (video_width, math.floor(frame_height) + 90),
         ),
-        fill=(255, 255, 255, 255)
+        fill=(255, 255, 255)
     )
 
     newim.paste(original_favicon_im, (offset[0], math.floor(frame_height) + 50), )
@@ -77,28 +77,31 @@ def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_w
 
     d.text( (offset[0] + 20, math.floor(frame_height) + 45), 
         "{}@{}".format(original_domain, memento_datetime),
-        font=sourcefnt, fill=(0, 0, 0, 255) 
+        font=sourcefnt, fill=(0, 0, 0) 
         )
     d.text( (offset[0] + 20, math.floor(frame_height) + 65 ), 
         "Preserved by {}".format(archive_name),
-        font=sourcefnt, fill=(0, 0, 0, 255) 
+        font=sourcefnt, fill=(0, 0, 0) 
         )
 
     for i in range(1, 99, 10):
         i = i / 100
         imgcounter += 1
         filename = "{}/img{}.png".format(framesdir, str(imgcounter).zfill(10))
+        module_logger.debug("saving file to {}".format(filename))
         Image.blend(imbase, newim, i).save(filename)
 
     for i in range(0, 30):
         imgcounter += 1
         filename = "{}/img{}.png".format(framesdir, str(imgcounter).zfill(10))
+        module_logger.debug("saving file to {}".format(filename))
         newim.save(filename)
 
     for i in range(1, 99, 10):
         i = i / 100
         imgcounter += 1
         filename = "{}/img{}.png".format(framesdir, str(imgcounter).zfill(10))
+        module_logger.debug("saving file to {}".format(filename))
         Image.blend(newim, imbase, i).save(filename)
 
     return imgcounter
@@ -237,8 +240,8 @@ class VideoStoryTeller(FileStoryteller):
 
         session = requests_cache.CachedSession()
 
-        # workingdir = tempfile.mkdtemp(suffix=".tmp", prefix="raintale-")
-        workingdir = "/Users/smj/tmp/raintale-testing"
+        workingdir = tempfile.mkdtemp(suffix=".tmp", prefix="raintale-")
+        # workingdir = "/Users/smj/tmp/raintale-testing"
         framesdir = "{}/videoframes".format(workingdir)
 
         if not os.path.exists(framesdir):
@@ -328,7 +331,7 @@ class VideoStoryTeller(FileStoryteller):
                     ifp = io.BytesIO(ofav.content)
                     or_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((16, 16), resample=Image.BICUBIC)
 
-                    d.text( (0, 0), text, font=sentencefnt, fill=(255, 255, 255, 255) )
+                    d.text( (0, 0), text, font=sentencefnt, fill=(255, 255, 255) )
 
                     imgcounter = save_fading_frames(imbase, im, framesdir, video_width, video_height, 
                         frame_width, frame_height, imgcounter, ar_favicon_im, or_favicon_im, 
@@ -336,26 +339,37 @@ class VideoStoryTeller(FileStoryteller):
 
         im = imbase.copy()
         d = ImageDraw.Draw(im)
-        d.text( (40, 40), "The End", font=sentencefnt, fill=(255, 255, 255, 255))
+        d.text( (40, 40), "The End", font=sentencefnt, fill=(255, 255, 255))
         imgcounter += 1
         filename = "{}/img{}.png".format(framesdir, str(imgcounter).zfill(10))
         im.save(filename)
 
         module_logger.info("generating movie from frames")
 
-        # sys.exit(255)
-
         if os.path.exists(self.output_filename):
             os.unlink(self.output_filename)
+
+        # outputims = []
+        # imout = Image.new("RGBA", (video_width, video_height), "black")
+
+        # for filename in os.listdir(framesdir):            
+        #     im = Image.open("{}/{}".format(framesdir, filename))
+        #     outputims.append(im)
+                
+
+        # with open(self.output_filename, 'wb') as outputfp:
+        #     imout.save(
+        #         outputfp, save_all=True, format="GIF", 
+        #         append_images=outputims, duration=100, loop=0
+        #     ) 
 
         (
             ffmpeg
             .input('{}/img*.png'.format(framesdir), pattern_type='glob', framerate=10)
-            .output(self.output_filename)    
+            .output(self.output_filename, pix_fmt='yuv420p', vcodec='libx264')
             .run()
         )
 
-        # .output(self.output_filename, pix_fmt='yuv420p', vcodec='libx264')
-        # shutil.rmtree(workingdir)
+        shutil.rmtree(workingdir)
 
         module_logger.info("movie has been saved to {}".format(self.output_filename))
