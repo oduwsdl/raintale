@@ -20,7 +20,8 @@ module_logger = logging.getLogger('raintale.storytellers.video')
 
 pp = pprint.PrettyPrinter(indent=4)
 
-def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_width, frame_height, imgcounter):
+def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_width, frame_height, imgcounter,
+    archive_favicon_im, original_favicon_im, archive_name, original_domain, memento_datetime, sourcefnt ):
     im_width = im.size[0]
     im_height = im.size[1]
 
@@ -55,9 +56,33 @@ def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_w
 
     offset = (math.floor((bg_w - im_width) / 2), math.floor((bg_h - im_height) / 2))
 
-    module_logger.debug("offset is {}".format(offset))
+    module_logger.info("offset is {}".format(offset))
 
     newim.paste(im, offset)
+
+    d = ImageDraw.Draw(newim)
+
+    d.rectangle(
+        (
+            (0, math.floor(frame_height) + 45),
+            (video_width, math.floor(frame_height) + 90),
+        ),
+        fill=(0, 0, 0, 100)
+    )
+
+    newim.paste(original_favicon_im, (offset[0], math.floor(frame_height) + 50), )
+    newim.paste(
+        archive_favicon_im, 
+        (offset[0], math.floor(frame_height) + 70), )
+
+    d.text( (offset[0] + 20, math.floor(frame_height) + 45), 
+        "{}@{}".format(original_domain, memento_datetime),
+        font=sourcefnt, fill=(0, 0, 0, 255) 
+        )
+    d.text( (offset[0] + 20, math.floor(frame_height) + 65 ), 
+        "Preserved by {}".format(archive_name),
+        font=sourcefnt, fill=(0, 0, 0, 255) 
+        )
 
     for i in range(1, 99, 10):
         i = i / 100
@@ -231,7 +256,7 @@ class VideoStoryTeller(FileStoryteller):
         toptitlefnt = ImageFont.truetype(fontfile, 20)
         metadatafnt = ImageFont.truetype(fontfile, 16)
         sentencefnt = ImageFont.truetype(fontfile, 40)
-        sourcefnt = ImageFont.truetype(fontfile, 26)
+        sourcefnt = ImageFont.truetype(fontfile, 16)
         imblank = Image.new("RGBA", (video_width, video_height), "black") 
         imbase = Image.new("RGBA", (video_width, video_height), "black")
         d = ImageDraw.Draw(imbase)
@@ -257,8 +282,18 @@ class VideoStoryTeller(FileStoryteller):
 
                         ifp = io.BytesIO(data)
                         im = Image.open(ifp).convert('RGBA', palette=Image.ADAPTIVE)
-                        
-                        imgcounter = save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_width, frame_height, imgcounter)
+
+                        ifp = io.BytesIO(afav.content)
+                        ar_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((16, 16), resample=Image.BICUBIC)
+
+                        ifp = io.BytesIO(ofav.content)
+                        or_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((16, 16), resample=Image.BICUBIC)
+
+                        imgcounter = save_fading_frames(imbase, im, framesdir, video_width, video_height, 
+                            frame_width, frame_height,
+                            imgcounter, ar_favicon_im, or_favicon_im, element["archive-name"],
+                            element["original-domain"], element["memento-datetime"], sourcefnt)
+
 
             if "text" in element:
 
@@ -284,24 +319,16 @@ class VideoStoryTeller(FileStoryteller):
                     module_logger.debug("writing sentence item {}".format(text))
 
                     ifp = io.BytesIO(afav.content)
-                    ar_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((32, 32), resample=Image.BICUBIC)
-                    im.paste(ar_favicon_im, (0, math.floor(frame_height) + 110), )
+                    ar_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((16, 16), resample=Image.BICUBIC)
 
                     ifp = io.BytesIO(ofav.content)
-                    or_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((32, 32), resample=Image.BICUBIC)
-                    im.paste(or_favicon_im, (0, math.floor(frame_height) + 70), )
+                    or_favicon_im = Image.open(ifp).convert("RGBA", palette=Image.ADAPTIVE).resize((16, 16), resample=Image.BICUBIC)
 
                     d.text( (0, 0), text, font=sentencefnt, fill=(255, 255, 255, 255) )
-                    d.text( (36, frame_height + 70), 
-                        "{}@{}".format(element["original-domain"], element["memento-datetime"]),
-                        font=sourcefnt, fill=(255, 255, 255, 255) 
-                        )
-                    d.text( (36, frame_height + 110 ), 
-                        "Preserved by {}".format(element["archive-name"]),
-                        font=sourcefnt, fill=(255, 255, 255, 255) 
-                        )
 
-                    imgcounter = save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_width, frame_height, imgcounter)
+                    imgcounter = save_fading_frames(imbase, im, framesdir, video_width, video_height, 
+                        frame_width, frame_height, imgcounter, ar_favicon_im, or_favicon_im, 
+                        element["archive-name"], element["original-domain"], element["memento-datetime"], sourcefnt)
 
         im = imbase.copy()
         d = ImageDraw.Draw(im)
@@ -312,7 +339,7 @@ class VideoStoryTeller(FileStoryteller):
 
         module_logger.info("generating movie from frames")
 
-        sys.exit(255)
+        # sys.exit(255)
 
         if os.path.exists(self.output_filename):
             os.unlink(self.output_filename)
