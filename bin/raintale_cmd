@@ -14,7 +14,7 @@ import requests
 
 from yaml import load, Loader
 
-from raintale.storytellers.storytellers import storytellers
+from raintale.storytellers.storytellers import storytellers, storytellers_without_templates
 from raintale.storytellers.filetemplate import FileTemplateStoryTeller
 from raintale import package_directory
 
@@ -135,7 +135,7 @@ def process_arguments(args):
 
     parser.add_argument('--mementoembed_api', dest='mementoembed_api',
         required=False, 
-        default=["http://localhost:5550", "http://mementoembed:5550"],
+        default=["http://localhost:5550", "http://mementoembed:5550", "http://localhost:5000"],
         help="The URL of the MementoEmbed instance used for generating surrogates"
     )
 
@@ -347,9 +347,12 @@ def choose_story_template(storyteller, preset, given_story_template_filename):
     except FileNotFoundError:
 
         if given_story_template_filename is None:
-            logger.error("Unsupported preset {} for storyteller {}".format(preset, storyteller))
-            print("EXITING DUE TO ERROR.")
-            sys.exit(errno.EINVAL)
+
+            if storyteller not in storytellers_without_templates:
+                logger.error("Unsupported preset {} for storyteller {}".format(preset, storyteller))
+                print("EXITING DUE TO ERROR.")
+                sys.exit(errno.EINVAL)
+
         else:
             logger.error("Cannot locate given template filename of {}".format(story_template_filename))
             print("EXITING DUE TO ERROR.")

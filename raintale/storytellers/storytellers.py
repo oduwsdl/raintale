@@ -11,3 +11,7 @@ storytellers = {
     "template": FileTemplateStoryTeller,
     "video": VideoStoryTeller
 }
+
+storytellers_without_templates = [
+    "video"
+]
