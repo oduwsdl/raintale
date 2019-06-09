@@ -11,24 +11,26 @@ Raintale accepts the following inputs:
 * a title for your story (required)
 * the URL of the underlying collection (optional)
 * the author, organization, or algorithm that generated the story (optional)
+* the storyteller to use when generating the story (e.g., HTML, Twitter, Markdown)
 * an output file for saving the story (if applicable)
 * a credential file for the a social media service (if applicable)
-* a template file allowing the user to format their story differently than the defaults (optional)
+* a template file allowing the user to format their story differently than the defaults (optional, and not supported by all storytellers)
 
 Raintale supports the following storytellers:
-* facebook - (EXPERIMENTAL) this storyteller publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
+* facebook - (EXPERIMENTAL) publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
 * html - the HTML that makes up a story, suitable for pasting into a web page or a blogging application such as Blogger
-* twitter - this storyteller publishes a story as a Twitter thread, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
+* twitter - publishes a story as a Twitter thread, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
 * template - given input data and a template file, this storyteller generates a story formatted based on the template and saves it to the given output file, allowing the end user to format their own stories
 * jekyll-html - writes output to [Jekyll](https://jekyllrb.com/) HTML file format, suitable for use with Jekyll and GitHub pages
 * jekyll-markdown - writes output to [Jekyll](https://jekyllrb.com/) Markdown file format, suitable for use with Jekyll and GitHub pages
 * markdown - writes output to the [GitHub Flavored Markdown](https://github.github.com/gfm/) file format, suitable for pasting into GitHub
 * mediawiki - writes output to this [MediaWiki](https://www.mediawiki.org/wiki/Help:Formatting) file format, suitable for pasting into MediaWiki pages
+* video - (EXPERIMENTAL) creates an MP4 file containing the top images and sentences from the mementos in your story
 
 Railtale also supports a number of presets for formatting a story for output to a specific file format:
-* socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format
-* thumbnails3col - provides a 3 column layout containing thumbnails of the submitted mementos
-* thumbnails4col - provides a 4 column layout containing thumbnails of the submitted mementos
+* socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format (html, markdown, mediawiki, and jekyll storytellers)
+* thumbnails3col - provides a 3 column layout containing thumbnails of the submitted mementos (HTML storyteller only)
+* thumbnails4col - provides a 4 column layout containing thumbnails of the submitted mementos (HTML storyteller only)
 
 Note that not all file formats support all presets.
 
