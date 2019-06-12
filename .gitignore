@@ -107,3 +107,7 @@ venv.bak/
 .vscode/
 
 .DS_Store
+
+# Jekyll work for gh-pages branch
+_site/
+_testtemplates/
