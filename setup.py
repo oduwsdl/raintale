@@ -28,7 +28,7 @@ setup(
         'raintale': [ 'templates/*' ]
     },
     scripts=[
-        'bin/raintale',
+        'bin/tellstory',
     ],
     include_package_data=True,
     install_requires=[
