@@ -1,10 +1,13 @@
 import re
 import logging
 import base64
+import random
+
+import requests
 
 from datetime import datetime
 
-import requests
+from requests_futures.sessions import FuturesSession
 
 module_logger = logging.getLogger('raintale.surrogatedata')
 
@@ -145,3 +148,144 @@ def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
             datetime.strptime(memento_data['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
 
     return memento_data
+
+
+class MementoData:
+
+    def __init__(self, template, mementoembed_api):
+        self.template = template
+
+        if mementoembed_api.endswith('/'):
+            self.mementoembed_api = mementoembed_api[:-1]
+        else:
+            self.mementoembed_api = mementoembed_api
+
+        self.fields_and_preferences = self._get_field_names_and_preferences()
+        # TODO: endpoint_to_fieldname
+        self.endpoint_list = self._get_endpoint_list()
+
+        # TODO: consider other backends than RAM
+        self.data = {}
+        self.urimlist = []
+
+    def _get_field_names_and_preferences(self):
+
+        fields_and_preferences = []
+
+        template_surrogate_fields = get_template_surrogate_fields(
+            self.template
+        )
+
+        for field in template_surrogate_fields:
+            if '|prefer ' in field:
+                fieldname, preference = [i.strip() for i in field.split('|prefer ')]
+                preference = preference.replace(' }}', '')
+
+            else:
+                fieldname = field
+                preference = None
+
+            fieldname = fieldname.replace('{{ element.surrogate.', '')
+            fieldname = fieldname.replace(' }}', '')
+
+            fields_and_preferences.append(
+                (fieldname, preference)
+            )
+        
+        return fields_and_preferences
+
+    def _get_endpoint_list(self):
+        
+        # what if the same endpoint appears with different preferences?
+        # only one call, right?
+
+        endpoints = {}
+
+        for fieldname,pref in self.fields_and_preferences:
+
+            endpoint = self.mementoembed_api + fieldname_to_endpoint[fieldname]
+
+            endpoints.setdefault(endpoint, [])
+            
+            if pref is not None:
+                if pref not in endpoints[endpoint]:
+                    endpoints[endpoint].append(pref)
+
+        return endpoints
+
+    def add(self, urim):
+        self.urimlist.append(urim)
+
+    def fetch_all_memento_data(self, session=None):
+
+        # TODO: if the data is already present for a URI-M, don't go through this again, but how do we know?
+        
+        if session is not None:
+            fs = FuturesSession(session=session)
+        else:
+            fs = FuturesSession()
+
+        service_uri_futures = {}
+
+        for urim in self.urimlist:
+
+            module_logger.debug("working on URI-M {}".format(urim))
+
+            for endpoint in self.endpoint_list:
+
+                headers = {}
+
+                service_uri = endpoint + urim
+
+                if len(self.endpoint_list[endpoint]) > 0:
+                    headers['Prefer'] = ','.join(self.endpoint_list[endpoint])
+
+                module_logger.debug("issuing request for service URI {}".format(service_uri))
+
+                service_uri_futures.setdefault(urim, {})
+                service_uri_futures[urim][service_uri] = \
+                    fs.get(service_uri, headers=headers)
+
+        all_memento_data = {}
+
+        def urim_generator(working_list):
+
+            while len(working_list) > 0:
+                choice = random.choice(working_list)
+                yield choice
+
+        working_service_uri_list = []
+        for urim in service_uri_futures:
+            for working_service_uri in service_uri_futures[urim]:
+                working_service_uri_list.append((urim, working_service_uri))
+
+        module_logger.debug("extracting data from futures: {}".format(service_uri_futures))
+
+        for urim,service_uri in urim_generator(working_service_uri_list):
+
+            if service_uri_futures[urim][service_uri].done():
+
+                module_logger.debug("service URI {} is done".format(service_uri))
+
+                jdata = service_uri_futures[urim][service_uri].result().json()
+
+                for key in jdata:
+                    all_memento_data.setdefault(urim, {})
+                    all_memento_data[urim][ key.replace('-', '_') ] = jdata[key]
+
+                working_service_uri_list.remove((urim,service_uri))
+
+        self.data = all_memento_data
+
+    def get_memento_data(self, urim, session=None):
+
+        if urim not in self.urimlist:
+            self.urimlist.append(urim)
+
+        self.fetch_all_memento_data(session=session)
+
+        return self.data[urim]
+
+    def get_sanitized_template(self):
+        # TODO: sanitize the template
+        pass
