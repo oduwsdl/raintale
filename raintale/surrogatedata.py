@@ -217,8 +217,6 @@ class MementoData:
         self.urimlist.append(urim)
 
     def fetch_all_memento_data(self, session=None):
-
-        # TODO: if the data is already present for a URI-M, don't go through this again, but how do we know?
         
         if session is not None:
             fs = FuturesSession(session=session)
@@ -282,7 +280,8 @@ class MementoData:
         if urim not in self.urimlist:
             self.urimlist.append(urim)
 
-        self.fetch_all_memento_data(session=session)
+        if urim not in self.data:
+            self.fetch_all_memento_data(session=session)
 
         return self.data[urim]
 
