@@ -305,6 +305,15 @@ def choose_mementoembed_api(mementoembed_api_candidates):
 
     if type(mementoembed_api_candidates) == list:
         statusii = []
+
+        env_mementoembed_api_candidate = os.getenv("MEMENTOEMBED_API_ENDPOINT")
+
+        if env_mementoembed_api_candidate is not None:
+            logger.info("adding {} from the environment to the list of candidate MementoEmbed API endpoints".format(env_mementoembed_api_candidate))
+            mementoembed_api_candidates.insert(
+                0, env_mementoembed_api_candidate
+            )
+
         for url in mementoembed_api_candidates:
             status = test_mementoembed_endpoint(url)
             statusii.append(status)
@@ -319,6 +328,9 @@ def choose_mementoembed_api(mementoembed_api_candidates):
             sys.exit(errno.EHOSTDOWN)
 
     else:
+        
+        logger.info("using MementoEmbed endpoing {}, specified via command line flag".format(mementoembed_api_candidates))
+
         status = test_mementoembed_endpoint(mementoembed_api_candidates)
 
         if status == False:
