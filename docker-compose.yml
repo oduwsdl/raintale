@@ -4,8 +4,6 @@ services:
     mementoembed:
         image: oduwsdl/mementoembed:latest
         restart: always
-        ports:
-            - "5550"
 
     raintale:
         depends_on:
@@ -15,3 +13,5 @@ services:
         volumes: 
             - .:/raintale-work
         stdin_open: true
+        environment:
+            - MEMENTOEMBED_API_ENDPOINT=http://mementoembed:5550

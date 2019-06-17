@@ -28,7 +28,7 @@ setup(
         'raintale': [ 'templates/*' ]
     },
     scripts=[
-        'bin/raintale_cmd',
+        'bin/tellstory',
     ],
     include_package_data=True,
     install_requires=[
@@ -38,6 +38,7 @@ setup(
         'google_auth_oauthlib',
         'jinja2',
         'oauth2client',
+        'Pillow',
         'pyyaml',
         'python-twitter',
         'requests',
