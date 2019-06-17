@@ -42,7 +42,8 @@ setup(
         'pyyaml',
         'python-twitter',
         'requests',
-        'requests_cache'
+        'requests_cache',
+        'requests_futures'
     ],
     test_suite="tests",
     zip_safe=True,
