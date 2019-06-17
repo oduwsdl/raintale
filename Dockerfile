@@ -8,5 +8,3 @@ RUN pip install .
 
 WORKDIR /raintale-work
 
-# keep the container running so we can execute raintale commands
-ENTRYPOINT /bin/bash

@@ -38,6 +38,7 @@ setup(
         'google_auth_oauthlib',
         'jinja2',
         'oauth2client',
+        'Pillow',
         'pyyaml',
         'python-twitter',
         'requests',
