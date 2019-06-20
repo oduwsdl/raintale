@@ -254,14 +254,20 @@ class MementoData:
 
                         for rtpref in raintale_specific_preferences:
                             module_logger.info("comparing rtpref {} to pref {}".format(rtpref, pref))
-                            if re.findall(rtpref, pref)[0] == pref:
-                                module_logger.info("matching rtpref {} to pref {}".format(rtpref, pref))
-                                rt_preferences.setdefault(service_uri, []).append(pref)
-                                break
+                            matches = re.findall(rtpref, pref)
 
-                        if service_uri in rt_preferences:
-                            if len(rt_preferences[service_uri]) == 0:
-                                me_preferences.append(pref)
+                            if len(matches) > 0:
+                                if matches[0] == pref:
+                                    module_logger.info("matching rtpref {} to pref {}".format(rtpref, pref))
+                                    rt_preferences.setdefault(service_uri, []).append(pref)
+                                    break
+
+                        module_logger.info("rt_preferences is now {}".format(rt_preferences))
+
+                        # TODO: what about Raintale preferences AND MementoEmbed preferences?
+                        if service_uri not in rt_preferences:
+                            module_logger.info("appending {} to preferences".format(pref))
+                            me_preferences.append(pref)
 
                     headers['Prefer'] = ','.join(me_preferences)
 
