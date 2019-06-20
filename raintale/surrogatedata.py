@@ -2,6 +2,7 @@ import re
 import logging
 import base64
 import random
+import json
 
 import requests
 
@@ -35,16 +36,21 @@ fieldname_to_endpoint = {
     "archive_collection_name": "/services/memento/archivedata/",
     "archive_collection_uri": "/services/memento/archivedata/",
     "best_image_uri": "/services/memento/bestimage/",
-    "ranked_image_1": "/services/memento/imagedata/",
-    "ranked_image_2": "/services/memento/imagedata/",
-    "ranked_image_3": "/services/memento/imagedata/",
-    "ranked_image_4": "/services/memento/imagedata/",
+    "image": "/services/memento/imagedata/",
     "title": "/services/memento/contentdata/",
     "snippet": "/services/memento/contentdata/",
     "memento_datetime": "/services/memento/contentdata/",
     "thumbnail": "/services/product/thumbnail/"
 
 }
+
+raintale_specific_preferences = [
+    "rank=[0-9]*"
+]
+
+raintale_ranking_services = [
+    "/services/"
+]
 
 class DataURIParseError(Exception):
     pass
@@ -226,6 +232,9 @@ class MementoData:
             fs = FuturesSession()
 
         service_uri_futures = {}
+        service_uri_to_endpoint = {}
+
+        rt_preferences = {}
 
         for urim in self.urimlist:
 
@@ -238,15 +247,34 @@ class MementoData:
                 service_uri = endpoint + urim
 
                 if len(self.endpoint_list[endpoint]) > 0:
-                    headers['Prefer'] = ','.join(self.endpoint_list[endpoint])
+
+                    me_preferences = []
+
+                    for pref in self.endpoint_list[endpoint]:
+
+                        for rtpref in raintale_specific_preferences:
+                            module_logger.info("comparing rtpref {} to pref {}".format(rtpref, pref))
+                            if re.findall(rtpref, pref)[0] == pref:
+                                module_logger.info("matching rtpref {} to pref {}".format(rtpref, pref))
+                                rt_preferences.setdefault(service_uri, []).append(pref)
+                                break
+
+                        if service_uri in rt_preferences:
+                            if len(rt_preferences[service_uri]) == 0:
+                                me_preferences.append(pref)
+
+                    headers['Prefer'] = ','.join(me_preferences)
 
                 module_logger.debug("issuing request for service URI {}".format(service_uri))
 
                 service_uri_futures.setdefault(urim, {})
+                service_uri_to_endpoint[service_uri] = endpoint.replace(self.mementoembed_api, '')
                 service_uri_futures[urim][service_uri] = \
                     fs.get(service_uri, headers=headers)
 
         all_memento_data = {}
+
+        module_logger.info("rt_preferences are {}".format(rt_preferences))
 
         def urim_generator(working_list):
 
@@ -272,20 +300,52 @@ class MementoData:
                 result = service_uri_futures[urim][service_uri].result()
                 all_memento_data.setdefault(urim, {})
 
-                if '/services/product/thumbnail/' in service_uri:
+                endpoint_uri = service_uri_to_endpoint[service_uri]
+
+                module_logger.info("corresponding endpoint uri is {}".format(endpoint_uri))
+
+                if endpoint_uri == '/services/product/thumbnail/':
 
                     module_logger.info("result: {}".format(result))
                     module_logger.info("content-length: {}".format(len(result.content)))
 
                     all_memento_data[urim]['thumbnail'] = png_to_datauri(result.content)
 
+                elif endpoint_uri == '/services/memento/imagedata/':
+
+                    try:
+                        jdata = result.json()
+                    except json.decoder.JSONDecodeError as e:
+                        module_logger.exception("Failed to process imagedata output from MementoEmbed endpoint for call to {}, quitting...".format(service_uri))
+                        raise e
+
+                    for rt_pref in rt_preferences[service_uri]:
+
+                        if 'rank=' in rt_pref:
+
+                            var, rank = rt_pref.split('=')
+                            irank = int(rank) - 1
+
+                            all_memento_data[urim][ "image_rank__{}".format(rank) ] = jdata["ranked images"][irank]
+
+                        # TODO:
+                        # else:
+                        #     module_logger.warning("unknown raintale preference for template variable {}".format())
+
                 else:
-                    jdata = result.json()
+
+                    try:
+                        jdata = result.json()
+                    except json.decoder.JSONDecodeError as e:
+                        module_logger.exception("Failed to process general output from MementoEmbed endpoint for call to {}, quitting...".format(service_uri))
+                        raise e
 
                     for key in jdata:
                         all_memento_data[urim][ key.replace('-', '_') ] = jdata[key]
 
                 working_service_uri_list.remove((urim,service_uri))
+
+        module_logger.info("all memento data: {}".format(all_memento_data))
 
         module_logger.info("done extracting data from all services for all URI-Ms.")
 
@@ -313,7 +373,15 @@ class MementoData:
             
             if "|prefer " in field:
                 fielddata = [i.strip() for i in field.split('|prefer ')]
-                fieldname = fielddata[0] + " }}"
+
+                if 'rank=' in fielddata[1]:
+                    var, rank = fielddata[1].split('=')
+
+                     # remember that rank actually includes ' }}'
+                    fieldname = fielddata[0] + "_rank__" + rank
+                else:
+                    fieldname = fielddata[0] + " }}"
+                
                 replacement_list.append( (field, fieldname) )
 
         sanitized_template = self.template

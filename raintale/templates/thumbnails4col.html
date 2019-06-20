@@ -16,7 +16,7 @@
 
 {% if element.type == 'link' %}
 
-    <td><img src="{{ element.surrogate.thumbnail }}"></td>
+    <td><a href="{{ element.surrogate.urim }}"><img src="{{ element.surrogate.thumbnail }}"></a></td>
 
     {% if loop.index is divisibleby 4 %}
         </tr><tr>
