@@ -196,20 +196,19 @@ class MementoData:
 
     def _get_endpoint_list(self):
         
-        # what if the same endpoint appears with different preferences?
-        # only one call, right?
-
         endpoints = {}
 
         for fieldname,pref in self.fields_and_preferences:
 
-            endpoint = self.mementoembed_api + fieldname_to_endpoint[fieldname]
+            if fieldname not in ['urim', 'creation_time', 'memento_datetime_14num']:
 
-            endpoints.setdefault(endpoint, [])
-            
-            if pref is not None:
-                if pref not in endpoints[endpoint]:
-                    endpoints[endpoint].append(pref)
+                endpoint = self.mementoembed_api + fieldname_to_endpoint[fieldname]
+
+                endpoints.setdefault(endpoint, [])
+                
+                if pref is not None:
+                    if pref not in endpoints[endpoint]:
+                        endpoints[endpoint].append(pref)
 
         return endpoints
 
@@ -278,7 +277,7 @@ class MementoData:
     def get_memento_data(self, urim, session=None):
 
         if urim not in self.urimlist:
-            self.urimlist.append(urim)
+            self.add(urim)
 
         if urim not in self.data:
             self.fetch_all_memento_data(session=session)
@@ -286,5 +285,24 @@ class MementoData:
         return self.data[urim]
 
     def get_sanitized_template(self):
-        # TODO: sanitize the template
-        pass
+        
+        template_surrogate_fields = get_template_surrogate_fields(
+            self.template
+        )
+
+        replacement_list = []
+
+        for field in template_surrogate_fields:
+            
+            if "|prefer " in field:
+                fieldname = fieldname + " }}"
+                replacement_list.append( (field, fieldname) )
+
+        sanitized_template = self.template
+
+        for replacement in replacement_list:
+            sanitized_template = sanitized_template.replace(replacement[0], replacement[1])
+
+        return sanitized_template
+
+

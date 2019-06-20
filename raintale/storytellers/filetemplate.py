@@ -4,7 +4,7 @@ import pprint
 from jinja2 import Environment
 
 from .storyteller import FileStoryteller, get_story_elements
-from ..surrogatedata import get_memento_data, get_template_surrogate_fields
+from ..surrogatedata import MementoData
 
 module_logger = logging.getLogger('raintale.storytellers.filetemplate')
 
@@ -27,10 +27,17 @@ class FileTemplateStoryTeller(FileStoryteller):
             "elements".format(len(story_elements)))
 
         elementcounter = 1
+        md = MementoData(story_template, mementoembed_api)
+        # template_surrogate_fields = get_template_surrogate_fields(story_template)
+        
+        # module_logger.info("template_surrogate_fields: {}".format(template_surrogate_fields))
 
-        template_surrogate_fields = get_template_surrogate_fields(story_template)
+        for element in story_elements:
 
-        module_logger.info("template_surrogate_fields: {}".format(template_surrogate_fields))
+            if element['type'] == 'link':
+
+                urim = element['value']
+                md.add(urim)
 
         for element in story_elements:
 
@@ -49,10 +56,7 @@ class FileTemplateStoryTeller(FileStoryteller):
                     urim = element['value']
                     link_data = {}
 
-                    memento_data = get_memento_data(
-                        template_surrogate_fields, 
-                        mementoembed_api, 
-                        urim)
+                    memento_data = md.get_memento_data(urim)
 
                     module_logger.debug("memento_data: {}".format(memento_data))
 
@@ -97,8 +101,10 @@ class FileTemplateStoryTeller(FileStoryteller):
         else:
             metadata = None
 
+        sanitized_template = md.get_sanitized_template()
+
         env = Environment()
-        template = env.from_string(story_template)
+        template = env.from_string(sanitized_template)
         rendered_story = template.render(
             title=story_data['title'],
             generated_by=story_data['generated_by'],
