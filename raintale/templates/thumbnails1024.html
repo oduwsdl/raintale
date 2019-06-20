@@ -1,0 +1,28 @@
+<p><h1>{{ title }}</h1></p>
+
+{% if generated_by is defined %}
+<p><strong>Story By:</strong> {{ generated_by }}</p>
+{% endif %}
+
+{% if collection_url is defined %}
+<p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
+{% endif %}
+
+<hr>
+
+<table border="0">
+
+{% for element in elements %}
+
+{% if element.type == 'link' %}
+
+    <tr><td><img src="{{ element.surrogate.thumbnail|prefer thumbnail_width=1024 }}"></td></tr>
+
+{% else %}
+
+<!-- Element type {{ element.type }} is unsupported by the thubmnails3col template -->
+
+{% endif %}
+
+{% endfor %}
+</table>

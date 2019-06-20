@@ -161,7 +161,7 @@ class MementoData:
             self.mementoembed_api = mementoembed_api
 
         self.fields_and_preferences = self._get_field_names_and_preferences()
-        # TODO: endpoint_to_fieldname
+        module_logger.info("fields and preferences {}".format(self.fields_and_preferences))
         self.endpoint_list = self._get_endpoint_list()
 
         # TODO: consider other backends than RAM
@@ -177,6 +177,9 @@ class MementoData:
         )
 
         for field in template_surrogate_fields:
+
+            module_logger.info("examining template field {} for preferences...".format(field))
+
             if '|prefer ' in field:
                 fieldname, preference = [i.strip() for i in field.split('|prefer ')]
                 preference = preference.replace(' }}', '')
@@ -262,13 +265,23 @@ class MementoData:
 
             if service_uri_futures[urim][service_uri].done():
 
-                module_logger.debug("service URI {} is done".format(service_uri))
+                module_logger.info("service URI {} is ready".format(service_uri))
 
-                jdata = service_uri_futures[urim][service_uri].result().json()
+                result = service_uri_futures[urim][service_uri].result()
+                all_memento_data.setdefault(urim, {})
 
-                for key in jdata:
-                    all_memento_data.setdefault(urim, {})
-                    all_memento_data[urim][ key.replace('-', '_') ] = jdata[key]
+                if '/services/product/thumbnail/' in service_uri:
+
+                    module_logger.info("result: {}".format(result))
+                    module_logger.info("content-length: {}".format(len(result.content)))
+
+                    all_memento_data[urim]['thumbnail'] = png_to_datauri(result.content)
+
+                else:
+                    jdata = result.json()
+
+                    for key in jdata:
+                        all_memento_data[urim][ key.replace('-', '_') ] = jdata[key]
 
                 working_service_uri_list.remove((urim,service_uri))
 
@@ -295,7 +308,8 @@ class MementoData:
         for field in template_surrogate_fields:
             
             if "|prefer " in field:
-                fieldname = fieldname + " }}"
+                fielddata = [i.strip() for i in field.split('|prefer ')]
+                fieldname = fielddata[0] + " }}"
                 replacement_list.append( (field, fieldname) )
 
         sanitized_template = self.template
