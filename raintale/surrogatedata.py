@@ -261,6 +261,8 @@ class MementoData:
 
         module_logger.debug("extracting data from futures: {}".format(service_uri_futures))
 
+        module_logger.info("extracting data from all services for all URI-Ms...")
+
         for urim,service_uri in urim_generator(working_service_uri_list):
 
             if service_uri_futures[urim][service_uri].done():
@@ -284,6 +286,8 @@ class MementoData:
                         all_memento_data[urim][ key.replace('-', '_') ] = jdata[key]
 
                 working_service_uri_list.remove((urim,service_uri))
+
+        module_logger.info("done extracting data from all services for all URI-Ms.")
 
         self.data = all_memento_data
 

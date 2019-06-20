@@ -28,9 +28,6 @@ class FileTemplateStoryTeller(FileStoryteller):
 
         elementcounter = 1
         md = MementoData(story_template, mementoembed_api)
-        # template_surrogate_fields = get_template_surrogate_fields(story_template)
-        
-        # module_logger.info("template_surrogate_fields: {}".format(template_surrogate_fields))
 
         for element in story_elements:
 
@@ -63,7 +60,6 @@ class FileTemplateStoryTeller(FileStoryteller):
                     link_data['type'] = 'link'
                     link_data['surrogate'] = memento_data
 
-                    # surrogates.append(memento_data)
                     elements.append(link_data)
 
                 elif element['type'] == 'text':
