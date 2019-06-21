@@ -36,9 +36,11 @@
 
     <div style="position:relative">
 
-    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.title }}</a><br />
-    {{ element.surrogate.snippet }}<br />
-    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a><br />
+    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.title }}</a><br /><br />
+    {{ element.surrogate.snippet }}<br /><br />
+    <img width="16px" src="{{ element.surrogate.original_favicon|prefer datauri_favicon=yes }}">
+    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a><br /><br />
+    <img width="16px" src="{{ element.surrogate.archive_favicon|prefer datauri_favicon=yes }}">
     Preserved by <a href="{{ element.surrogate.archive_uri }}">{{ element.surrogate.archive_name }}</a><br />
 
     </div>

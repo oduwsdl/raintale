@@ -44,8 +44,9 @@ fieldname_to_endpoint = {
 
 }
 
+# TODO: preference for any image as data URI
 raintale_specific_preferences = [
-    "rank=[0-9]*"
+    "rank"
 ]
 
 raintale_ranking_services = [
@@ -252,21 +253,11 @@ class MementoData:
 
                     for pref in self.endpoint_list[endpoint]:
 
-                        for rtpref in raintale_specific_preferences:
-                            module_logger.info("comparing rtpref {} to pref {}".format(rtpref, pref))
-                            matches = re.findall(rtpref, pref)
-
-                            if len(matches) > 0:
-                                if matches[0] == pref:
-                                    module_logger.info("matching rtpref {} to pref {}".format(rtpref, pref))
-                                    rt_preferences.setdefault(service_uri, []).append(pref)
-                                    break
-
-                        module_logger.info("rt_preferences is now {}".format(rt_preferences))
-
-                        # TODO: what about Raintale preferences AND MementoEmbed preferences?
-                        if service_uri not in rt_preferences:
-                            module_logger.info("appending {} to preferences".format(pref))
+                        prefname, value = pref.split('=')
+                            
+                        if prefname in raintale_specific_preferences:
+                            rt_preferences.setdefault(service_uri, []).append(pref)
+                        else:
                             me_preferences.append(pref)
 
                     headers['Prefer'] = ','.join(me_preferences)
