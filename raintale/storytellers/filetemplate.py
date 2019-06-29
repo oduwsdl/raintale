@@ -99,7 +99,7 @@ class FileTemplateStoryTeller(FileStoryteller):
 
         sanitized_template = md.get_sanitized_template()
 
-        module_logger.debug("sanitized template:\n\n {}\n\n".format(sanitized_template))
+        module_logger.info("sanitized template:\n\n {}\n\n".format(sanitized_template))
 
         env = Environment()
         template = env.from_string(sanitized_template)

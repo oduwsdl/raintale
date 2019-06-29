@@ -46,7 +46,8 @@ fieldname_to_endpoint = {
 
 # TODO: preference for any image as data URI
 raintale_specific_preferences = [
-    "rank"
+    "rank",
+    "datauri"
 ]
 
 raintale_ranking_services = [
@@ -253,12 +254,15 @@ class MementoData:
 
                     for pref in self.endpoint_list[endpoint]:
 
-                        prefname, value = pref.split('=')
+                        module_logger.info("examining preference {}".format(pref))
+
+                        for singlepref in pref.split(','):
+                            prefname, value = singlepref.split('=')
                             
-                        if prefname in raintale_specific_preferences:
-                            rt_preferences.setdefault(service_uri, []).append(pref)
-                        else:
-                            me_preferences.append(pref)
+                            if prefname in raintale_specific_preferences:
+                                rt_preferences.setdefault(service_uri, []).append(singlepref)
+                            else:
+                                me_preferences.append(pref)
 
                     headers['Prefer'] = ','.join(me_preferences)
 
@@ -325,10 +329,6 @@ class MementoData:
 
                             all_memento_data[urim][ "image_rank__{}".format(rank) ] = jdata["ranked images"][irank]
 
-                        # TODO:
-                        # else:
-                        #     module_logger.warning("unknown raintale preference for template variable {}".format())
-
                 else:
 
                     try:
@@ -371,17 +371,25 @@ class MementoData:
             if "|prefer " in field:
                 fielddata = [i.strip() for i in field.split('|prefer ')]
 
-                if 'rank=' in fielddata[1]:
-                    var, rank = fielddata[1].split('=')
+                for preference in fielddata[1].split(','):
 
-                     # remember that rank actually includes ' }}'
-                    fieldname = fielddata[0] + "_rank__" + rank
-                else:
-                    fieldname = fielddata[0] + " }}"
-                
-                replacement_list.append( (field, fieldname) )
+                    preference = preference.replace(' }}', '')
+
+                    module_logger.info("looking at preference {}".format(preference))
+
+                    if 'rank=' in preference:
+
+                        var, rank = preference.split('=')
+
+                        fieldname = fielddata[0] + "_rank__" + rank + ' }}'
+                    else:
+                        fieldname = fielddata[0] + " }}"
+                    
+                    replacement_list.append( (field, fieldname) )
 
         sanitized_template = self.template
+
+        module_logger.info("replacement list: {}".format(replacement_list))
 
         for replacement in replacement_list:
             sanitized_template = sanitized_template.replace(replacement[0], replacement[1])
