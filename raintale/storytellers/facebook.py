@@ -10,7 +10,6 @@ import facebook
 from jinja2 import Template
 
 from .storyteller import ServiceStoryteller, get_story_elements, StoryTellerCredentialParseError, split_multipart_template
-from ..surrogatedata import get_memento_data, get_template_surrogate_fields, datauri_to_data
 
 module_logger = logging.getLogger('raintale.storytellers.facebook')
 

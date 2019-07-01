@@ -68,6 +68,9 @@ raintale_ranking_services = [
     "/services/"
 ]
 
+class MementoEmbedRequestError(Exception):
+    pass
+
 class DataURIParseError(Exception):
     pass
 
@@ -114,71 +117,6 @@ def datauri_to_data(datauri):
             raise DataURIUnsupportedEncoding
         else:
             return mimetype, base64.decodebytes(base64data.encode("utf-8"))
-
-def get_memento_data(template_surrogate_fields, mementoembed_api, urim):
-
-    memento_data = {}
-
-    if mementoembed_api.endswith('/'):
-        mementoembed_api = mementoembed_api[0:-1]
-
-    service_list = []
-
-    for template_surrogate_field in template_surrogate_fields:
-
-        module_logger.debug("template_surrogate_field: {}".format(template_surrogate_field))
-
-        data_field = template_surrogate_field.replace('{{ element.surrogate.', '')
-        data_field = data_field.replace(' }}', '')
-
-        module_logger.debug("data field: {}".format(data_field))
-
-        if data_field not in ['urim', 'creation_time', 'memento_datetime_14num']:
-            service_list.append( fieldname_to_endpoint[data_field] )
-
-    service_list = list(set(service_list))
-
-    module_logger.debug("service list: {}".format(service_list))
-
-    for service in service_list:
-
-        endpoint = "{}{}{}".format(mementoembed_api, service, urim)
-
-        module_logger.info("querying MementoEmbed endpoint {}".format(endpoint))
-
-        r = requests.get(endpoint)
-
-        if r.status_code == 200:
-
-            if service == '/services/product/thumbnail/':
-
-                memento_data['thumbnail'] = png_to_datauri(r.content)
-
-            elif service == '/services/memento/imagedata/':
-                jsondata = r.json()
-
-                # module_logger.debug("jsondata for images: \n{}".format(jsondata))
-
-                for imagecounter in range(0, len(jsondata['ranked images'])):
-                    memento_data['ranked_image_{}'.format(imagecounter + 1)] = \
-                        jsondata['ranked images'][imagecounter]
-                    
-            else:
-                for key in r.json():
-                    memento_data[ key.replace('-', '_') ] = r.json()[key]
-
-        # TODO: what do we do if not 200? what is one service is 200, but another not?
-        else:
-            module_logger.error("failed to retrieve data from endpoint {}".format(endpoint))
-
-    memento_data['urim'] = urim
-    memento_data['creation_time'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    if 'memento_datetime' in memento_data:
-        memento_data['memento_datetime_14num'] = \
-            datetime.strptime(memento_data['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
-
-    return memento_data
 
 def get_field_value(data, preferences, base_fieldname):
 
@@ -429,12 +367,16 @@ class MementoData:
                             request_working_list.remove( (endpoint, me_preferences) )
 
                         else:
-                            module_logger.warning("cannot process response with output of {}".format(
+                            module_logger.debug("cannot process response with output of {}".format(
                                 result.content
                             ))
-                            module_logger.warning("cannot process response with request headers of {}".format(
+                            module_logger.debug("cannot process response with request headers of {}".format(
                                 pprint.pformat(result.request.headers, indent=4)
                             ))
+                            
+                            request_working_list.remove( (endpoint, me_preferences) )
+
+                            raise MementoEmbedRequestError("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
                     
                     else:
                         module_logger.debug("waiting for request to endpoint {} with preferences {} to complete".format(
@@ -443,7 +385,13 @@ class MementoData:
                 
             module_logger.debug("working list is now {}".format(request_working_list))
 
-        module_logger.debug("mementodata stabilized at {}".format(self._mementodata))
+        for urim in self._mementodata:
+            
+            if 'memento_datetime' in self._mementodata[urim]:
+                self._mementodata[urim]['memento_datetime_14num'] = \
+                    datetime.strptime(self._mementodata[urim]['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
+
+        module_logger.debug("mementodata stabilized at {}".format(pprint.pformat(self._mementodata, indent=4)))
 
 
     def get_memento_data(self, urim, session=None):
