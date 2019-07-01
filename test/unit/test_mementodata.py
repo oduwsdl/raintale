@@ -2,7 +2,7 @@ import unittest
 import os
 import pprint
 
-from raintale.surrogatedata import MementoData2
+from raintale.surrogatedata import MementoData
 
 testdir = os.path.dirname(os.path.realpath(__file__))
 
@@ -93,7 +93,7 @@ class TestMementoData(unittest.TestCase):
             }
             expected_data.update(updated_data)
 
-        md = MementoData2(template_str, mementoembed_api)
+        md = MementoData(template_str, mementoembed_api)
 
         md.add(urim1)
         md.add(urim2)

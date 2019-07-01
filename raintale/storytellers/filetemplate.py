@@ -4,7 +4,7 @@ import pprint
 from jinja2 import Environment
 
 from .storyteller import FileStoryteller, get_story_elements
-from ..surrogatedata import MementoData2
+from ..surrogatedata import MementoData
 
 module_logger = logging.getLogger('raintale.storytellers.filetemplate')
 
@@ -27,7 +27,7 @@ class FileTemplateStoryTeller(FileStoryteller):
             "elements".format(len(story_elements)))
 
         elementcounter = 1
-        md = MementoData2(story_template, mementoembed_api)
+        md = MementoData(story_template, mementoembed_api)
 
         for element in story_elements:
 
