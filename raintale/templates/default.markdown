@@ -31,7 +31,7 @@
 
 Preserved by <img src="{{ element.surrogate.archive_favicon }}" width="16"> [{{ element.surrogate.archive_name }}]({{ element.surrogate.archive_uri }})
 
-{% if element.surrogate.collection_name is defined %}
+{% if element.surrogate.archive_collection_name is not none %}
 Member of the Collection [{{ element.surrogate.archive_collection_name }}]({{ element.surrogate.archive_collection_uri }})
 {% endif %}
 
