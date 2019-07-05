@@ -22,7 +22,9 @@ The Twitter storyteller will use the default preset to publish the story to Twit
 
 .. image:: images/raintale-twitter-example.png
 
+.. note::
 
+    Raintale only works for memento URLs (URI-Ms) from Memento-compliant web archives. It will not work for live web resources or mementos from web archives that do not support the Memento protocol. To create mementos of live web pages, use `the Save Page Now tool at the Internet Archive <https://archive.org/web/>`_, `the ArchiveNow Python utility <https://github.com/oduwsdl/archivenow>`_, or `the Mink Chrome Extension <https://chrome.google.com/webstore/detail/mink-integrate-live-archi/jemoalkmipibchioofomhkgimhofbbem?hl=en-US>`_.
 
 .. toctree::
    :maxdepth: 2
@@ -31,5 +33,4 @@ The Twitter storyteller will use the default preset to publish the story to Twit
    creating_story
    raintale_options
    templates
-   
-
+   license
