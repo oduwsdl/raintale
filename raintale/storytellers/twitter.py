@@ -54,8 +54,8 @@ class TwitterStoryTeller(ServiceStoryteller):
             "story_output_data: {}".format(pprint.pformat(story_output_data))
         )
 
-        module_logger.critical("premature exit!")
-        sys.exit(255)
+        # module_logger.critical("premature exit!")
+        # sys.exit(255)
 
         module_logger.debug("main tweet data:\n{}".format(
             story_output_data["main_post"]
@@ -87,15 +87,16 @@ class TwitterStoryTeller(ServiceStoryteller):
 
                 module_logger.debug("working on media URI {}".format(media_uri))
 
-                if media_uri[0:5] == 'data:':
-                    mimetype, filedata = datauri_to_data(media_uri)
-                    ext = mimetypes.guess_extension(mimetype)
-                    f = tempfile.NamedTemporaryFile(prefix='raintale-', suffix=ext, delete=False)
-                    f.write(filedata)
-                    module_logger.debug("temporary file name is {}".format(f.name))
-                    tweet_media.append(f)
-                else:
-                    tweet_media.append(media_uri)
+                if media_uri is not None:
+                    if media_uri[0:5] == 'data:':
+                        mimetype, filedata = datauri_to_data(media_uri)
+                        ext = mimetypes.guess_extension(mimetype)
+                        f = tempfile.NamedTemporaryFile(prefix='raintale-', suffix=ext, delete=False)
+                        f.write(filedata)
+                        module_logger.debug("temporary file name is {}".format(f.name))
+                        tweet_media.append(f)
+                    else:
+                        tweet_media.append(media_uri)
 
             module_logger.info("thread tweet media: \n{}".format(
                 tweet_media

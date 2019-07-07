@@ -145,7 +145,14 @@ def get_field_value(data, preferences, base_fieldname):
             prefdict[var] = rank
 
         # handle rank first
-        imageuri = json.loads(data)["ranked images"][ int(prefdict['rank']) - 1 ]
+        
+        jdata = json.loads(data)
+        ranked_images = jdata["ranked images"]
+
+        try:
+            imageuri = ranked_images[ int(prefdict['rank']) - 1 ]
+        except IndexError:
+            imageuri = None
 
         # TODO: this seems like too much for this function to handle
         # if prefdict["datauri"] == "yes":
