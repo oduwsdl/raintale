@@ -70,10 +70,33 @@ Raintale provides the following ``storytellers`` for file formats:
 * ``template`` - a generic storyteller for output to a single file
 * ``video`` - an **EXPERIMENTAL** storyteller that creates a video of URI-M content suitable for posting to Twitter or YouTube
 
+To use one of these storytellers, you must also supply the ``-o`` argument specifying the name of the output file.
+
 For social media, Raintale provides the following ``storytellers``:
 
 * ``twitter`` - publishes a story as a Twitter thread, with titles, URLs, memento-datetimes, and images supplied by MementoEmbed
-* ``facebook`` - an **EXPERIMENTAL** storyteller that publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed
+* ``facebook`` - an **EXPERIMENTAL** storyteller that publishes a story as a Facebook thread, with titles, snippets, URLs, and memento-datetimes supplied by MementoEmbed; **it does not yet support image upload**
+
+To use one of these storytellers, you must also supply the ``-c`` argument specifying the name of the file containing credentials in YAML format. For twitter, an example credentials file is shown below:
+
+.. code-block::
+
+    consumer_key: XXXXX
+    consumer_secret: XXXXX
+    access_token_key: XXXXX
+    access_token_secret: XXXXX
+
+Replace the values of ``XXXXX`` with the appropriate values for Twitter authentication. Visit https://developer.twitter.com/en/apps for more information on how to generate these values for your Twitter account.
+
+Likewise, for using the **experimental** Facebook storyteller, the credentials file resembles the following:
+
+.. code-block::
+
+    page_id: XXXXX
+    access_token: XXXXX
+
+Visit https://developers.facebook.com/docs/facebook-login/access-tokens/ for more information on how to generate these values for your Facebook page.
+
 
 Available presets
 -----------------
