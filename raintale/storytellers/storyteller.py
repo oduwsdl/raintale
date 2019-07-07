@@ -161,8 +161,17 @@ class ServiceStoryteller(Storyteller):
 
                     media_uris = []
 
-                    for mediauri in media_data.values():
-                        media_uris.append(mediauri)
+                    # TODO: how to handle order specified in template?
+                    for variable in media_template_list:
+                        sanitized_variable = variable.replace('{{ element.surrogate.', '').replace('}}', '')
+                        sanitized_variable = sanitized_variable.replace('|prefer ', '__prefer__').replace('=', '_').replace(',', '_').replace('{{ element.surrogate.', '').replace(' }}', '').strip()
+
+                        media_uris.append(
+                            media_data[sanitized_variable]
+                        )
+
+                    # for mediauri in media_data.values():
+                    #     media_uris.append(mediauri)
 
                     module_logger.debug("media_uris: {}".format(media_uris))
 
