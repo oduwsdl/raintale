@@ -111,3 +111,6 @@ venv.bak/
 # Jekyll work for gh-pages branch
 _site/
 _testtemplates/
+
+# for sphix documentation
+_build/
