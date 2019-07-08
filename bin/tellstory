@@ -329,13 +329,15 @@ def choose_mementoembed_api(mementoembed_api_candidates):
 
     else:
         
-        logger.info("using MementoEmbed endpoing {}, specified via command line flag".format(mementoembed_api_candidates))
+        logger.info("using MementoEmbed endpoint {}, specified via command line flag".format(mementoembed_api_candidates))
 
         status = test_mementoembed_endpoint(mementoembed_api_candidates)
 
         if status == False:
             logger.error("Failed to connect to MementoEmbed API, cannot continue.")
             sys.exit(errno.EHOSTDOWN)
+        else:
+            mementoembed_api = mementoembed_api_candidates
 
     logger.info("For building story elements, using MementoEmbedAPI at {}".format(mementoembed_api))
 
