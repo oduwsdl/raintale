@@ -115,7 +115,7 @@ def process_arguments(args):
 
     parser.add_argument('--story-template', dest='story_template_filename',
         required=False,
-        help="The file containing the template for the story in Jinja2 format."
+        help="The file containing the template for the story."
     )
 
     parser.add_argument('--title', dest='title',

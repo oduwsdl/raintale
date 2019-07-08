@@ -10,7 +10,7 @@ Raintale: Storytelling for Web Archives
 
 What story do you want to tell with web archives?
 
-Raintale is a utility for publishing social media stories from groups of archived web pages (**mementos**). Raintale uses `MementoEmbed <https://github.com/oduwsdl/MementoEmbed>`_ to extract memento information and then publishes a story with the given **storyteller**, to a static file or an online social media service. A Raintale user supplies a file containing a list of memento URLs, a story title, and a storyteller to use for publishing the story. 
+Raintale is a utility for publishing social media stories from groups of archived web pages (**mementos**). Raintale uses `MementoEmbed <https://github.com/oduwsdl/MementoEmbed>`_ to extract memento information and then publishes a story using a given **storyteller** to a static file or an online social media service. A Raintale user supplies a file containing a list of memento URLs, a story title, and a storyteller to use for publishing the story. 
 
 Raintale is quite configurable, providing different publishing options as storytellers and file formats. Users may also provide different presets to configure how these storytellers format their stories. Finally, Raintale accepts a template file as an argument, allowing users to format their own stories.
 

@@ -1,10 +1,10 @@
 <p><h1>{{ title }}</h1></p>
 
-{% if generated_by is defined %}
+{% if generated_by is not none %}
 <p><strong>Story By:</strong> {{ generated_by }}</p>
 {% endif %}
 
-{% if collection_url is defined %}
+{% if collection_url is not none %}
 <p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
 {% endif %}
 
