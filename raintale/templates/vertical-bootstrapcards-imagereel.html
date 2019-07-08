@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>{{ title }}</title>
+  </head>
+  <body class="bg-info">
+
+<div class="container-fluid">
+
+<p><h1 class="text-white">{{ title }}</h1></p>
+
+{% if generated_by is defined %}
+<p class="text-white"><strong>Story By:</strong> {{ generated_by }}</p>
+{% endif %}
+
+{% if collection_url is defined %}
+<p class="text-white"><strong>Collection URL:</strong> <a href="{{ collection_url }}" class="text-white">{{ collection_url }}</a></p>
+{% endif %}
+
+{% if metadata is not none %}
+
+{% for key, value in metadata.items() %}
+
+    <p class="text-white"><strong>{{ key|title }}</strong>: {{ value }}</p>
+
+{% endfor %}
+
+{% endif %}
+
+<div class="card-deck card-deck-padding">
+
+{% for element in elements %}
+
+{% if loop.index is divisibleby 3 %}
+</div>
+<div class="p-2"></div>
+<div class="card-deck card-deck-padding">
+{% endif %}
+
+{% if element.type == 'link' %}
+
+<div class="card rounded border-dark" style="width: 18rem;">
+    <img class="card-img-top" src="{{ element.surrogate.imagereel }}" alt="Images from {{ element.surrogate.title }}">
+    <div class="card-body">
+        <h5 class="card-title"><a href="{{ element.surrogate.urim }}">{{ element.surrogate.title }}</a></h5>
+        <p class="card-text">{{ element.surrogate.snippet }}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><img width="16" src="{{ element.surrogate.original_favicon }}"> <a href="{{ element.surrogate.urim }}">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a></li>
+        <li class="list-group-item"><img widht="16" src="{{ element.surrogate.archive_favicon }}"> Preserved by <a href="{{ element.surrogate.archive_uri }}">{{ element.surrogate.archive_name }}</a></li>
+        <li class="list-group-item"><a href="http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }}">Other versions</a></li>
+        <li class="list-group-item"><a href="{{ element.surrogate.original_uri }}">Current Version</a></li>
+    </ul>
+</div>
+
+{% else %}
+
+<div class="card rounded border-dark" style="width: 18rem;">
+    <div class="card-body">
+        <p class="card-text">{{ element.text }}</p>
+    </div>
+</div>
+
+{% endif %}
+
+{% if loop.last %}
+
+{% set leftovercount = 3 - (loop.index % 3) %}
+
+{% for lcount in range(leftovercount) %}
+
+<div class="card rounded border-0 bg-info"></div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
