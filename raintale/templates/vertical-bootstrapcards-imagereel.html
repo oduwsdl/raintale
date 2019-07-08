@@ -38,7 +38,7 @@
 
 {% for element in elements %}
 
-{% if loop.index is divisibleby 3 %}
+{% if loop.index0 is divisibleby 3 %}
 </div>
 <div class="p-2"></div>
 <div class="card-deck card-deck-padding">
@@ -72,7 +72,7 @@
 
 {% if loop.last %}
 
-{% set leftovercount = 3 - (loop.index % 3) %}
+{% set leftovercount = 3 - (loop.index0 % 3) %}
 
 {% for lcount in range(leftovercount) %}
 
