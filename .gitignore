@@ -114,3 +114,6 @@ _testtemplates/
 
 # for sphix documentation
 _build/
+
+# caching
+*.sqlite
