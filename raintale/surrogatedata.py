@@ -41,8 +41,8 @@ fieldname_to_endpoint = {
     "title": "/services/memento/contentdata/",
     "snippet": "/services/memento/contentdata/",
     "memento_datetime": "/services/memento/contentdata/",
-    "thumbnail": "/services/product/thumbnail/"
-
+    "thumbnail": "/services/product/thumbnail/",
+    "imagereel": "/services/product/imagereel/"
 }
 
 calculated_fields = {
@@ -165,6 +165,10 @@ def get_field_value(data, preferences, base_fieldname):
         #         module_logger("got a status code of {} for image at URI {}, refusing to convert to data URI".format(r.status_code, imageuri))
 
         return imageuri
+
+    elif base_fieldname == "imagereel":
+
+        return png_to_datauri(data)
 
     else:
 
