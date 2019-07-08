@@ -1,0 +1,217 @@
+---
+
+title: Raintale | Template Gallery
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Raintale | Template Gallery</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+  <!-- Plugin CSS -->
+  <link rel="stylesheet" href="device-mockups/device-mockups.min.css">
+
+  <!-- Custom styles for this template -->
+  <link href="css/new-age.min.css" rel="stylesheet">
+
+  <style>
+    header.masthead {
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgb(0, 0, 238), rgb(85, 26, 139), rgb(255, 255, 255))
+      /* background: linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 238), rgb(85, 26, 139), rgb(0, 0, 0)) */
+    }
+
+    .darkerlink {
+      color: rgb(0, 0, 255);
+    }
+
+    .included {
+        background-color: darkgreen;
+        color: whitesmoke;
+        text-align: center;
+        border-radius: 25px;
+        width: 200px;
+    }
+
+    .considered {
+        background-color: darkorange;
+        color: whitesmoke;
+        text-align: center;
+        border-radius: 25px;
+        width: 200px;
+    }
+
+    .screenshot {
+        position: relative;
+        overflow: hidden;
+        height: 300px;
+        object-fit: scale-down;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+      <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-shrink" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="index.html">
+            <img src="img/raintale-logo-alpha-40px.png">
+            &nbsp;&nbsp;
+            Raintale</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="https://github.com/oduwsdl/raintale">Source Code</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="https://raintale.readthedocs.io/en/latest/">Documentation</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="template_gallery.html">Template Gallery</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="https://oduwsdl.github.io/dsa/">DSA Project</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <div class="section-heading text-left">
+            <h1>The Raintale Template Gallery</h1>
+            <p>This page contains screenshots and demos of:</p>
+            <ul>
+                <li>the presets included with raintale</li>
+                <li>templates that are under consideration</li>
+            </ul> 
+            </p>
+            </div>
+        </div>
+    </section>
+
+      {% assign count = 0 %}
+
+      <div class="container">
+
+        <div class="card-deck card-deck padding">
+
+            {% for template in site.data.templates %}
+
+                {% assign count = count | plus:1 %}
+                {% assign countmod = count | modulo:2 %}
+
+                <div class="card">
+                    <div class="card-header">{{ template.name }}</div>
+                    <a style="text-align: center;" href="{{ template.bigger_screenshot }}"><img class="screenshot" src="{{ template.screenshot }}"></a>
+                    <div class="card-body">
+                        <div class="card-text">
+                            Ideas for Use:
+                        <ul>
+                            {% for usecase in template.uses %}
+                                <li>{{ usecase }}</li>
+                            {% endfor %}
+                        </ul>
+                        </div>
+                    </div>
+                    <ul class="list-group">
+                        
+                        <li class="list-group-item"><strong>Supported Storyteller:</strong> <code>{{ template.storyteller }}</code></li>
+                        <li class="list-group-item"><strong>Preset Name:</strong> <code>{{ template.preset }}</code></li>
+                        <li class="list-group-item"><strong>Example tellstory command:</strong><br/> 
+                            <code>{{ template.example_command }}</code></li>
+                        <li class="list-group-item"><strong>Template Type:</strong> {{ template.template_type }}</li>
+                        <li class="list-group-item"><a class="darkerlink" href="{{ template.bigger_screenshot }}">Click to view full screenshot</a></li>
+                        <li class="list-group-item"><a class="darkerlink" href="{{ template.template_code_link }}">Click to view template code</a></li>
+                        </ul>
+                    <div class="card-footer">
+
+                        {% if template.status == "included" %}
+                            <div class="included">Included with Raintale</div>
+                        {% else %}
+                            <div class="considered">Under Consideration</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if countmod == 0 %}
+                    </div>
+                    <div class="p-2"></div>
+                    <div class="card-deck card-deck-padding">
+                    {% assign count = 0 %}
+                {% endif %}
+
+            {% endfor %}
+
+            {% if count < 2 %}
+
+                {% for i in (count..1) %}
+
+                <div class="card" style="border-width: 0"></div>
+            
+                {% endfor %}
+            
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="p-5"></div>
+
+    <footer>
+        <div class="container">
+    
+            <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <img src="img/imls-logo.png">
+            </div>
+            <div class="col-xl-9 col-lg-10">
+                This work was funded in part by the Institute of Museum and Library Services (LG-71-15-0077-15).
+            </div>
+            </div>
+    
+            <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <hr>
+            </div>
+            </div>
+    
+            <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <img src="img/odulogo.png"> 
+            </div>
+            <div class="col-xl-9 col-lg-10">
+                This web site is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a> by the Old Dominion University Web Science and Digital Libraries Research Group 2019. <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>
+            </div>
+            </div>
+    
+    
+        </div>
+    </footer>
+    
+
+</body>
+
+</html>

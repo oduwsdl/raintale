@@ -1,54 +1,272 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Raintale | Storytelling for Web Archives</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Raintale</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+  <!-- Plugin CSS -->
+  <link rel="stylesheet" href="device-mockups/device-mockups.min.css">
+
+  <!-- Custom styles for this template -->
+  <link href="css/new-age.min.css" rel="stylesheet">
+
+  <style>
+    header.masthead {
+      background: linear-gradient(135deg, rgb(0, 0, 0), rgb(0, 0, 238), rgb(85, 26, 139), rgb(255, 255, 255))
+      /* background: linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 238), rgb(85, 26, 139), rgb(0, 0, 0)) */
+    }
+
+    .darkerlink {
+      color: rgb(0, 0, 255);
+    }
+
+  </style>
+
 </head>
-<body>
-    
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="/images/raintale-logo-sm.png">
-            Raintale</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>  
-            <li class="nav-item">
-                <a class="nav-link" href="#">Install</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Source Code</a>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Template Gallery</a>
-            </li> -->
-          </ul>
-        </div>
-      </nav>
 
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-        <h1 class="display-4">Raintale &mdash; Storytelling for Web Archives</h1>
-        <p class="lead">Raintale provides visual storytelling for the content of web archives. </p>
-        <hr class="my-4">
-        <p>Publish stories from web archive content to different file formats and services, like HTML and Twitter.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-        </div>
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="index.html">
+      <img src="img/raintale-logo-alpha-40px.png">
+      &nbsp;&nbsp;
+      Raintale</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="https://github.com/oduwsdl/raintale">Source Code</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="https://raintale.readthedocs.io/en/latest/">Documentation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="template_gallery.html">Template Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="https://oduwsdl.github.io/dsa/">DSA Project</a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    
+  <header class="masthead">
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col-lg-7 my-auto">
+          <div class="header-content mx-auto">
+            <h1 class="mb-5">Raintale allows anyone to create stories from archived web pages (mementos).</h1>
+            <a href="https://raintale.readthedocs.io/en/latest/" class="btn btn-outline btn-xl js-scroll-trigger">Get Started with Raintale</a>
+          </div>
+        </div>
+        <div class="col-lg-5 my-auto">
+          <div class="device-container">
+            <div class="device-mockup nexus7 portrait">
+              <div class="device">
+                <div class="screen">
+                  <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                  <img src="img/template_gallery/template-default-twitter.png" class="img-fluid" alt="">
+                </div>
+                <div class="button">
+                  <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- <section class="download bg-info text-center" id="download">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <h2 class="section-heading">Raintale is available</h2>
+          <p>Our app is available on any mobile device! Download now to get started!</p>
+          <div class="badges">
+            <a class="badge-link" href="#"><img src="img/google-play-badge.svg" alt=""></a>
+            <a class="badge-link" href="#"><img src="img/app-store-badge.svg" alt=""></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-heading text-center">
+        <h2>Raintale's Core Features</h2>
+        <p class="text-muted">Raintale was developed with customization in mind.</p>
+        <hr>
+      </div>
+      <div class="row">
+        <!-- <div class="col-lg-4 my-auto">
+          <div class="device-container">
+            <div class="device-mockup iphone6_plus portrait white">
+              <div class="device">
+                <div class="screen"> -->
+                  <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                  <!-- <img src="img/demo-screen-1.jpg" class="img-fluid" alt="">
+                </div>
+                <div class="button"> -->
+                  <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                <!-- </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-lg-8 my-auto"> -->
+        <div class="col-lg-12 my-auto"> 
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="feature-item">
+                  <i class="icon-globe-alt text-primary"></i>
+                  <h3>File Output</h3>
+                  <p class="text-muted">Post your story to files in HTML, <a class="darkerlink" href="https://jekyllrb.com/">Jekyll</a>, <a class="darkerlink" href="https://guides.github.com/features/mastering-markdown/">Markdown</a>, and MediaWiki formats. With templates, you can create any single page story format you wish. An experimental video storyteller is also available.</p>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="feature-item">
+                  <i class="icon-social-twitter text-primary"></i>
+                  <h3>Social Media Publishing</h3>
+                  <p class="text-muted">Use the Twitter storyteller to post your as a Twitter thread. An experimental Facebook storyteller is also available.</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="feature-item">
+                  <i class="icon-wrench text-primary"></i>
+                  <h3>Presets and Templates</h3>
+                  <p class="text-muted">You can control the look of your story. Visit the <a class="darkerlink" href="">Template Gallery</a> to see examples.</p>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="feature-item">
+                  <i class="icon-lock-open text-primary"></i>
+                  <h3>Open Source</h3>
+                  <p class="text-muted">Raintale is licensed under the MIT license.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-content">
+      <div class="container">
+        <div class="row h-100">
+          <div class="col-md-7 my-auto">
+            <div class="header-content mx-auto">
+              <h2>What Story Do You Wish To Tell With Web Archives?</h2>
+              <a href="https://raintale.readthedocs.io/en/latest/" class="btn btn-outline btn-xl js-scroll-trigger">Let's Get Started!</a>
+            </div>
+          </div>
+          <div class="col-md-5 my-auto">
+            <div class="device-mockup imac portrait white">
+                <div class="device">
+                  <div class="screen">
+                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                    <img src="img/template_gallery/template-thumbnails4col-html.png" class="img-fluid" alt="">
+                  </div>
+                  <div class="button">
+                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="overlay"></div>
+  </section>
+
+  <section class="contact bg-light" id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 col-lg-2">
+            <img src="img/dsa-logo-monochrome-wb.png">
+        </div>
+        <div class="col-xl-9 col-lg-10">
+          <p>
+          Raintale is a software package developed as part of <a class="darkerlink" href="https://oduwsdl.github.io/dsa/">the Dark and Stormy Archives (DSA) Project</a>.
+        </p>
+        <p>
+          Raintale uses the DSA Project's <a class="darkerlink" href="https://mementoembed.readthedocs.io/en/latest/">MementoEmbed</a>.
+        </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xl-3 col-lg-2">
+            <img src="img/imls-logo.png">
+        </div>
+        <div class="col-xl-9 col-lg-10 text-light">
+            This work was funded in part by the Institute of Museum and Library Services (LG-71-15-0077-15).
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12">
+          <hr>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-3 col-lg-2">
+          <img src="img/odulogo.png"> 
+        </div>
+        <div class="col-xl-9 col-lg-10 text-light">
+          This web site is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a> by the Old Dominion University Web Science and Digital Libraries Research Group 2019. <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>
+        </div>
+      </div>
+
+
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/new-age.min.js"></script>
+
 </body>
+
 </html>

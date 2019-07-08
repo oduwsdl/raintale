@@ -1,0 +1,201 @@
+[
+    {
+        "name": "Bootstrap Cards With Imagereel (Animated GIF) Images",
+        "screenshot": "img/template_gallery/template-vbsir-html.png",
+        "storyteller": "html",
+        "preset": "vertical-bootstrapcards-imagereel",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html --preset vertical-bootstrapcards-imagereel -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-vbsir-html.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/thumbnails1024.html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Twitter Default",
+        "screenshot": "img/template_gallery/template-default-twitter.png",
+        "storyteller": "twitter",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller twitter -c mycredentials.yaml",
+        "bigger_screenshot": "img/template_gallery/template-default-twitter.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.twitter",
+        "status": "included",
+        "uses": [
+            "Publishing a story to Twitter"
+        ],
+        "template_type": "multipart"
+    },
+    {
+        "name": "HTML Default",
+        "screenshot": "img/template_gallery/template-default-html.png",
+        "storyteller": "html",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-default-html.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Facebook Default",
+        "screenshot": "img/template_gallery/template-default-facebook.png",
+        "storyteller": "facebook",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller facebook -c mycredentials.yaml",
+        "bigger_screenshot": "img/template_gallery/template-default-facebook.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.twitter",
+        "status": "included",
+        "uses": [
+            "Publishing a story to Facebook",
+            "<strong>Note that Facebook stories are still EXPERIMENTAL</strong>"
+        ],
+        "template_type": "multipart"
+    },
+    {
+        "name": "Markdown Default",
+        "screenshot": "img/template_gallery/template-default-markdown.png",
+        "storyteller": "markdown",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller markdown -o mystory.md",
+        "bigger_screenshot": "img/template_gallery/template-default-markdown.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.markdown",
+        "status": "included",
+        "uses": [
+            "Pasting into GitHub gists, comments"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "MediaWiki Default",
+        "screenshot": "img/template_gallery/template-default-mediawiki.png",
+        "storyteller": "mediawiki",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller mediawiki -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-default-mediawiki.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.mediawiki",
+        "status": "included",
+        "uses":[
+            "Pasting into MediaWiki pages"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "HTML 4 Column Thumbnails",
+        "screenshot": "img/template_gallery/template-thumbnails4col-html.png",
+        "storyteller": "html",
+        "preset": "thumbnails4col",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html --preset thumbnails4col -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-thumbnails4col-html.png",
+        "template_code_link": "https://github.com/oduwsdl/raintale/blob/master/raintale/templates/thumbnails4col.html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "HTML 3 Column Thumbnails",
+        "screenshot": "img/template_gallery/template-thumbnails3col-html.png",
+        "storyteller": "html",
+        "preset": "thumbnails3col",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html --preset thumbnails3col -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-thumbnails3col-html.png",
+        "template_code_link": "https://github.com/oduwsdl/raintale/blob/master/raintale/templates/thumbnails4col.html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Jekyll HTML Default",
+        "screenshot": "img/template_gallery/template-default-html.png",
+        "storyteller": "jekyll-html",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller jekyll-html -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-default-html.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.jekyll-html",
+        "status": "included",
+        "uses": [
+            "Insertion into Jekyll web sites",
+            "Use with GitHub Pages"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Jekyll Markdown Default",
+        "screenshot": "img/template_gallery/template-default-markdown.png",
+        "storyteller": "jekyll-markdown",
+        "preset": "default",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller jekyll-markdown -o mystory.md",
+        "bigger_screenshot": "img/template_gallery/template-default-markdown.png",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.jekyll-markdown",
+        "status": "included",
+        "uses": [
+            "Insertion into Jekyll web sites",
+            "Use with GitHub Pages"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Jekyll HTML 3 Column Thumbnails",
+        "screenshot": "img/template_gallery/template-thumbnails3col-html.png",
+        "storyteller": "jekyll-html",
+        "preset": "thumbnails3col",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller jekyll-html --preset thumbnails3col -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-thumbnails3col-html.png",
+        "template_code_link": "https://github.com/oduwsdl/raintale/blob/master/raintale/templates/thumbnails3col.jekyll-html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Jekyll HTML 4 Column Thumbnails",
+        "screenshot": "img/template_gallery/template-thumbnails4col-html.png",
+        "storyteller": "jekyll-html",
+        "preset": "thumbnails3col",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller jekyll-html --preset thumbnails4col -o mystory.html",
+        "bigger_screenshot": "img/template_gallery/template-thumbnails4col-html.png",
+        "template_code_link": "https://github.com/oduwsdl/raintale/blob/master/raintale/templates/thumbnails4col.jekyll-html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    },
+    {
+        "name": "Thumbnails at 1024px Wide",
+        "screenshot": "",
+        "storyteller": "html",
+        "preset": "thumbnails1024",
+        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html --preset thumbnails1024 -o mystory.html",
+        "bigger_screenshot": "",
+        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/thumbnails1024.html",
+        "status": "included",
+        "uses": [
+            "Pasting into Blogger blog posts",
+            "Insertion into static HTML pages",
+            "Inclusion into HTML output curation workflows"
+        ],
+        "template_type": "simple"
+    }
+]
