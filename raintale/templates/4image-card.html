@@ -1,0 +1,53 @@
+<p><h1>{{ title }}</h1></p>
+
+{% if generated_by is defined %}
+<p><strong>Story By:</strong> {{ generated_by }}</p>
+{% endif %}
+
+{% if collection_url is defined %}
+<p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
+{% endif %}
+
+{% if metadata is not none %}
+
+{% for key, value in metadata.items() %}
+
+    <p><strong>{{ key|title }}</strong>: {{ value }}</p>
+
+{% endfor %}
+
+{% endif %}
+
+{% for element in elements %}
+<hr>
+
+{% if element.type == 'link' %}
+<div>
+<blockquote>
+
+    <div style="position:relative">
+    <img height="100px" src="{{ element.surrogate.image|prefer rank=1 }}">
+    <img height="100px" src="{{ element.surrogate.image|prefer rank=2 }}">
+    <img height="100px" src="{{ element.surrogate.image|prefer rank=3 }}">
+    <img height="100px" src="{{ element.surrogate.image|prefer rank=4 }}">
+    </div>
+
+    <br /><br />
+
+    <div style="position:relative">
+
+    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.title }}</a><br /><br />
+    {{ element.surrogate.snippet }}<br /><br />
+    <img width="16px" src="{{ element.surrogate.original_favicon|prefer datauri_favicon=yes }}">
+    <a href="{{ element.surrogate.urim }}">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a><br /><br />
+    <img width="16px" src="{{ element.surrogate.archive_favicon|prefer datauri_favicon=yes }}">
+    Preserved by <a href="{{ element.surrogate.archive_uri }}">{{ element.surrogate.archive_name }}</a><br />
+
+    </div>
+
+</blockquote>
+</div>
+
+{% endif %}
+
+{% endfor %}

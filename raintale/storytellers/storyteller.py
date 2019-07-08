@@ -5,7 +5,7 @@ import pprint # for debugging
 from yaml import load, Loader
 from jinja2 import Template
 
-from ..surrogatedata import get_memento_data, get_template_surrogate_fields
+from ..surrogatedata import get_template_surrogate_fields, MementoData
 
 module_logger = logging.getLogger('raintale.storytellers.storyteller')
 
@@ -70,9 +70,10 @@ def split_multipart_template(template_contents):
         module_logger.debug("cleaned_media_list: {}".format(cleaned_media_list))
 
     except ValueError:
-        media_list = []
+        media_template = ""
+        cleaned_media_list = []
 
-    return title_template, element_template, cleaned_media_list
+    return title_template, element_template, media_template, cleaned_media_list
 
 class Storyteller:
 
@@ -110,7 +111,7 @@ class ServiceStoryteller(Storyteller):
 
     def generate_story(self, story_data, mementoembed_api, story_template):
 
-        title_template, element_template, media_template_list = split_multipart_template(story_template)
+        title_template, element_template, media_template, media_template_list = split_multipart_template(story_template)
 
         story_elements = get_story_elements(story_data)
 
@@ -128,21 +129,20 @@ class ServiceStoryteller(Storyteller):
                 metadata=story_data['metadata']
         )
 
-        template_surrogate_fields = get_template_surrogate_fields(element_template)
-
-        template_media_fields = []
-        
-        for field in media_template_list:
-
-            # there should only be one
-            template_media_fields.append(
-                get_template_surrogate_fields(field)[0]
-            )
-
-        module_logger.debug("template_media_fields: {}".format(template_media_fields))
-
         module_logger.info("preparing to iterate through {} story "
             "elements".format(len(story_elements)))
+
+        md = MementoData(element_template, mementoembed_api)
+        md_media = MementoData(media_template, mementoembed_api)
+        
+        # TODO: how to handle media part of template?
+
+        for element in story_elements:
+
+            if element['type'] == 'link':
+
+                urim = element['value']
+                md.add(urim)
 
         for element in story_elements:
 
@@ -154,31 +154,24 @@ class ServiceStoryteller(Storyteller):
 
                     urim = element['value']
 
-                    memento_data = get_memento_data(
-                        template_surrogate_fields, 
-                        mementoembed_api, 
-                        urim)
+                    memento_data = md.get_memento_data(urim)
+                    media_data = md_media.get_memento_data(urim)
 
                     module_logger.debug("memento_data: {}".format(memento_data))
 
                     media_uris = []
 
-                    module_logger.debug("template_media_fields: {}".format(template_media_fields))
+                    # TODO: how to handle order specified in template?
+                    for variable in media_template_list:
+                        sanitized_variable = variable.replace('{{ element.surrogate.', '').replace('}}', '')
+                        sanitized_variable = sanitized_variable.replace('|prefer ', '__prefer__').replace('=', '_').replace(',', '_').replace('{{ element.surrogate.', '').replace(' }}', '').strip()
 
-                    for field in template_media_fields:
-
-                        module_logger.debug("field: {}".format(field))
-                        field_data = get_memento_data(
-                            [field],
-                            mementoembed_api,
-                            urim
-                        )
                         media_uris.append(
-                                Template(field).render(
-                                element={
-                                    "surrogate": field_data
-                                }
-                        ))
+                            media_data[sanitized_variable]
+                        )
+
+                    # for mediauri in media_data.values():
+                    #     media_uris.append(mediauri)
 
                     module_logger.debug("media_uris: {}".format(media_uris))
 

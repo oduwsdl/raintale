@@ -21,7 +21,7 @@ title: {{ title }}
 
 {% if element.type == 'link' %}
 
-    <td><img src="{{ element.surrogate.thumbnail }}"></td>
+    <td><a href="{{ element.surrogate.urim }}"><img src="{{ element.surrogate.thumbnail|prefer remove_banner=yes }}"></a></td>
 
     {% if loop.index is divisibleby 4 %}
         </tr><tr>

@@ -28,7 +28,7 @@ Raintale supports the following storytellers:
 * video - (EXPERIMENTAL) creates an MP4 file containing the top images and sentences from the mementos in your story
 
 Railtale also supports a number of presets for formatting a story for output to a specific file format:
-* socialcard - provides a social card like those seen in social networking, may also provide an approximation, depending on file format (html, markdown, mediawiki, and jekyll storytellers)
+* default - provides a default set of fields like those seen in the social cards from social networking; may also provide an approximation, depending on file format (html, markdown, mediawiki, and jekyll storytellers)
 * thumbnails3col - provides a 3 column layout containing thumbnails of the submitted mementos (HTML storyteller only)
 * thumbnails4col - provides a 4 column layout containing thumbnails of the submitted mementos (HTML storyteller only)
 
