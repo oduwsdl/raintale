@@ -1,7 +1,7 @@
 Creating Your Own Templates
 ===========================
 
-Raintale allows the user to supply their own templates to format a story. Each template can be in a text-based format. Examples of text-based formats are HTML, XML, Markdown, and JSON. Raintale's presets are templates and you can view the files in the templates directory of the `Raintale GitHub <https://github.com/oduwsdl/raintale/tree/master/raintale/templates>`_ repository. Templates are built using an extension of the Jinja2 template engine. Because the format is an extension, not all Raintale templates are interoperable with Jinja2.
+Raintale allows the user to supply their own templates to format a story. Each template can be in a text-based format. Examples of text-based formats are HTML, XML, Markdown, and JSON. Raintale's presets are templates and you can view the files in the templates directory of the `Raintale GitHub <https://github.com/oduwsdl/raintale/tree/master/raintale/templates>`_ repository. Templates are built using an extension of the Jinja2 template engine. Because the format is an extension, Raintale templates are not interoperable with Jinja2.
 
 A Simple Template
 -----------------
@@ -13,11 +13,11 @@ As noted in :ref:`building_story`, Raintale, at a minimum, accepts a list of mem
     
     <p><h1>{{ title }}</h1></p>
 
-    {% if generated_by is defined %}
+    {% if generated_by is not none %}
     <p><strong>Story By:</strong> {{ generated_by }}</p>
     {% endif %}
 
-    {% if collection_url is defined %}
+    {% if collection_url is not none %}
     <p><strong>Collection URL:</strong> <a href="{{ collection_url }}">{{ collection_url }}</a></p>
     {% endif %}
 
@@ -29,7 +29,7 @@ As noted in :ref:`building_story`, Raintale, at a minimum, accepts a list of mem
 
     {% if element.type == 'link' %}
 
-        <td><img src="{{ element.surrogate.thumbnail }}"></td>
+        <td><a href="{{ element.surrogate.urim }}"><img src="{{ element.surrogate.thumbnail|prefer remove_banner=yes }}"></a></td>
 
         {% if loop.index is divisibleby 4 %}
             </tr><tr>
@@ -37,11 +37,13 @@ As noted in :ref:`building_story`, Raintale, at a minimum, accepts a list of mem
 
     {% else %}
 
-    <!-- Element type {{ element.type }} is unsupported by the thubmnails3col template -->
+    <!-- Element type {{ element.type }} is unsupported by the thumbnails4col template -->
 
     {% endif %}
 
     {% endfor %}
+    </table>
+
 
 In this example, the ``{{ title }}`` variable will be filled by the parameter of the ``--title`` argument of the ``tellstory`` command. The same for the ``{{ generated_by }}`` and ``{{ collection_url }}`` variables and their corresponding ``tellstory`` arguments.
 
@@ -136,7 +138,7 @@ The above example would replace the value of the variable with the 3 :superscrip
 
 .. note::
 
-    If a Raintale preference is used in a template, it is no longer a valid Jinja2 template and will only work with Raintale.
+    If a Raintale preference is used in a template, it is no longer a valid Jinja2 template and will only work with Raintale. Jinja2 filters do not yet work with Raintale.
 
 .. note::
 
