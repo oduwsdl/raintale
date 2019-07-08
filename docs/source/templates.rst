@@ -123,6 +123,11 @@ The loop for the story elements starts on line 21. For the ``link`` element type
 
 Line 45 shows how a template can handle a ``text`` element type via the ``element.text`` variable.
 
+This template is rendered by GitHub as a gist as shown below.
+
+.. image:: images/raintale-markdown-example.png
+
+
 Available Surrogate Variables
 -----------------------------
 
