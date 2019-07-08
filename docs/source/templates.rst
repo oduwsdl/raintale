@@ -234,3 +234,13 @@ The above example would replace the value of the variable with the 3 :superscrip
 * ``element.surrogate.urim``
     - the URI-M of this memento
 
+Considerations For Surrogates
+-----------------------------
+
+As noted in our work with MementoEmbed, surrogates for mementos need special consideration to avoid misleading users. Here we provide a brief explanation of some of the decisions made with MementoEmbed to address problems created by other surrogate services. 
+
+.. image:: images/mementoembed_annotated.png
+
+Note that the surrogate below contains information from the memento content, such as the title and a text snippet. It also provides information from the archive. This duality may make mementos confusing for some users. It is important to provide both archive information as well as the information about the original resource. In the example below, CNN is the author of the underlying memento, Archive-It merely captured it. If you leave out the information on the original resource, visitors to your story may think that Archive-It is the author, which is incorrect. If you leave out information on the archive, visitors to your story may think that you have misled them because the link did not lead them to cnn.com. Such misleading behavior may cause you, the story author, to lose credibility. When developing templates, please keep these considerations in mind.
+
+
