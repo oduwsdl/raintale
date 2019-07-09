@@ -10,17 +10,19 @@
 
 <hr>
 
-<table border="0">
-
 {% for element in elements %}
 
 {% if element.type == 'link' %}
-
-    <tr><td><img src="{{ element.surrogate.thumbnail|prefer thumbnail_width=1024 }}"></td></tr>
+    <div style="text-align: center;">
+    <img src="{{ element.surrogate.thumbnail|prefer thumbnail_width=1024 }}">
+    </div>
+    <div>
+        <hr/>
+    </div>
 
 {% else %}
 
-<!-- Element type {{ element.type }} is unsupported by the thubmnails3col template -->
+{{ element.text }}
 
 {% endif %}
 
