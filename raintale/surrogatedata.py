@@ -152,7 +152,7 @@ def get_field_value(data, preferences, base_fieldname):
         try:
             imageuri = ranked_images[ int(prefdict['rank']) - 1 ]
         except IndexError:
-            imageuri = None
+            imageuri = ""
 
         # TODO: this seems like too much for this function to handle
         # if prefdict["datauri"] == "yes":

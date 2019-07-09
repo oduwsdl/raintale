@@ -87,7 +87,7 @@ class TwitterStoryTeller(ServiceStoryteller):
 
                 module_logger.debug("working on media URI {}".format(media_uri))
 
-                if media_uri is not None:
+                if media_uri != "":
                     if media_uri[0:5] == 'data:':
                         mimetype, filedata = datauri_to_data(media_uri)
                         ext = mimetypes.guess_extension(mimetype)
