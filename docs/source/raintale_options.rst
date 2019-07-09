@@ -67,8 +67,8 @@ Raintale provides the following ``storytellers`` for file formats:
 * ``markdown`` - suitable for posting to `GitHub gists <https://gist.github.com/>`_
 * ``jekyll-html`` and ``jekyll-markdown`` - suitable for use with a `Jekyll site <https://jekyllrb.com/>`_ and posting to `GitHub Pages <https://pages.github.com/>`_
 * ``mediawiki`` - for pasting into MediaWiki pages
-* ``template`` - a generic storyteller for output to a single file
-* ``video`` - an **EXPERIMENTAL** storyteller that creates a video of URI-M content suitable for posting to Twitter or YouTube
+* ``template`` - a generic storyteller for output to a single file, must have a file specified using the ``--story-template`` parameter
+* ``video`` - an **EXPERIMENTAL** storyteller that creates an MPEG video of URI-M content suitable for posting to Twitter or YouTube
 
 To use one of these storytellers, you must also supply the ``-o`` argument specifying the name of the output file.
 
