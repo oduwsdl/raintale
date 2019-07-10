@@ -1,3 +1,5 @@
+.. _creating_your_own_templates:
+
 Creating Your Own Templates
 ===========================
 

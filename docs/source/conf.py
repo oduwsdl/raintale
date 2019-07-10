@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Raintale'
-copyright = u'2019, Web Science and Digital Libraries - Department of Computer Science, Old Dominion University, Norfolk VA'
+copyright = u': Licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (http://creativecommons.org/licenses/by-sa/4.0/) by the Old Dominion University Web Science and Digital Libraries Research Group.'
 author = u'Shawn M. Jones'
 
 # The short X.Y version
