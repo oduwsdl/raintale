@@ -2,7 +2,7 @@
 {# RAINTALE TITLE PART #}
 {{ title }}
 
-{% if generated_by not none %}Story By: {{ generated_by }}{% endif %}
+{% if generated_by is not none %}Story By: {{ generated_by }}{% endif %}
 
 {% if collection_url is not none %}{{ collection_url }}{% endif %}
 {# RAINTALE ELEMENT PART #}
