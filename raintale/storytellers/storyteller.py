@@ -99,23 +99,27 @@ class ServiceStoryteller(Storyteller):
     requires_file = False
     requires_credentials = True
 
-    def __init__(self, credentials_filename):
+    def __init__(self, credentials_filename, auth_check=True):
         self.credentials_filename = credentials_filename
         self.load_credentials_filename()
-        self.auth()
+
+        if auth_check is True:
+            self.auth()
 
     def load_credentials_filename(self):
 
         with open(self.credentials_filename) as f:
             self.credentials = load(f, Loader=Loader)
 
-    def generate_story(self, story_data, mementoembed_api, story_template):
+    def generate_story(self, story_data, mementoembed_api, story_template, session=None):
 
         title_template, element_template, media_template, media_template_list = split_multipart_template(story_template)
 
         story_elements = get_story_elements(story_data)
 
         module_logger.debug("media_template_list: {}".format(media_template_list))
+
+        module_logger.debug("media_template: [{}]".format(media_template))
         
         story_output_data = {
             "main_post": "",
@@ -133,7 +137,12 @@ class ServiceStoryteller(Storyteller):
             "elements".format(len(story_elements)))
 
         md = MementoData(element_template, mementoembed_api)
-        md_media = MementoData(media_template, mementoembed_api)
+
+        # handle the case where there no media is requested
+        if media_template == "\n" or media_template == '':
+            md_media = None
+        else:
+            md_media = MementoData(media_template, mementoembed_api)
         
         # TODO: how to handle media part of template?
 
@@ -154,24 +163,22 @@ class ServiceStoryteller(Storyteller):
 
                     urim = element['value']
 
-                    memento_data = md.get_memento_data(urim)
-                    media_data = md_media.get_memento_data(urim)
+                    memento_data = md.get_memento_data(urim, session=session)
 
                     module_logger.debug("memento_data: {}".format(memento_data))
 
                     media_uris = []
 
-                    # TODO: how to handle order specified in template?
-                    for variable in media_template_list:
-                        sanitized_variable = variable.replace('{{ element.surrogate.', '').replace('}}', '')
-                        sanitized_variable = sanitized_variable.replace('|prefer ', '__prefer__').replace('=', '_').replace(',', '_').replace('{{ element.surrogate.', '').replace(' }}', '').strip()
+                    if md_media is not None:
+                        media_data = md_media.get_memento_data(urim, session=session)
 
-                        media_uris.append(
-                            media_data[sanitized_variable]
-                        )
+                        for variable in media_template_list:
+                            sanitized_variable = variable.replace('{{ element.surrogate.', '').replace('}}', '')
+                            sanitized_variable = sanitized_variable.replace('|prefer ', '__prefer__').replace('=', '_').replace(',', '_').replace('{{ element.surrogate.', '').replace(' }}', '').strip()
 
-                    # for mediauri in media_data.values():
-                    #     media_uris.append(mediauri)
+                            media_uris.append(
+                                media_data[sanitized_variable]
+                            )
 
                     module_logger.debug("media_uris: {}".format(media_uris))
 
