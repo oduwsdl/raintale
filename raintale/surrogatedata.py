@@ -330,11 +330,11 @@ class MementoData:
 
                         result = request.result()
 
-                        module_logger.info("status is {}".format(result.status_code))
+                        module_logger.debug("status is {}".format(result.status_code))
 
                         if result.status_code == 200:
 
-                            module_logger.info("fields for this endpoint with preferences: {}".format(
+                            module_logger.debug("fields for this endpoint with preferences: {}".format(
                                 future_requests[ (endpoint, me_preferences) ]["fields"]
                             ))
 
@@ -348,7 +348,7 @@ class MementoData:
                                 rt_preferences = self._data[ (fieldname, urim) ]["Raintale preferences"]
                                 base_fieldname = self._data[ (fieldname, urim) ]["base field name"]
 
-                                module_logger.info("attempting to set memento data value '{}' using base field name '{}' and Raintale preferences '{}'".format(
+                                module_logger.debug("attempting to set memento data value '{}' using base field name '{}' and Raintale preferences '{}'".format(
                                     self._data[ (fieldname, urim) ]["sanitized field name"],
                                     base_fieldname,
                                     rt_preferences
@@ -369,7 +369,7 @@ class MementoData:
                                 except KeyError as e:
                                     module_logger.exception("Got error at endpoint {}: {}".format(endpoint, e))
 
-                                module_logger.info("mementodata is now {}\n\n".format(
+                                module_logger.debug("mementodata is now {}\n\n".format(
                                     pprint.pformat( self._mementodata )
                                 ))
 
@@ -413,7 +413,7 @@ class MementoData:
         if urim not in self._mementodata:
             self.fetch_all_memento_data(session=session)
 
-        module_logger.info("mementodata: {}".format(
+        module_logger.debug("mementodata: {}".format(
             pprint.pformat(self._mementodata, indent=4)
         ))
 
