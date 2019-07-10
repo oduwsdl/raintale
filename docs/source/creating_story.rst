@@ -63,7 +63,7 @@ Using JSON, the story author can specify the title of the story with the ``title
 
 Lines 3 and 4 show how a story author can supply values for ``collection_url`` and ``generated_by``. As noted in :ref:`raintale_options`, if the ``--collection_url`` or ``--generated_by`` arguments are specified to ``tellstory``, then the values supplied with those arguments will override the values in this JSON file.
 
-Lines 5 through 9 demonstrate how the story author can provide additional metadata in the form of a JSON object of keys and values. The key ``metadata`` is not a keyword. As long as your preset or template file contains a matching key between your story file and your  template, the value of that key will be used in your story.
+Lines 5 through 9 demonstrate how the story author can provide additional metadata in the form of a JSON object of keys and values. You can utilize keys from metadata to fill specific values in your template. See the section :ref:`creating_your_own_templates` for more information on how templates work.
 
 Lines 10 through 27 contain the ``elements`` of your story. Each element consists of a JSON object with two keys: ``type`` and ``value``. Raintale will process each element's ``value`` differently based on its ``type``.
 

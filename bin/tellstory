@@ -352,6 +352,8 @@ def choose_story_template(storyteller, preset, given_story_template_filename):
         story_template_filename = "{}/templates/{}.{}".format(
             package_directory, args.storytelling_preset, args.storyteller
         )
+    else:
+        story_template_filename = given_story_template_filename
 
     logger.info("using story template filename {}".format(story_template_filename))
 
