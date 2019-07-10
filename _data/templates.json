@@ -184,11 +184,11 @@
     },
     {
         "name": "Thumbnails at 1024px Wide",
-        "screenshot": "",
+        "screenshot": "img/template_gallery/template-thumbnails1024-html.png",
         "storyteller": "html",
         "preset": "thumbnails1024",
         "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller html --preset thumbnails1024 -o mystory.html",
-        "bigger_screenshot": "",
+        "bigger_screenshot": "img/template_gallery/template-thumbnails1024-html.png",
         "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/thumbnails1024.html",
         "status": "included",
         "uses": [
