@@ -228,8 +228,6 @@ The above example would replace the value of the variable with the 3 :superscrip
     - may be deprecated in the future in favor of ``element.surrogate.image|prefer rank=1``
 * ``element.surrogate.first_memento_datetime``
     - the datetime of the *earliest* memento for this resource at the web archive containing this URI-M
-* ``element.surrogate.first_title``
-    - the title pulled from the HTML of the *earliest* memento for this resource at the web archive containing this URI-M
 * ``element.surrogate.first_urim``
     - the URI-M of the *earliest* memento for this resource at the web archive containing this URI-M
 * ``element.surrogate.image``
@@ -240,8 +238,6 @@ The above example would replace the value of the variable with the 3 :superscrip
         - default value: ``rank=0``
 * ``element.surrogate.last_memento_datetime``
     - the datetime of the *latest* memento for this resource at the web archive containing this URI-M
-* ``element.surrogate.last_title``
-    - the title pulled from the HTML of the *latest* memento for this resource at the web archive containing this URI-M
 * ``element.surrogate.last_urim``
     - the URI-M of the *latest* memento for this resource at the web archive containing this URI-M
 * ``element.surrogate.memento_count``

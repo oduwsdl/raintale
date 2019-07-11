@@ -24,8 +24,6 @@ fieldname_to_endpoint = {
     "last_memento_datetime": "/services/memento/seeddata/",
     "first_urim": "/services/memento/seeddata/",
     "last_urim": "/services/memento/seeddata/",
-    "first_title": "/services/memento/seeddata/",
-    "last_title": "/services/memento/seeddata/",
     "metadata": "/services/memento/seeddata/",
     "original_domain": "/services/memento/originalresourcedata/",   
     "original_favicon": "/services/memento/originalresourcedata/",
