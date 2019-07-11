@@ -136,21 +136,6 @@
         "template_type": "simple"
     },
     {
-        "name": "Jekyll Markdown Default",
-        "screenshot": "img/template_gallery/template-default-markdown.png",
-        "storyteller": "jekyll-markdown",
-        "preset": "default",
-        "example_command": "tellstory -i story-mementos.txt --title \"My Story\" --storyteller jekyll-markdown -o mystory.md",
-        "bigger_screenshot": "img/template_gallery/template-default-markdown.png",
-        "template_code_link": "https://raw.githubusercontent.com/oduwsdl/raintale/master/raintale/templates/default.jekyll-markdown",
-        "status": "included",
-        "uses": [
-            "Insertion into Jekyll web sites",
-            "Use with GitHub Pages"
-        ],
-        "template_type": "simple"
-    },
-    {
         "name": "Jekyll HTML 3 Column Thumbnails",
         "screenshot": "img/template_gallery/template-thumbnails3col-html.png",
         "storyteller": "jekyll-html",
