@@ -50,12 +50,11 @@ class TwitterStoryTeller(ServiceStoryteller):
 
         module_logger.info("publishing story as a thread to Twitter")
 
-        module_logger.critical(
+        self.auth()
+
+        module_logger.debug(
             "story_output_data: {}".format(pprint.pformat(story_output_data))
         )
-
-        # module_logger.critical("premature exit!")
-        # sys.exit(255)
 
         module_logger.debug("main tweet data:\n{}".format(
             story_output_data["main_post"]

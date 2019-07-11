@@ -2,9 +2,9 @@
 {# RAINTALE TITLE PART #}
 {{ title }}
 
-{% if generated_by is defined %}Story By: {{ generated_by }}{% endif %}
+{% if generated_by is not none %}Story By: {{ generated_by }}{% endif %}
 
-{% if collection_url is defined %}{{ collection_url }}{% endif %}
+{% if collection_url is not none %}{{ collection_url }}{% endif %}
 {# RAINTALE ELEMENT PART #}
 
 {{ element.surrogate.title }}

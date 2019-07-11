@@ -10,9 +10,6 @@ pp = pprint.PrettyPrinter(indent=4)
 
 class TestMementoData(unittest.TestCase):
 
-    def test_simple_template(self):
-        pass
-
     def test_complex_template(self):
 
         urim1 = "http://archive.example/20100424130000/https://example.com"
@@ -158,7 +155,6 @@ class TestMementoData(unittest.TestCase):
                         fieldname, urim, endpoint, me_preferences
                     )
                 )
-
 
 
 if __name__ == '__main__':

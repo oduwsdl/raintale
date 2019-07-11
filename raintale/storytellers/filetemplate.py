@@ -17,7 +17,7 @@ class FileTemplateStoryTeller(FileStoryteller):
     
     description = "Given input data and a template file, this storyteller generates a story formatted based on the template and saves it to an output file."
 
-    def generate_story(self, story_data, mementoembed_api, story_template):
+    def generate_story(self, story_data, mementoembed_api, story_template, session=None):
 
         story_elements = get_story_elements(story_data)
 
@@ -53,7 +53,7 @@ class FileTemplateStoryTeller(FileStoryteller):
                     urim = element['value']
                     link_data = {}
 
-                    memento_data = md.get_memento_data(urim)
+                    memento_data = md.get_memento_data(urim, session=session)
 
                     module_logger.debug("memento_data: {}".format(memento_data))
 
