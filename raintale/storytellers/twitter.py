@@ -3,12 +3,15 @@ import mimetypes
 import tempfile
 import os
 import time
+import io
 import sys # for debugging
 import pprint # for debugging
 
 import twitter
+import requests
 
 from jinja2 import Template
+from PIL import Image
 
 from .storyteller import ServiceStoryteller, get_story_elements, StoryTellerCredentialParseError, split_multipart_template
 from ..surrogatedata import datauri_to_data
@@ -94,10 +97,23 @@ class TwitterStoryTeller(ServiceStoryteller):
                         f.write(filedata)
                         module_logger.debug("temporary file name is {}".format(f.name))
                         tweet_media.append(f)
+                    elif os.path.splitext(media_uri)[1] == '.gif':
+                        # Twitter does not allow multiple animated GIFs, and an imagereel would be a data URI, but it still blocks regular GIFs
+                        # TODO: actually check the content-type
+                        
+                        r = requests.get(media_uri)
+
+                        if r.status_code == 200:
+                            ifp = io.BytesIO(r.content)
+                            converted_im = Image.open(ifp)
+                            converted = tempfile.NamedTemporaryFile(prefix='raintale-', suffix="png", delete=False)
+                            converted_im.save(converted, "PNG")
+                            tweet_media.append(converted)
+
                     else:
                         tweet_media.append(media_uri)
 
-            module_logger.info("thread tweet media: \n{}".format(
+            module_logger.debug("thread tweet media: \n{}".format(
                 tweet_media
             ))
 
