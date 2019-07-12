@@ -34,9 +34,9 @@ Railtale also supports a number of presets for formatting a story for output to 
 
 Note that not all file formats support all presets.
 
-# Running raintale
+# Running Raintale
 
-Raintale uses docker-compose to load and execute all dependencies. To run raintale, do the following:
+Raintale uses docker-compose to load and execute all dependencies. To run Raintale, do the following:
 1. Create a directory on your system
 2. Copy docker-compose.yml from this repository into that directory
 3. Open a terminal
@@ -67,7 +67,7 @@ Once that is done, type the following within the Docker prompt:
 docker-compose run raintale tellstory -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me” -c twitter-credentials.yml
 ``
 
-# Building raintale
+# Building Raintale
 
 Raintale uses ```pip``` for build and installation. Clone this repository and type the following from the root of the source code:
 
@@ -75,6 +75,6 @@ Raintale uses ```pip``` for build and installation. Clone this repository and ty
 
 to build and install the version from the source code on your machine.
 
-# The future of raintale
+# The future of Raintale
 
 We are working on additional storytellers and presets. Storytellers must be either a file format or an online service that supports an API. The choice in storyteller is highly dependent upon the capabilities and terms of that online service's API.
