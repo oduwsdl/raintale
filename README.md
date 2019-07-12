@@ -75,6 +75,6 @@ Raintale uses ```pip``` for build and installation. Clone this repository and ty
 
 to build and install the version from the source code on your machine.
 
-# The future of Raintale
+# The future of raintale
 
 We are working on additional storytellers and presets. Storytellers must be either a file format or an online service that supports an API. The choice in storyteller is highly dependent upon the capabilities and terms of that online service's API.
