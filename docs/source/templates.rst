@@ -126,7 +126,7 @@ The following example displays how one can use Raintale templates with Markdown.
 
 In this example, we highlight some additional functionality. If you supply a JSON story that contains a ``metadata`` key to a `JSON object <https://en.wikipedia.org/wiki/JSON#Data_types_and_syntax>`_, then the key value pairs for that object will be rendered within the loop from lines 13 to 17.
 
-The loop for the story elements starts on line 21. For the ``link`` element type, lines 25 - 42 utilize the many features available in Raintale to render a URI-M into a surrogate for storytelling. Each of these varabiles is prefixed with ``element.surrogate.``. The :ref:`available_surrogate_variables`_ section lists the available options and preferences.
+The loop for the story elements starts on line 21. For the ``link`` element type, lines 25 - 42 utilize the many features available in Raintale to render a URI-M into a surrogate for storytelling. Each of these varabiles is prefixed with ``element.surrogate.``. The :ref:`available_surrogate_variables` section lists the available options and preferences.
 
 Line 45 shows how a template can handle a ``text`` element type via the ``element.text`` variable.
 
@@ -163,7 +163,7 @@ When publishing to social media, Raintale cannot use the simple templates above.
     {{ element.surrogate.image|prefer rank=2 }}
     {{ element.surrogate.image|prefer rank=3 }}
 
-As seen on line 1, the Multipart template starts with an identifying statement ``{# RAINTALE MULTIPART TEMPLATE #}``. The multipart template contains three parts: a title, an element, and the element media. All can use the same variables as mentioned in the :ref:`_simple_templates`_ section and listed in the :ref:`available_surrogate_variables`_ section.
+As seen on line 1, the Multipart template starts with an identifying statement ``{# RAINTALE MULTIPART TEMPLATE #}``. The multipart template contains three parts: a title, an element, and the element media. All can use the same variables as mentioned in the :ref:`_simple_templates` section and listed in the :ref:`available_surrogate_variables` section.
 
 The ``{# RAINTALE TITLE PART #}`` contains a template with the variables to be used in the inital post creating the story in both the Twitter and Facebook storytellers. In the future, it may just contain the variables used for other social media aggregation features, such as the boards on Pinterest.
 
@@ -295,6 +295,6 @@ As noted in our work with MementoEmbed, surrogates for mementos need special con
 
 .. image:: images/mementoembed_annotated.png
 
-Note that the surrogate below contains information from the memento content, such as the title and a text snippet. It also provides information from the archive. This duality may make mementos confusing for some users. It is important to provide both archive information as well as the information about the original resource. In the example below, CNN is the author of the underlying memento, Archive-It merely captured it. If you leave out the information on the original resource, visitors to your story may think that Archive-It is the author, which is incorrect. If you leave out information on the archive, visitors to your story may think that you have misled them because the link did not lead them to cnn.com. Such misleading behavior may cause you, the story author, to lose credibility. When developing templates, please keep these considerations in mind.
+Note that the surrogate above contains information from the memento content, such as the title and a text snippet. It also provides information from the archive. This duality may make mementos confusing for some users. It is important to provide both archive information as well as the information about the original resource. In the example below, CNN is the author of the underlying memento, Archive-It merely captured it. If you leave out the information on the original resource, visitors to your story may think that Archive-It is the author, which is incorrect. If you leave out information on the archive, visitors to your story may think that you have misled them because the link did not lead them to cnn.com. Such misleading behavior may cause you, the story author, to lose credibility. When developing templates, please keep these considerations in mind.
 
 

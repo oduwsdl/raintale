@@ -27,7 +27,7 @@ Complex Story With JSON
 
 Raintale also accepts more complex input in the form of a JSON file. This more complex format allows the story author to supply additional metadata and insert text elements into the story. Below is an example complex story using JSON.
 
-.. code-block::
+.. code-block:: JSON
     :linenos:
 
     {

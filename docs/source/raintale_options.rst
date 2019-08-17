@@ -79,7 +79,7 @@ For social media, Raintale provides the following ``storytellers``:
 
 To use one of these storytellers, you must also supply the ``-c`` argument specifying the name of the file containing credentials in YAML format. For twitter, an example credentials file is shown below:
 
-.. code-block::
+.. code-block:: text
 
     consumer_key: XXXXX
     consumer_secret: XXXXX
@@ -90,7 +90,7 @@ Replace the values of ``XXXXX`` with the appropriate values for Twitter authenti
 
 Likewise, for using the **experimental** Facebook storyteller, the credentials file resembles the following:
 
-.. code-block::
+.. code-block:: text
 
     page_id: XXXXX
     access_token: XXXXX
