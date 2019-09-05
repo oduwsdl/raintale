@@ -124,6 +124,21 @@ def get_field_value(data, preferences, base_fieldname):
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # TODO: how to hanlde memento_datetime_14num?
+
+    elif base_fieldname == "first_memento_datetime" or \
+        base_fieldname == "last_memento_datetime" or \
+        base_fieldname == "memento_datetime":
+
+        me_fieldname = base_fieldname.replace('_', '-')
+        datedata = json.loads(data)[me_fieldname]
+        dt_datedata = datetime.strptime(datedata, "%Y-%m-%dT%H:%M:%SZ")
+
+        module_logger.debug(
+            "field {} datetime datedata {} is type {}".format(
+                base_fieldname, dt_datedata, type(dt_datedata)
+        ))
+
+        return dt_datedata
         
     elif base_fieldname == "thumbnail":
         return png_to_datauri(data)
@@ -187,7 +202,14 @@ class MementoData:
 
         self._template_surrogate_fields = get_template_surrogate_fields(template_string)
 
+        module_logger.debug("template_surrogate_fields: {}".format(self._template_surrogate_fields))
+
     def add(self, urim):
+        """
+            Adds a URI-M to the search for memento data. Because each surrogate
+            field may contain different preferences, filters, and options to
+            apply to the URI-M, they must be recorded at this point.
+        """
         
         for field in self._template_surrogate_fields:
             working_dict = {}
@@ -195,8 +217,22 @@ class MementoData:
             fieldname = field.replace('{{ element.surrogate.', '').replace(' }}', '')
             preferences = None
 
-            if '|prefer ' in fieldname:
-                fieldname, preferences = [ i.strip() for i in fieldname.split('|prefer ') ]
+            jinja2_filters = []
+
+            fields = fieldname.split('|')
+            fieldname = fields[0]
+
+            for jfilter in fields[1:]:
+
+                if 'prefer ' in jfilter:
+                    preferences = jfilter.split('prefer ')[1]
+
+                jinja2_filters.append(jfilter)
+
+            joptions = None
+
+            if '.' in fieldname:
+                fieldname, joptions = fieldname.split('.', 1)
 
             working_dict["full endpoint"] = None
             working_dict["endpoint path"] = None
@@ -234,7 +270,22 @@ class MementoData:
             working_dict["base field name"] = fieldname
             working_dict["Raintale preferences"] = tuple(rtprefs)
             working_dict["MementoEmbed preferences"] = tuple(meprefs)
-            working_dict["sanitized field name"] = field.replace('|prefer ', '__prefer__').replace('=', '_').replace(',', '_').replace('{{ element.surrogate.', '').replace(' }}', '')
+
+            sanitized_field_name = field.replace('{{ element.surrogate.', '').replace(' }}', '')
+
+            if preferences is not None:
+                sanitized_preferences = preferences.replace('=', '_').replace(',', '_')
+                sanitized_field_name = sanitized_field_name.replace("|prefer " + preferences, "__prefer__" + sanitized_preferences)
+
+            working_dict["Jinja2-compliant field name"] = sanitized_field_name
+
+            for jfilter in jinja2_filters:
+                sanitized_field_name = sanitized_field_name.replace('|' + jfilter, '')
+
+            if joptions is not None:
+                sanitized_field_name = sanitized_field_name.replace('.' + joptions, '')
+
+            working_dict["sanitized field name"] = sanitized_field_name.strip()
 
             self._data[ ( field, urim ) ] = working_dict
             self._urimlist.append(urim)
@@ -244,7 +295,7 @@ class MementoData:
         fieldlist_to_replacements = {}
 
         for field, urim in self._data:
-            fieldlist_to_replacements[field] = "{{ element.surrogate." + self._data[(field, urim)]["sanitized field name"] + " }}"
+            fieldlist_to_replacements[field] = "{{ element.surrogate." + self._data[(field, urim)]["Jinja2-compliant field name"] + " }}"
 
         sanitized_template = self.template_string
 
@@ -398,7 +449,7 @@ class MementoData:
             
             if 'memento_datetime' in self._mementodata[urim]:
                 self._mementodata[urim]['memento_datetime_14num'] = \
-                    datetime.strptime(self._mementodata[urim]['memento_datetime'], '%Y-%m-%dT%H:%M:%SZ').strftime("%Y%m%d%H%M%S")
+                    self._mementodata[urim]['memento_datetime'].strftime("%Y%m%d%H%M%S")
 
         module_logger.debug("mementodata stabilized at {}".format(pprint.pformat(self._mementodata, indent=4)))
 
