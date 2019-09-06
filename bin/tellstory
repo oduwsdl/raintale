@@ -398,8 +398,9 @@ if __name__ == '__main__':
     story_template = choose_story_template(args.storyteller, args.storytelling_preset, args.story_template_filename)
     story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by, parser)
 
-    storyteller.tell_story(story_data, mementoembed_api, story_template)
+    output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 
-    end_message = "Done telling your story. THE END."
+    end_message = "Done telling your story with the {} storyteller. Output is available at {}. THE END.".format(args.storyteller, output_location)
+
     logger.info(end_message)
     print(end_message)

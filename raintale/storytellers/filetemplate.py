@@ -125,3 +125,5 @@ class FileTemplateStoryTeller(FileStoryteller):
                 self.output_filename
             )
         )
+
+        return self.output_filename

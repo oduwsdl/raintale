@@ -373,3 +373,5 @@ class VideoStoryTeller(FileStoryteller):
         shutil.rmtree(workingdir)
 
         module_logger.info("movie has been saved to {}".format(self.output_filename))
+
+        return self.output_filename

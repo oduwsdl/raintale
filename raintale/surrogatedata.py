@@ -105,7 +105,6 @@ def datauri_to_data(datauri):
     if datauri[0:5] != 'data:':
         raise DataURISchemeError("Non-data URI submitted for decoding")
     else:
-        data = ""
 
         mimetype, dataheader = datauri[5:].split(';', 1)
 
