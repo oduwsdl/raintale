@@ -40,7 +40,8 @@ fieldname_to_endpoint = {
     "snippet": "/services/memento/contentdata/",
     "memento_datetime": "/services/memento/contentdata/",
     "thumbnail": "/services/product/thumbnail/",
-    "imagereel": "/services/product/imagereel/"
+    "imagereel": "/services/product/imagereel/",
+    "sentence": "/services/memento/sentencerank/"
 }
 
 calculated_fields = {
@@ -141,6 +142,33 @@ def get_field_value(data, preferences, base_fieldname):
         
     elif base_fieldname == "thumbnail":
         return png_to_datauri(data)
+
+    elif base_fieldname == "sentence":
+
+        ranked_sentence = None
+
+        prefdict = {
+            "rank": 1,
+            "datauri": "yes"
+        }
+
+        for preference in preferences:
+
+            var, rank = preference.split('=')
+
+            prefdict[var] = rank
+
+        jdata = json.loads(data)
+        ranked_sentences = jdata["scored sentences"]
+
+        try:
+            ranked_sentence = ranked_sentences[ int(prefdict['rank']) - 1 ]['text']
+
+        except IndexError:
+            ranked_sentence = ""
+
+        return ranked_sentence
+
 
     elif base_fieldname == "image":
         
@@ -376,7 +404,12 @@ class MementoData:
 
                         module_logger.info("request for {} is ready to be reviewed".format(endpoint))
 
-                        result = request.result()
+                        try:
+                            result = request.result()
+                        except ConnectionError as e:
+                            # reissue request in future requests?
+                            module_logger.exception('request to MementoEmbed endpoint {} failed with preferences {}'.format(endpoint, me_preferences))
+                            raise e
 
                         module_logger.debug("status is {}".format(result.status_code))
 
@@ -434,6 +467,8 @@ class MementoData:
                             ))
                             
                             request_working_list.remove( (endpoint, me_preferences) )
+
+                            module_logger.critical("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
 
                             raise MementoEmbedRequestError("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
                     
