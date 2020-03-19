@@ -468,9 +468,9 @@ class MementoData:
                             
                             request_working_list.remove( (endpoint, me_preferences) )
 
-                            module_logger.critical("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
+                            module_logger.error("failed to get a good response from MementoEmbed at {}, something went wrong, skipping...".format(endpoint))
 
-                            raise MementoEmbedRequestError("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
+                            # raise MementoEmbedRequestError("failed to get a good response from MementoEmbed at {}, something went wrong, try rerunning Raintale again...".format(endpoint))
                     
                     else:
                         module_logger.debug("waiting for request to endpoint {} with preferences {} to complete".format(

@@ -125,12 +125,12 @@ def process_arguments(args):
     )
 
     parser.add_argument('--collection-url', dest='collection_url',
-        required=False,
+        required=False, default=None,
         help="The URL of the collection from which the story is derived."
     )
 
     parser.add_argument('--generated-by', dest='generated_by',
-        required=False,
+        required=False, default=None,
         help="The name of the algorithm or person who created this story."
     )
 
@@ -250,10 +250,10 @@ def format_data(input_filename, title, collection_url, generated_by, parser, gen
                 story_data['title'] = title
 
             if 'generated_by' not in story_data:
-                story_data['generated_by'] = None
+                story_data['generated_by'] = generated_by
 
             if 'collection_url' not in story_data:
-                story_data['collection_url'] = None
+                story_data['collection_url'] = collection_url
 
             if 'story image' not in story_data:
                 story_data['story image'] = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD//gBHRmlsZSBzb3VyY2U6IGh0dHBzOi8vY29tbW9ucy53aWtpbWVkaWEub3JnL3dpa2kvRmlsZTpCbGFja19jb2xvdXIuanBn/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg8MEBcUGBgXFBYWGh0lHxobIxwWFiAsICMmJykqKRkfLTAtKDAlKCko/9sAQwEHBwcKCAoTCgoTKBoWGigoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo/8AAEQgA8AC0AwEiAAIRAQMRAf/EABcAAQEBAQAAAAAAAAAAAAAAAAABAgj/xAAbEAEBAAEFAAAAAAAAAAAAAAAAAUEhMWFxgf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A5WAAAAAAAAAAAAAAAAAAABQBQBRAAAEAAAAAAAAAAAARQFUEVEABQBRAAAABUAAAAAAQAAFBQAAAQAFAAEAAAAAAARAAAAAAAAFAFBFEAFVZqIAgAAAAAgAgAAAAAAAAKgKKAgAqgCCAAAKACIAAAAAAAAAAAAKgCiKKAKIRUAAAARAAAAAAAAAAAABUAURVUABBUAAAARAAAAAAAAAAAFBAUARVUAQEVFBRAAEQAAAAAAAAAAVAFEUABVAEABQABBUAARAAAAAAAABQVQBAAUABAAUAAABBUAAEAUEBQQFRQBQAAAAFnYCAAAAAAAAIoAAAAAAAAAAgAKAAAAAAACAAoAAAAAIACgAAAACggALQAAAQFBBUAFQAUBAAAABQEBQRQA9ABUau6CoKCIBgAAAAAAAAAMHAAKKgKImFCCqAD//Z"
