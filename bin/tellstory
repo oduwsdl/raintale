@@ -136,7 +136,7 @@ def process_arguments(args):
 
     parser.add_argument('--generation-date', dest='generation_date',
         required=False, default=datetime.now(),
-        type=lambda s: datetime.datetime.strptime(s, '%Y-%m-%dT%H:%M%S'),
+        type=lambda s: datetime.strptime(s, '%Y-%m-%dT%H:%M:%S'),
         help="The generation date for this story, in YYYY-mm-ddTHH:MM:SS format. Default value is now."
     )
 
