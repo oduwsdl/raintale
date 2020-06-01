@@ -38,7 +38,7 @@
     data-original-favicon="{{ element.surrogate.original_favicon }}"
     data-original-domain="{{ element.surrogate.original_domain }}"
     data-original-link-status="{{ element.surrogate.original_linkstatus }}"
-    data-versiondate="{{ element.surrogate.memento_datetime }}"
+    data-versiondate="{{ element.surrogate.memento_datetime.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
     style="
         width: 445px; 
         font-size: 12px;
@@ -81,7 +81,7 @@
                 >
                 <a class="me-title-link"
                     data-originalurl="{{ element.surrogate.original_uri }}"
-                    data-versiondate="{{ element.surrogate.memento_datetime }}"
+                    data-versiondate="{{ element.surrogate.memento_datetime.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
                     href="{{ element.surrogate.urim }}"
                     style="
                         text-decoration: none;
@@ -183,17 +183,17 @@
             <a
                 class="me-pubdate"
                 data-originalurl="{{ element.surrogate.original_uri }}"
-                data-versiondate="{{ element.surrogate.memento_datetime }}"
+                data-versiondate="{{ element.surrogate.memento_datetime.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
                 href="{{ element.surrogate.urim }}"
                 style="
                     text-decoration: none;
                     color: rgb(9, 116, 255);
                     background: center center no-repeat fixed rgb(255, 255, 255);
                     margin: 0px;
-                    padding: 0px;">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime }}</a><br> &nbsp; 
+                    padding: 0px;">{{ element.surrogate.original_domain }}&nbsp;&nbsp;@&nbsp;&nbsp;{{ element.surrogate.memento_datetime.strftime('%Y-%m-%dT%H:%M:%SZ') }}</a><br> &nbsp; 
             <a 
                 class="me-allversions"
-                href="http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime_14num }}Z/{{ element.surrogate.original_uri }}"
+                href="http://timetravel.mementoweb.org/list/{{ element.surrogate.memento_datetime.strftime('%Y%m%d%H%M%S') }}Z/{{ element.surrogate.original_uri }}"
                 style="
                     text-decoration: none;
                     color: rgb(9, 116, 255);
@@ -203,7 +203,7 @@
             <a 
                 class="me-livestatus"
                 data-versionurl="{{ element.surrogate.urim }}" 
-                data-versiondate="{{ element.surrogate.memento_datetime }}"
+                data-versiondate="{{ element.surrogate.memento_datetime.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
                 href="{{ element.surrogate.original_uri }}"
                 style="
                     text-decoration: none;

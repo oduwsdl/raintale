@@ -143,3 +143,5 @@ class TwitterStoryTeller(ServiceStoryteller):
                 title_post.user.screen_name, title_post.id
             )
         )
+
+        return "https://twitter.com/{}/status/{}".format(title_post.user.screen_name, title_post.id)

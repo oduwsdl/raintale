@@ -107,6 +107,8 @@ class FileTemplateStoryTeller(FileStoryteller):
             title=story_data['title'],
             generated_by=story_data['generated_by'],
             collection_url=story_data['collection_url'],
+            story_image=story_data['story image'],
+            generation_date=story_data['generation_date'],
             metadata=metadata,
             elements=elements
         )
@@ -125,3 +127,5 @@ class FileTemplateStoryTeller(FileStoryteller):
                 self.output_filename
             )
         )
+
+        return self.output_filename

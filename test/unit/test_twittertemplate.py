@@ -87,7 +87,7 @@ access_token_secret: XXX""")
                     "media": []
                 },
                 {
-                    "text": "\nThis is a test title for memento #1\n\n2010-04-24T00:00:01Z\n\n{}\n".format(
+                    "text": "\nThis is a test title for memento #1\n\n2010-04-24 00:00:01\n\n{}\n".format(
                         story_data["elements"][1]["value"]),
                     "media": []
                 },
@@ -96,7 +96,7 @@ access_token_secret: XXX""")
                     "media": []
                 },
                 {
-                    "text": "\nThis is a test title for memento #2\n\n2010-04-24T00:00:02Z\n\n{}\n".format(
+                    "text": "\nThis is a test title for memento #2\n\n2010-04-24 00:00:02\n\n{}\n".format(
                         story_data["elements"][3]["value"]),
                     "media": []
                 }
@@ -237,7 +237,7 @@ access_token_secret: XXX""")
                     "media": []
                 },
                 {
-                    "text": "\nThis is a test title for memento #1\n\n2010-04-24T00:00:01Z\n\n{}\n".format(
+                    "text": "\nThis is a test title for memento #1\n\n2010-04-24 00:00:01\n\n{}\n".format(
                         story_data["elements"][1]["value"]),
                     "media": [
                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAABlBMVEUAAAD///+l2Z/dAAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNgAAAAAgAB9HFkpgAAAABJRU5ErkJggg==\n",
@@ -251,7 +251,7 @@ access_token_secret: XXX""")
                     "media": []
                 },
                 {
-                    "text": "\nThis is a test title for memento #2\n\n2010-04-24T00:00:02Z\n\n{}\n".format(
+                    "text": "\nThis is a test title for memento #2\n\n2010-04-24 00:00:02\n\n{}\n".format(
                         story_data["elements"][3]["value"]),
                     "media": [
                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAABlBMVEX///////9VfPVsAAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNgAAAAAgAB9HFkpgAAAABJRU5ErkJggg==\n",

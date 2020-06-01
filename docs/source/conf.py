@@ -28,7 +28,6 @@ version = u''
 # The full version, including alpha/beta/rc tags
 release = u'0.2020.06.01.211830'
 
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

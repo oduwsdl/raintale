@@ -85,6 +85,9 @@ class Storyteller:
             "Create a child class to use StoryTeller functionality.")
 
     def publish_story(self, story_output_data):
+        """
+            When implemented, returns the filename or URL containing the story.
+        """
         raise NotImplementedError(
             "StoryTeller class is not meant to be called directly. "
             "Create a child class to use StoryTeller functionality.")
@@ -92,7 +95,7 @@ class Storyteller:
     def tell_story(self, story_data, mementoembed_api, story_template):
 
         story_output_data = self.generate_story(story_data, mementoembed_api, story_template)
-        self.publish_story(story_output_data)
+        return self.publish_story(story_output_data)
 
 class ServiceStoryteller(Storyteller):
 
