@@ -1,15 +1,16 @@
 ARG     PYTAG=3.7.3-stretch
 FROM    python:${PYTAG}
 
-LABEL   app.name="Raintale" \
-        app.description="A Python utility and library for publishing a social media story built from archived web pages to multiple services" \
-        app.license="MIT License" \
-        app.license.url="https://github.com/oduwsdl/raintale/blob/master/LICENSE" \
-        app.repo.url="https://github.com/oduwsdl/raintale" \
-        app.docs.url="https://raintale.readthedocs.io/en/latest/" \
-        app.authors="Shawn M. Jones <https://github.com/shawnmjones>"
+LABEL   org.opencontainers.image.title="Raintale" \
+        org.opencontainers.image.description="A Python utility and library for publishing a social media story built from archived web pages to multiple services" \
+        org.opencontainers.image.licenses="MIT License" \
+        org.opencontainers.image.source="https://github.com/oduwsdl/raintale" \
+        org.opencontainers.image.documentation="https://raintale.readthedocs.io/" \
+        org.opencontainers.image.vendor="Web Science and Digital Libraries Research Group at Old Dominion University" \
+        org.opencontainers.image.authors="Shawn M. Jones <https://github.com/shawnmjones>"
 
 WORKDIR /app
-COPY    . /app
+COPY    . ./
 RUN     pip install .
+
 WORKDIR /raintale-work
