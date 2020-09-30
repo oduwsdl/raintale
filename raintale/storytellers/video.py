@@ -108,7 +108,11 @@ def save_fading_frames(imbase, im, framesdir, video_width, video_height, frame_w
 
 class VideoStoryTeller(FileStoryteller):
 
+    description = "(EXPERIMENTAL) Given input data, this storyteller generates a video of fading frames."
+
     def generate_story(self, story_data, mementoembed_api, story_template):
+
+        module_logger.info("generating story with data: {}".format(story_data))
 
         requests_cache.install_cache('videostory_test')
 
@@ -136,6 +140,8 @@ class VideoStoryTeller(FileStoryteller):
                     endpoint = "{}/services/memento/contentdata/{}".format(mementoembed_api, urim)
 
                     r = session.get(endpoint)
+
+                    module_logger.info("got back a status of {} for {}".format(r.status_code, endpoint))
 
                     if r.status_code == 200:
 

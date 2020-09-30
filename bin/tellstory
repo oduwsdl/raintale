@@ -19,6 +19,7 @@ from yaml import load, Loader
 from raintale.storytellers.storytellers import storytellers, storytellers_without_templates
 from raintale.storytellers.filetemplate import FileTemplateStoryTeller
 from raintale import package_directory
+from raintale.version import __appversion__
 
 logger = logging.getLogger(__name__)
 
@@ -170,6 +171,8 @@ def process_arguments(args):
         required=False, default=None,
         help="If needed by the storyteller, the output file to which raintale will write the story contents."
     )
+
+    parser.add_argument('--version', action='version', version="Raintale " + __appversion__, help="Version of Raintale")
 
     args = parser.parse_args()
 
@@ -406,11 +409,9 @@ def choose_story_template(storyteller, preset, given_story_template_filename):
     return story_template
 
 if __name__ == '__main__':
+    parser, args = process_arguments(sys.argv)
 
     start_message = "Beginning raintale to tell your story."
-    print(start_message)
-
-    parser, args = process_arguments(sys.argv)
 
     # set up logging for the rest of the system
     logger = get_logger(
