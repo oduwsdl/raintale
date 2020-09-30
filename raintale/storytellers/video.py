@@ -141,13 +141,16 @@ class VideoStoryTeller(FileStoryteller):
 
                     r = session.get(endpoint)
 
-                    module_logger.info("got back a status of {} for {}".format(r.status_code, endpoint))
-
                     if r.status_code == 200:
 
                         jdata = r.json()
                         title = jdata["title"]
                         mdt = jdata["memento-datetime"]
+                    else:
+                        module_logger.warning("skipping URI-M {} because MementoEmbed returned a {} ...".format(urim, r.status_code))
+                        continue
+
+                    # module_logger.info("title is {}".format(title))
 
                     endpoint = "{}/services/memento/sentencerank/{}".format(mementoembed_api, urim)
 
