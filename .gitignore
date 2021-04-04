@@ -114,3 +114,6 @@ _testtemplates/
 
 # testing
 *.sqlite
+
+# ignore build
+docs/source/_build/*
