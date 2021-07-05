@@ -6,14 +6,14 @@ from urllib.parse import urlparse
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 
-#import requests
+import requests
 
-#from yaml import load, Loader
+from yaml import load, Loader
 
-# from raintale.storytellers.storytellers import storytellers, storytellers_without_templates
-# from raintale.storytellers.filetemplate import FileTemplateStoryTeller
-# from raintale import package_directory
-# from raintale.version import b__appversion__
+from raintale.storytellers.storytellers import storytellers, storytellers_without_templates
+from raintale.storytellers.filetemplate import FileTemplateStoryTeller
+from raintale import package_directory
+from raintale.version import __appversion__
 
 parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
     description='Given a list of story elements, including URLs to archived web pages, raintale publishes them to the specified service.',
@@ -22,7 +22,8 @@ parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
 
 parser.add_argument('-i', '--input', dest='input_filename',
     required=True,
-    help="An input file containing the memento URLs for use in the story."
+    help="An input file containing the memento URLs for use in the story.",
+    type=argparse.FileType('r')
 )
 
 parser.add_argument('--title', dest='title',
@@ -32,11 +33,12 @@ parser.add_argument('--title', dest='title',
 
 parser.add_argument('--story-template', dest='story_template_filename',
     required=True,
-    help="The file containing the template for the story."
+    help="The file containing the template for the story.",
+    type=argparse.FileType('r')
 )
 
 parser.add_argument('-o', '--output-file', dest='output_file',
-    required=True, default=None,
+    required=False, default="output.dat",
     help="If needed by the storyteller, the output file to which raintale will write the story contents."
 )
 
@@ -62,17 +64,17 @@ parser.add_argument('--mementoembed_api', dest='mementoembed_api',
     help="The URL of the MementoEmbed instance used for generating surrogates"
 )
 
-def get_storyteller(parser, args):
+# def get_storyteller(parser, args):
 
-    storyteller = None
+#     storyteller = None
 
-    discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
+#     discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
 
-    storyteller_class = FileTemplateStoryTeller
+#     storyteller_class = FileTemplateStoryTeller
 
-    storyteller = storyteller_class(args.output_file)
+#     storyteller = FileTemplateStoryTeller(args.output_file)
     
-    return storyteller
+#     return storyteller
 
 def choose_mementoembed_api(mementoembed_api_candidates):
 
@@ -118,24 +120,24 @@ def choose_mementoembed_api(mementoembed_api_candidates):
 
     return mementoembed_api
 
-def choose_story_template(given_story_template_filename):
+# def choose_story_template(given_story_template_filename):
 
-    story_template = ""
+#     story_template = ""
 
-    story_template_filename = given_story_template_filename
+#     story_template_filename = given_story_template_filename
 
-    logger.info("using story template filename {}".format(story_template_filename))
+#     logger.info("using story template filename {}".format(story_template_filename))
 
-    try:
-        with open(story_template_filename) as f:
-            story_template = f.read()
+#     try:
+#         with open(story_template_filename) as f:
+#             story_template = f.read()
 
-    except FileNotFoundError:
-        logger.error("Cannot locate given template filename of {}".format(story_template_filename))
-        print("EXITING DUE TO ERROR.")
-        sys.exit(errno.EINVAL)
+#     except FileNotFoundError:
+#         logger.error("Cannot locate given template filename of {}".format(story_template_filename))
+#         print("EXITING DUE TO ERROR.")
+#         sys.exit(errno.EINVAL)
 
-    return story_template
+#     return story_template
 
 def format_data(input_filename, title, collection_url, generated_by, parser, generation_date):
 
@@ -243,11 +245,13 @@ if __name__ == '__main__':
 
     logger.info(start_message)
 
-
-    storyteller = get_storyteller(parser, args)
+    input_filename = args.input_filename.name
+    storyteller = FileTemplateStoryTeller(args.output_file)
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
-    story_template = choose_story_template(args.story_template_filename)
-    story_data = format_data(args.input_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+
+    story_template = args.story_template_filename.read()
+
+    story_data = format_data(input_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 
