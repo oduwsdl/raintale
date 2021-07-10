@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+    mementoembed:
+        image: oduwsdl/mementoembed:latest
+        restart: always
+
+    raintale:
+        depends_on:
+            - mementoembed
+        image: oduwsdl/raintale:latest
+        restart: always
+        volumes: 
+            - .:/raintale-work
+        stdin_open: true
+        environment:
+            - MEMENTOEMBED_API_ENDPOINT=http://mementoembed:5550
