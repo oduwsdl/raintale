@@ -60,7 +60,7 @@ wooify -p ${PROJECT_NAME}
 
 echo "installing templates into Django application at ${TEMPLATE_DIR}"
 mkdir -p ${TEMPLATE_DIR}
-cp ${SCRIPT_DIR}/templates/* ${TEMPLATE_DIR}
+cp -R ${SCRIPT_DIR}/templates/* ${TEMPLATE_DIR}
 
 echo "installing static files (JS/CSS/images) into Django application at ${TEMPLATE_DIR}"
 mkdir -p ${STATIC_DIR}
@@ -75,7 +75,11 @@ echo "changing to ${WOOEY_DIR}"
 cd ${WOOEY_DIR}
 
 echo "adding scripts to Wooey"
+oldIFS=$IFS
+IFS='
+'
 for script in `ls ${SCRIPT_DIR}/scripts/*.py`; do
     echo "adding script ${script}"
     python ./manage.py addscript "${script}"
 done
+IFS=$oldIFS
