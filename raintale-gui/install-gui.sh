@@ -8,12 +8,28 @@ fi
 echo "Installing GUI inside environment at $VIRTUAL_ENV"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+INSTALL_ALL=1
+SKIP_WOOEY_INSTALL=1
+WOOEY_DIR=${SCRIPT_DIR}/../raintale_with_wooey
 
-if [ -z "$1" ]; then
-    WOOEY_DIR=${SCRIPT_DIR}/../raintale_with_wooey
-else
-    WOOEY_DIR=$1
-fi
+while test $# -gt 0; do
+
+    case "$1" in
+        --wooey-dir) 
+        shift
+        WOOEY_DIR=$1
+        echo "setting WOOEY_DIR to ${WOOEY_DIR}"
+        ;;
+        --install-all) echo "install-all"
+        INSTALL_ALL=0
+        ;;
+        --skip-wooey-install) echo "skip-wooey-install"
+        SKIP_WOOEY_INSTALL=0
+        ;;
+    esac
+    shift
+
+done
 
 PROJECT_NAME=`basename ${WOOEY_DIR}`
 TEMPLATE_DIR=${WOOEY_DIR}/${PROJECT_NAME}/templates/wooey
@@ -21,42 +37,60 @@ STATIC_DIR=${WOOEY_DIR}/${PROJECT_NAME}/static
 SETTINGS_DIR=${WOOEY_DIR}/${PROJECT_NAME}/settings
 PARENT_DIR=`dirname ${WOOEY_DIR}`
 
-pip freeze | grep raintale > /dev/null
-status=$?
-
-if [ $status -eq 0 ]; then
-    echo "Raintale already installed, skipping install of Raintale"
-else
+if [ $INSTALL_ALL -eq 0 ]; then
     echo "installing Raintale"
     pip install . --use-feature=in-tree-build
+else
+    pip freeze | grep raintale > /dev/null
+    status=$?
+
+    if [ $status -eq 0 ]; then
+        echo "Raintale already installed, skipping install of Raintale"
+    else
+        echo "installing Raintale"
+        pip install . --use-feature=in-tree-build
+    fi
 fi
 
-pip freeze | grep Django==3.1.8 > /dev/null
-status=$?
-
-if [ $status -eq 0 ]; then
-    echo "Django already installed, skipping install of Django"
-else
+if [ $INSTALL_ALL -eq 0 ]; then
     echo "installing specific Django version"
     pip install Django==3.1.8 # see https://github.com/wooey/Wooey/issues/334
+else
+    pip freeze | grep Django==3.1.8 > /dev/null
+    status=$?
+
+    if [ $status -eq 0 ]; then
+        echo "Django already installed, skipping install of Django"
+    else
+        echo "installing specific Django version"
+        pip install Django==3.1.8 # see https://github.com/wooey/Wooey/issues/334
+    fi
 fi
 
-pip freeze | grep wooey > /dev/null
-status=$?
-
-if [ $status -eq 0 ]; then
-    echo "Wooey already installed, skipping install of Wooey"
-else
+if [ $INSTALL_ALL -eq 0 ]; then
     echo "installing Wooey"
     pip install wooey
+else
+    pip freeze | grep wooey > /dev/null
+    status=$?
+
+    if [ $status -eq 0 ]; then
+        echo "Wooey already installed, skipping install of Wooey"
+    else
+        echo "installing Wooey"
+        pip install wooey
+    fi
 fi
 
-echo "clearing out old Wooey project, if any"
-rm -rf ${WOOEY_DIR}
+if [ $SKIP_WOOEY_INSTALL -eq 1 ]; then
 
-echo "creating clean Wooey project ${PROJECT_NAME} at ${PARENT_DIR}"
-cd `dirname ${WOOEY_DIR}`
-wooify -p ${PROJECT_NAME}
+    echo "clearing out old Wooey project, if any"
+    rm -rf ${WOOEY_DIR}
+
+    echo "creating clean Wooey project ${PROJECT_NAME} at ${PARENT_DIR}"
+    cd `dirname ${WOOEY_DIR}`
+    wooify -p ${PROJECT_NAME}
+fi
 
 echo "installing templates into Django application at ${TEMPLATE_DIR}"
 mkdir -p ${TEMPLATE_DIR}
