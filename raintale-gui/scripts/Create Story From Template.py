@@ -1,6 +1,11 @@
 import argparse
 import sys
 import os
+import logging
+import time
+import errno
+import json
+import pathlib
 
 from urllib.parse import urlparse
 from argparse import RawTextHelpFormatter
@@ -8,12 +13,10 @@ from datetime import datetime
 
 import requests
 
-from yaml import load, Loader
-
-from raintale.storytellers.storytellers import storytellers, storytellers_without_templates
 from raintale.storytellers.filetemplate import FileTemplateStoryTeller
-from raintale import package_directory
 from raintale.version import __appversion__
+
+DEFAULT_LOGFILE="./creating-story.log"
 
 parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
     description='Given a list of story elements, including URLs to archived web pages, create an output file based on the supplied template.',
@@ -27,13 +30,13 @@ parser.add_argument('-i', '--input', dest='input_filename',
 )
 
 parser.add_argument('--title', dest='title',
-    required=False,
-    help="The title used for the story."
+    required=True,
+    help="The title used for the story. If JSON story file is submitted, this value will be overriden by the title in that JSON input."
 )
 
 parser.add_argument('--story-template', dest='story_template_filename',
     required=True,
-    help="The file containing the template for the story.",
+    help="The file containing the template for the story. The extension of this file (e.g., .html) will be used for the extension of the output.",
     type=argparse.FileType('r')
 )
 
@@ -64,17 +67,25 @@ parser.add_argument('--mementoembed_api', dest='mementoembed_api',
     help="The URL of the MementoEmbed instance used for generating surrogates"
 )
 
-# def get_storyteller(parser, args):
+def test_mementoembed_endpoint(url):
 
-#     storyteller = None
+    status = False
+    tries = 4
 
-#     discovered_storytellers, discovered_presets = generate_list_of_storytellers_and_presets()
+    logger.info("testing MementoEmbed endpoint at {}".format(url))
 
-#     storyteller_class = FileTemplateStoryTeller
+    for i in range(0, tries):
 
-#     storyteller = FileTemplateStoryTeller(args.output_file)
-    
-#     return storyteller
+        try:
+            requests.get(url)
+            status = True
+            break
+        except requests.ConnectionError:
+            retry_time = (i + 1) * 5
+            logger.error("Failed to connect to MementoEmbed endpoint at {}, sleeping for {} seconds to try again".format(url, retry_time))
+            time.sleep(retry_time)
+
+    return status
 
 def choose_mementoembed_api(mementoembed_api_candidates):
 
@@ -238,15 +249,20 @@ if __name__ == '__main__':
     start_message = "Beginning raintale to tell your story."
 
     # set up logging for the rest of the system
-    logger = get_logger(
-        __name__, calculate_loglevel(
-            verbose=args.verbose, quiet=args.quiet), 
-        args.logfile)
+    logger = logging.getLogger(__name__)
+    logging.basicConfig( 
+        format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        level=logging.INFO,
+        filename=DEFAULT_LOGFILE)
 
+    print(start_message)
     logger.info(start_message)
 
     input_filename = args.input_filename.name
-    storyteller = FileTemplateStoryTeller(args.output_file)
+
+    output_filename = args.output_file + pathlib.Path(args.story_template_filename.name).suffix
+
+    storyteller = FileTemplateStoryTeller(output_filename)
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
 
     story_template = args.story_template_filename.read()
@@ -255,7 +271,7 @@ if __name__ == '__main__':
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 
-    end_message = "Done telling your story with the {} storyteller. Output is available at {}. THE END.".format(args.storyteller, output_location)
+    end_message = "Done telling your story using a template. Output is available at {}. THE END.".format(output_location)
 
     logger.info(end_message)
     print(end_message)

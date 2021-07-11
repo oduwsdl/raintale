@@ -118,5 +118,6 @@ _build/
 # caching
 *.sqlite
 
-# Raintale-GUI testing
+# Raintale testing
 raintale_with_wooey/
+hand-testing/
