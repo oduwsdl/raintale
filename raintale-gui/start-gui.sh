@@ -42,7 +42,7 @@ echo $celery_pid > celery-wooey.pid
 echo "finished starting Celery"
 
 if [ DAEMONIZE_DJANGO -eq 0 ]; then
-    python ./manage.py runserver 0:${DJANGO_PORT} > django-output.log 2>&1 &
+    python ./manage.py runserver 0.0.0.0:${DJANGO_PORT} > django-output.log 2>&1 &
     django_pid=$!
     echo "Django PID is ${django_pid}"
     echo $django_pid > django-wooey.pid

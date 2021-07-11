@@ -14,5 +14,5 @@ COPY    . ./
 
 EXPOSE 8000
 
-RUN ./raintale-gui/install-gui.sh --override-virtualenv-check
+RUN ./raintale-gui/install-gui.sh --override-virtualenv-check --install-all
 CMD [ "./raintale-gui/start-gui.sh" ]

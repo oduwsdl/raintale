@@ -49,6 +49,10 @@ fi
 if [ $INSTALL_ALL -eq 0 ]; then
     echo "installing Raintale"
     pip install . --use-feature=in-tree-build
+    status=$?
+    if [ $status -eq 2 ]; then
+        pip install .
+    fi
 else
     pip freeze | grep raintale > /dev/null
     status=$?

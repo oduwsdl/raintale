@@ -125,5 +125,5 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static/raintale'
 ]
 
-print("BASE_DIR is {}".format(BASE_DIR))
-print(STATICFILES_DIRS)
+# TODO: this doesn't seem very secure, figure out how to address this for Docker
+ALLOWED_HOSTS = ['*']
