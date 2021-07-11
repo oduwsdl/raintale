@@ -245,7 +245,7 @@ if __name__ == '__main__':
     #parser, args = process_arguments(sys.argv)
     args = parser.parse_args()
 
-    start_message = "Beginning raintale to tell your story."
+    start_message = "Beginning Raintale to tell your story. ONCE UPON A TIME..."
 
     # set up logging for the rest of the system
     logger = logging.getLogger(__name__)
