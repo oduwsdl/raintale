@@ -16,7 +16,7 @@ from raintale import package_directory
 from raintale.version import __appversion__
 
 parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
-    description='Given a list of story elements, including URLs to archived web pages, raintale publishes them to the specified service.',
+    description='Given a list of story elements, including URLs to archived web pages, create an output file based on the supplied template.',
     formatter_class=RawTextHelpFormatter
     )
 
