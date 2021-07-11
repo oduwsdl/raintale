@@ -23,21 +23,21 @@ parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
     formatter_class=RawTextHelpFormatter
     )
 
-parser.add_argument('-i', '--input', dest='input_filename',
+parser.add_argument('-i', '--input', dest='story_filename',
     required=True,
-    help="An input file containing the memento URLs for use in the story.",
+    help="An input file containing the memento URLs (URI-Ms) for use in the story.",
     type=argparse.FileType('r')
-)
-
-parser.add_argument('--title', dest='title',
-    required=True,
-    help="The title used for the story. If JSON story file is submitted, this value will be overriden by the title in that JSON input."
 )
 
 parser.add_argument('--story-template', dest='story_template_filename',
     required=True,
     help="The file containing the template for the story. The extension of this file (e.g., .html) will be used for the extension of the output.",
     type=argparse.FileType('r')
+)
+
+parser.add_argument('--title', dest='title',
+    required=True,
+    help="The title used for the story. If JSON story file is submitted, this value will be overriden by the title in that JSON input."
 )
 
 parser.add_argument('-o', '--output-file', dest='output_file',
@@ -56,8 +56,7 @@ parser.add_argument('--generated-by', dest='generated_by',
 )
 
 parser.add_argument('--generation-date', dest='generation_date',
-    required=False, default=datetime.now(),
-    type=lambda s: datetime.strptime(s, '%Y-%m-%dT%H:%M:%S'),
+    required=False, default=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
     help="The generation date for this story, in YYYY-mm-ddTHH:MM:SS format. Default value is now."
 )
 
@@ -258,16 +257,20 @@ if __name__ == '__main__':
     print(start_message)
     logger.info(start_message)
 
-    input_filename = args.input_filename.name
+    story_filename = args.story_filename.name
 
-    output_filename = args.output_file + pathlib.Path(args.story_template_filename.name).suffix
+    template_ext = pathlib.Path(args.story_template_filename.name).suffix
+    output_ext = pathlib.Path(args.output_file).suffix
+
+    if template_ext != output_ext:
+        output_filename = args.output_file + pathlib.Path(args.story_template_filename.name).suffix
 
     storyteller = FileTemplateStoryTeller(output_filename)
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
 
     story_template = args.story_template_filename.read()
 
-    story_data = format_data(input_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+    story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 
