@@ -97,10 +97,10 @@ mkdir -p ${TEMPLATE_DIR}
 cp -R ${SCRIPT_DIR}/templates/* ${TEMPLATE_DIR}
 
 echo "installing static files (JS/CSS/images) into Django application at ${TEMPLATE_DIR}"
-mkdir -p ${STATIC_DIR}
+mkdir -p ${STATIC_DIR}/raintale/{js,css,images}
 # cp ${SCRIPT_DIR}/static/js/* ${STATIC_DIR}/js/
-cp ${SCRIPT_DIR}/static/css/* ${STATIC_DIR}/wooey/css/
-cp ${SCRIPT_DIR}/static/images/* ${STATIC_DIR}/wooey/images/
+# cp ${SCRIPT_DIR}/static/css/* ${STATIC_DIR}/wooey/css/
+cp ${SCRIPT_DIR}/static/images/* ${STATIC_DIR}/raintale/images/
 
 echo "copying Django settings into Django application at ${WOOEY_DIR}"
 cp ${SCRIPT_DIR}/settings/*.py ${SETTINGS_DIR}

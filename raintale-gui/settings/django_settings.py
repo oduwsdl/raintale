@@ -121,9 +121,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'static'
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static/raintale'
+]
 
 print("BASE_DIR is {}".format(BASE_DIR))
-# print(STATICFILES_DIRS)
+print(STATICFILES_DIRS)

@@ -13,9 +13,9 @@
 {% block outer_content %}
     {{ block.super }}
     {% if not request.user.is_authenticated %}
-        <div class="jumbotron frontpage">
-          <h1 class="wooey">{% get_wooey_setting "WOOEY_SITE_NAME" %}</h1>
-          <p>{% get_wooey_setting "WOOEY_SITE_TAG" %}</p>
+        <div class="jumbotron frontpage raintale-masthead">
+          <h1 class="raintale-center-page">Raintale</h1>
+          <p class="raintale-subtitle">What story will you tell with web archives?</p>
         </div>
     {% endif %}
 {% endblock %}
@@ -25,6 +25,7 @@
 
 {% block center_content %}
     {{ block.super }}
+    <!--
     <div class="row">
         <div class="col-sm-12 col-md-12">
             <form>
@@ -34,6 +35,7 @@
             </form>
         </div>
     </div>
+    -->
 
     <div class="row" id="script-list">
 
