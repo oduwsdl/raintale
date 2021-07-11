@@ -1,15 +1,12 @@
 #!/bin/bash
 
-if [ -z $VIRTUAL_ENV ]; then
-    echo "It does not appear that you are installing Raintale's GUI inside a Python Virtualenv, quitting..."
-    exit 255
-fi
 
 echo "Installing GUI inside environment at $VIRTUAL_ENV"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 INSTALL_ALL=1
 SKIP_WOOEY_INSTALL=1
+OVERRIDE_VIRTUALENV_CHECK=0
 WOOEY_DIR=${SCRIPT_DIR}/../raintale_with_wooey
 
 while test $# -gt 0; do
@@ -26,6 +23,9 @@ while test $# -gt 0; do
         --skip-wooey-install) echo "skip-wooey-install"
         SKIP_WOOEY_INSTALL=0
         ;;
+        --override-virtualenv-check)
+        OVERRIDE_VIRTUALENV_CHECK=1
+        ;;
     esac
     shift
 
@@ -36,6 +36,15 @@ TEMPLATE_DIR=${WOOEY_DIR}/${PROJECT_NAME}/templates/wooey
 STATIC_DIR=${WOOEY_DIR}/${PROJECT_NAME}/static
 SETTINGS_DIR=${WOOEY_DIR}/${PROJECT_NAME}/settings
 PARENT_DIR=`dirname ${WOOEY_DIR}`
+
+if [ $OVERRIDE_VIRTUALENV_CHECK -eq 0 ]; then
+
+    if [ -z $VIRTUAL_ENV ]; then
+        echo "It does not appear that you are installing Raintale's GUI inside a Python Virtualenv, quitting..."
+        exit 255
+    fi
+
+fi
 
 if [ $INSTALL_ALL -eq 0 ]; then
     echo "installing Raintale"
