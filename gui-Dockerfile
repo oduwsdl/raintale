@@ -33,7 +33,7 @@ RUN mkdir /app/logs && mkdir -p /app/thumbnails && mkdir -p /app/imagereels
 # RUN redis-server --daemonize yes --save ""
 # RUN gunicorn -b 0.0.0.0:5550 mementoembed:create_app --daemon
 
-EXPOSE 5550 8000
+EXPOSE 8000 5550
 
 COPY    . ./
 RUN ./raintale-gui/install-gui.sh --override-virtualenv-check --install-all

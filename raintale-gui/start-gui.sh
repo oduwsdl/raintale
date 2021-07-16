@@ -9,6 +9,8 @@ DJANGO_PORT=8000
 
 while test $# -gt 0; do
 
+    echo "looping..."
+
     case "$1" in
         --dont-daemize-django)
         DAEMONIZE_DJANGO=1
@@ -24,6 +26,8 @@ while test $# -gt 0; do
         echo "setting DJANGO_PORT to ${DJANGO_PORT}"
         ;;
     esac
+
+    shift
 
 done
 
@@ -41,7 +45,7 @@ echo "Celery PID is ${celery_pid}"
 echo $celery_pid > celery-wooey.pid
 echo "finished starting Celery"
 
-if [ DAEMONIZE_DJANGO -eq 0 ]; then
+if [ ${DAEMONIZE_DJANGO} -eq 0 ]; then
     python ./manage.py runserver 0.0.0.0:${DJANGO_PORT} > django-output.log 2>&1 &
     django_pid=$!
     echo "Django PID is ${django_pid}"
