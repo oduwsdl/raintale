@@ -57,6 +57,10 @@
       .raintale-subtitle {
         font-weight: bold !important;
       }
+    
+      .raintale-logo {
+          padding-left: 20px;
+      }
 
     .footer {
         /* position: relative; */
@@ -74,6 +78,11 @@
         max-height: 60px;
     }
 
+    .authform {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
 
       {% block extra_style %}
       {% endblock extra_style %}
@@ -86,7 +95,7 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <ol class="breadcrumb navbar-breadcrumb">
-              <li><img src="/static/images/raintale-logo-alpha-40px.png"><a href="{% url 'wooey:wooey_home' %}" class="raintale-nav-brand">Raintale</a></li>
+              <li><img src="/static/images/raintale-logo-alpha-40px.png" class="raintale-logo"><a href="{% url 'wooey:wooey_home' %}" class="raintale-nav-brand">Raintale</a></li>
                 {% block breadcrumbs %}{% endblock %}
             </ol>
 
@@ -144,7 +153,7 @@
         <div class="{% block page_content_class %}{% endblock page_content_class %}">
         {% block outer_content %}{% endblock %}
         {% block center %}
-            <div class="row">
+            <div class="row" style="padding: 30px;">
             <div class="center-div {% block center_content_class %}col-md-10 col-xs-6{% endblock center_content_class %}">
                 {% block center_content %}
                 {% endblock center_content %}
@@ -159,13 +168,13 @@
             
         <div class="row">
             <div class="col-md-4 col-sm-4 col-xs-4">
+                <img src="/static/images/wsdl-logo-small.png"> 
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4">
                 <img src="/static/images/IIPC-logo.png">
             </div>
             <div class="col-md-4 col-sm-4 col-xs-4">
                 <img src="/static/images/imls-logo.gif">
-            </div>
-            <div class="col-md-4 col-sm-4 col-xs-4">
-                <img src="/static/images/wsdl-logo-small.png"> 
             </div>
         </div>
 

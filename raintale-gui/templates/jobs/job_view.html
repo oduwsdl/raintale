@@ -148,16 +148,6 @@
 
     {% include "wooey/modals/resubmit_modal.html" %}
 
-    <div id="job-outputs" class="row">
-
-        {% for output_group, output_files in job_info.file_groups.items %}
-                {% for output_file_content in output_files %}
-                    {%if output_group %}{% include 'wooey/preview/'|concat:output_group|concat:'.html' %}{% endif %}
-                {% endfor %}
-        {% endfor %}
-
-    </div>
-
     <div class="row">
 
         <!-- Output command and stderr, stdout in console-style view -->

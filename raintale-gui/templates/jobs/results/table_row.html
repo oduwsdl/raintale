@@ -6,7 +6,7 @@
         {% elif file.filetype == 'fasta' %}<span class="glyphicon glyphicon-list-alt"></span>
         {% elif file.filetype == 'tabular' %}<span class="glyphicon glyphicon-list-alt"></span>
         {% else %}<span class="glyphicon glyphicon-file"></span>{% endif %}
-        <a href="{{ file.url }}">{{ file.basename }}</a>
+        <a href="{{ file.url }}" target="_blank">{{ file.basename }}</a>
     </th>
     <td>{% if file.slug %}{{ file.slug }}{% endif %}</td>
     <td></td>

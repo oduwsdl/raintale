@@ -6,6 +6,7 @@ echo "Installing GUI inside environment at $VIRTUAL_ENV"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 INSTALL_ALL=1
 SKIP_WOOEY_INSTALL=1
+JUST_TEMPLATES=1
 OVERRIDE_VIRTUALENV_CHECK=0
 WOOEY_DIR=${SCRIPT_DIR}/../raintale_with_wooey
 
@@ -25,6 +26,10 @@ while test $# -gt 0; do
         ;;
         --override-virtualenv-check)
         OVERRIDE_VIRTUALENV_CHECK=1
+        ;;
+        --just-templates) echo "just-templates"
+        SKIP_WOOEY_INSTALL=0
+        JUST_TEMPLATES=0
         ;;
     esac
     shift
@@ -105,6 +110,7 @@ if [ $SKIP_WOOEY_INSTALL -eq 1 ]; then
     wooify -p ${PROJECT_NAME}
 fi
 
+
 echo "installing templates into Django application at ${TEMPLATE_DIR}"
 mkdir -p ${TEMPLATE_DIR}
 cp -R ${SCRIPT_DIR}/templates/* ${TEMPLATE_DIR}
@@ -115,18 +121,21 @@ mkdir -p ${STATIC_DIR}/raintale/{js,css,images}
 # cp ${SCRIPT_DIR}/static/css/* ${STATIC_DIR}/wooey/css/
 cp ${SCRIPT_DIR}/static/images/* ${STATIC_DIR}/raintale/images/
 
-echo "copying Django settings into Django application at ${WOOEY_DIR}"
-cp ${SCRIPT_DIR}/settings/*.py ${SETTINGS_DIR}
+if [ $JUST_TEMPLATES -eq 1 ]; then
+    echo "copying Django settings into Django application at ${WOOEY_DIR}"
+    cp ${SCRIPT_DIR}/settings/*.py ${SETTINGS_DIR}
 
-echo "changing to ${WOOEY_DIR}"
-cd ${WOOEY_DIR}
+    echo "changing to ${WOOEY_DIR}"
+    cd ${WOOEY_DIR}
 
-echo "adding scripts to Wooey"
-oldIFS=$IFS
-IFS='
+    echo "adding scripts to Wooey"
+    oldIFS=$IFS
+    # do not edit the spacing with these '', it is significant!
+    IFS='
 '
-for script in `ls ${SCRIPT_DIR}/scripts/*.py`; do
-    echo "adding script ${script}"
-    python ./manage.py addscript "${script}"
-done
-IFS=$oldIFS
+    for script in `ls ${SCRIPT_DIR}/scripts/*.py`; do
+        echo "adding script ${script}"
+        python ./manage.py addscript "${script}"
+    done
+    IFS=$oldIFS
+fi
