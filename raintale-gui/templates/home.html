@@ -25,17 +25,6 @@
 
 {% block center_content %}
     {{ block.super }}
-    <!--
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <form>
-             <div class="form-group">
-                <input type="text" class="form-control" id="searchform" placeholder="{% trans "Search for scripts..." %}">
-              </div>
-            </form>
-        </div>
-    </div>
-    -->
 
     <div class="row" id="script-list">
 
@@ -43,7 +32,7 @@
         {% include 'wooey/scripts/script_panel.html' %}
     {% endfor %}
 
-</div>
+    </div>
 
 
 
