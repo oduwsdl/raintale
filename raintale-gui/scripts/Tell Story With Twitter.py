@@ -4,7 +4,7 @@ from argparse import RawTextHelpFormatter
 from datetime import datetime
 
 parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
-    description='Given a list of story elements, including URLs to archived web pages, create a Twitter thread summarizing the list.',
+    description='Given a list of URLs to archived web pages, create a Twitter thread summarizing the list.',
     formatter_class=RawTextHelpFormatter
 )
 

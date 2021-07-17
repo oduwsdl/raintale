@@ -14,7 +14,7 @@
                     <a href="{% url 'wooey:wooey_script' slug=script.slug %}">{{ script.script_name }}</a>
                     {% with previous_versions=script.get_previous_versions %}
                         {% if previous_versions %}
-                            <div class="dropdown wooey-script-dropdown">
+                            <!-- <div class="dropdown wooey-script-dropdown">
                                 <a href="#" class="dropdown dropdown-toggle" id="{{ script.id }}_scriptDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     <span class="caret"></span>
                                 </a>
@@ -29,17 +29,17 @@
                                         {% endfor %}
                                     {% endfor %}
                                 </ul>
-                            </div>
+                            </div> -->
                         {% endif %}
                     {% endwith %}
                 {% else %}
                     {{ script.script_name }}
                     <a class="icon icon-locked" href="#" title="This script is unavailable."></a>
                 {% endif %}
-                <a class="icon icon-favorite requires-login" data-favorite="{{ script|app_model_id }}"  href="#"></a>
+                <!-- <a class="icon icon-favorite requires-login" data-favorite="{{ script|app_model_id }}"  href="#"></a> -->
             </div>
         <div class="panel-body">{{ script.script_description }}</div>
-        <div class="wooey-script-group">{{ script.script_group.group_name }}</div>
+        <!-- <div class="wooey-script-group">{{ script.script_group.group_name }}</div> -->
 
         </div>
         {% endif %}

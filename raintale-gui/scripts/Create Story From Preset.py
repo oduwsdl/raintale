@@ -4,7 +4,7 @@ from argparse import RawTextHelpFormatter
 from datetime import datetime
 
 parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
-    description="Given a list of story elements, including URLs to archived web pages, create story with one of Raintale's presets.",
+    description="Given a list of URLs to archived web pages, create story with one of Raintale's presets.",
     formatter_class=RawTextHelpFormatter
 )
 
@@ -12,6 +12,11 @@ parser.add_argument('-i', '--input', dest='story_filename',
     required=True,
     help="An input file containing the memento URLs (URI-Ms) for use in the story.",
     type=argparse.FileType('r')
+)
+
+parser.add_argument('--preset', dest='story_preset',
+    required=True, 
+    help="The Raintale preset to use.",
 )
 
 parser.add_argument('--title', dest='title',
@@ -38,11 +43,6 @@ parser.add_argument('--mementoembed_api', dest='mementoembed_api',
     required=False, 
     default=["http://localhost:5550", "http://mementoembed:5550", "http://localhost:5000"],
     help="The URL of the MementoEmbed instance used for generating surrogates"
-)
-
-parser.add_argument('--preset', dest='story_preset',
-    required=False, 
-    help="The Raintale preset to use.",
 )
 
 if __name__ == '__main__':

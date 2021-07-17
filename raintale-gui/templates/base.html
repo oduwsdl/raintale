@@ -58,13 +58,31 @@
         font-weight: bold !important;
       }
 
-      /* Set the fixed height of the footer here */
-      #footer {
-        /* position: fixed; */
-        bottom: 0;
-      }
 
-      
+    /* Sticky footer styles
+    -------------------------------------------------- */
+    html {
+    position: relative;
+    min-height: 100%;
+    }
+    body {
+    margin-bottom: 60px; /* Margin bottom by footer height */
+    }
+    .footer {
+        margin: 0;
+        margin-top: 10px;
+        bottom: 0;
+        width: 100%;
+        background-color: #f5f5f5;
+        padding: 15px;
+    }
+
+    div.footer > div > div > img {
+        /* max-width: 200px; */
+        max-width: 132px;
+        max-height: 60px;
+    }
+
 
       {% block extra_style %}
       {% endblock extra_style %}
@@ -185,11 +203,39 @@
             <div class="center-div {% block center_content_class %}col-md-10 col-xs-6{% endblock center_content_class %}">
                 {% block center_content %}
                 {% endblock center_content %}
+
+                <div class="footer">
+            
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-4">
+                            <img src="/static/images/IIPC-logo.png">
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4">
+                            <img src="/static/images/imls-logo.gif">
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4">
+                            <img src="/static/images/wsdl-logo-small.png"> 
+                        </div>
+                    </div>
+            
+                    <div class="row">
+                        <div class="col-md-12">
+                        <p>
+                        This work was funded in part by <a href="https://netpreserve.org/projects/dark-and-stormy-archives/">a grant</a> from the <a href="https://netpreserve.org/">International Internet Preservation Consortium</a> and grant <a href="https://www.imls.gov/grants/awarded/lg-71-15-0077-15">LG-71-15-0077-15</a> from the <a href="https://www.imls.gov/">Institute of Museum and Library Services</a>.
+                        </p>
+                        <p>
+                        This software is licensed under a <a rel="license" href="https://github.com/oduwsdl/raintale/blob/master/LICENSE">MIT LIcense</a> by the <a href="https://oduwsdl.github.io/">Old Dominion University Web Science and Digital Libraries Research Group</a> 2021.
+                        </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+
 
         {% endblock center %}
         </div>
-
     </div>
 
 
@@ -543,69 +589,6 @@
 
     </script>
     {% endblock inline_js %}
-    </div>
-
-    <div id="footer">
-        <div class="container">
-    
-          <!-- <div class="row">
-            <div class="col-md-12 col-xl-12 col-lg-12">
-    
-            <p><img style="width: 16px;" src="img/twitter-icon-32x32.png">&nbsp;&nbsp;<a href="https://twitter.com/StormyArchives">Follow @StormyArchives on Twitter</a></p>
-            <p><img style="width: 16px;" src="img/f_logo_RGB-White-32x32.png">&nbsp;&nbsp;<a href="https://www.facebook.com/DarkAndStormyArchives/">Follow @DarkAndStormyArchives on Facebook</a></p>
-    
-            </div>
-          </div> -->
-
-          <div class="row">
-            <div class="col-md-12">
-              <hr>
-            </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-3">
-                <img src="/static/images/IIPC-logo.png">
-            </div>
-            <div class="col-md-9 col-xs-10">
-                This work was funded in part by <a href="https://netpreserve.org/projects/dark-and-stormy-archives/">a grant</a> from the <a href="https://netpreserve.org/">International Internet Preservation Consortium</a>.
-            </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-12">
-              <hr>
-            </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-3">
-                <img src="/static/images/imls-logo.png">
-            </div>
-            <div class="col-md-9">
-                This work was funded in part by grant <a href="https://www.imls.gov/grants/awarded/lg-71-15-0077-15">LG-71-15-0077-15</a> from the <a href="https://www.imls.gov/">Institute of Museum and Library Services</a>.
-            </div>
-          </div>
-    
-    
-          <div class="row">
-            <div class="col-md-12">
-              <hr>
-            </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-3">
-              <img src="/static/images/wsdl-logo-small.png"> 
-            </div>
-            <div class="col-md-9">
-              This software is licensed under a <a rel="license" href="https://github.com/oduwsdl/raintale/blob/master/LICENSE">MIT LIcense</a> by the <a href="https://oduwsdl.github.io/">Old Dominion University Web Science and Digital Libraries Research Group</a> 2021. 
-              <!-- <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a> -->
-            </div>
-          </div>
-    
-    
-        </div>
     </div>
 
 </body>
