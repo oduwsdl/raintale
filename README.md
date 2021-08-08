@@ -82,10 +82,12 @@ To install the Raintale GUI, do the following:
 1. Clone this repository
 2. Change into the rstartaintale-gui directory
 3. Run the install-gui.sh script
+This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale GUI.
 
 Once the installation is complete, to start the Raintale GUI, do the following:
 1. Run the ./start-gui.sh script
-2. Make sure the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running as well.
+2. Once the service is started, you can access the Raintale GUI at http://127.0.0.1:8000/. 
+It is important to make sure that the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running as well.
 
 To stop Raintale GUI, do the following:
 1. Run the ./stop-gui.sh script
