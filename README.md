@@ -89,10 +89,7 @@ Once the installation is complete, to start the Raintale GUI, do the following:
 
 To stop Raintale GUI, do the following:
 1. Run the ./stop-gui.sh script
-
-
-
-
+2. You may stop the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service as well.
 
 # The future of Raintale
 
