@@ -3,7 +3,7 @@
 
 # Raintale
 
-Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses [MementoEmbed](https://www.google.com)
+Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses [MementoEmbed](https://github.com/oduwsdl/MementoEmbed)
  to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
 
 Raintale accepts the following inputs:
