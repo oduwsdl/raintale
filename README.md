@@ -68,7 +68,7 @@ docker-compose run raintale tellstory -i story_mementos.txt --storyteller twitte
 ``
 # Building Raintale
 
-## Command Line Tool
+### Command Line Tool
 
 Raintale uses ```pip``` for build and installation. Clone this repository and type the following from the root of the source code:
 
@@ -76,7 +76,23 @@ Raintale uses ```pip``` for build and installation. Clone this repository and ty
 
 to build and install the version from the source code on your machine.
 
-## Graphical User Interface
+### Graphical User Interface
+
+To install the Raintale GUI, do the following:
+1. Clone this repository
+2. Change into the rstartaintale-gui directory
+3. Run the install-gui.sh script
+
+Once the installation is complete, to start the Raintale GUI, do the following:
+1. Run the ./start-gui.sh script
+2. Make sure the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running as well.
+
+To stop Raintale GUI, do the following:
+1. Run the ./stop-gui.sh script
+
+
+
+
 
 # The future of Raintale
 
