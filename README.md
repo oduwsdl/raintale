@@ -78,19 +78,22 @@ to build and install the version from the source code on your machine.
 
 ### Graphical User Interface
 
+Make sure that the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running.
+
 To install the Raintale GUI, do the following:
-1. Clone this repository
-2. Change into the raintale-gui directory
-3. Run the install-gui.sh script
+1. Clone this repository.
+2. Change into the directory where it was cloned.
+3. [Create a virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) to separate Raintale's install from other Python installations.
+4. Run `raintale-gui/install-gui.sh`.
+
 This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale GUI.
 
 Once the installation is complete, to start the Raintale GUI, do the following:
-1. Run the ./start-gui.sh script
+1. Run `raintale-gui/start-gui.sh`.
 2. Once the service is started, you can access the Raintale GUI at http://127.0.0.1:8000/. 
-It is important to make sure that the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running as well.
 
 To stop Raintale GUI, do the following:
-1. Run the ./stop-gui.sh script
+1. Run `raintale-gui/stop-gui.sh`.
 2. You may stop the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service as well.
 
 # The future of Raintale
