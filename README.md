@@ -66,7 +66,7 @@ Once that is done, type the following within the Docker prompt:
 ``
 docker-compose run raintale tellstory -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me” -c twitter-credentials.yml
 ``
-# Building Raintale
+# Installing Raintale without Docker
 
 ### Command Line Tool
 
