@@ -80,7 +80,7 @@ to build and install the version from the source code on your machine.
 
 To install the Raintale GUI, do the following:
 1. Clone this repository
-2. Change into the rstartaintale-gui directory
+2. Change into the raintale-gui directory
 3. Run the install-gui.sh script
 This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale GUI.
 
