@@ -34,6 +34,7 @@ class TwitterStoryTeller(ServiceStoryteller):
         ]
 
         for key in expected_credentials:
+            #print("key: [{}]".format(key))
             if key not in self.credentials:
                 msg = "Credential file is missing the field {}, cannot continue...".format(key)
                 module_logger.critical(msg)

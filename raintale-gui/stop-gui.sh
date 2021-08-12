@@ -2,7 +2,7 @@
 
 echo "beginning the steps to shut down Raintale GUI"
 
-WOOEY_DIR=raintale_with_wooey
+WOOEY_DIR="../raintale_with_wooey"
 
 cd ${WOOEY_DIR}
 
