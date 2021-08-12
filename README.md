@@ -3,7 +3,7 @@
 
 # Raintale
 
-Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses [MementoEmbed](https://www.google.com)
+Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses [MementoEmbed](https://github.com/oduwsdl/MementoEmbed)
  to extract memento information and then publishes a story to the given **storyteller**, a static file or an online social media service.
 
 Raintale accepts the following inputs:
@@ -66,14 +66,35 @@ Once that is done, type the following within the Docker prompt:
 ``
 docker-compose run raintale tellstory -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me” -c twitter-credentials.yml
 ``
+# Installing Raintale without Docker
 
-# Building Raintale
+### Command Line Tool
 
 Raintale uses ```pip``` for build and installation. Clone this repository and type the following from the root of the source code:
 
 ```pip install .``` 
 
 to build and install the version from the source code on your machine.
+
+### Graphical User Interface
+
+Make sure that the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running.
+
+To install the Raintale GUI, do the following:
+1. Clone this repository.
+2. Change into the directory where it was cloned.
+3. [Create a virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) to separate Raintale's install from other Python installations.
+4. Run `raintale-gui/install-gui.sh`.
+
+This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale GUI.
+
+Once the installation is complete, to start the Raintale GUI, do the following:
+1. Run `raintale-gui/start-gui.sh`.
+2. Once the service is started, you can access the Raintale GUI at http://127.0.0.1:8000/. 
+
+To stop Raintale GUI, do the following:
+1. Run `raintale-gui/stop-gui.sh`.
+2. You may stop the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service as well.
 
 # The future of Raintale
 
