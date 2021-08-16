@@ -36,8 +36,8 @@
         <div class="pull-right">
 
             <div class="btn-toolbar" role="toolbar" >
-
-                <div class="btn-group status-completed-toggle">
+<!--                     We are removing the download button from the job view. We will be implementing a "View Story" button in #26 which will make the existing Download button redundant. --> 
+<!--                 <div class="btn-group status-completed-toggle">
                     <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-primary">
                         <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download" %}
                     </a>
@@ -50,7 +50,7 @@
                             <li><a href="{{ archive.url }}"><span class="glyphicon glyphicon-compressed"></span> {% if archive.url|endswith:"zip" %}.zip{% else %}.tar.gz{% endif %}</a></li>
                         {% endfor %}
                     </ul>
-                </div>
+                </div> -->
 
                 <div class="btn-group status-completed-toggle">
                     <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-success">
