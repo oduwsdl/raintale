@@ -111,7 +111,7 @@
                     <button {% if not stoppable_jobs %}data-placement="bottom" data-toggle="tooltip" title="The current celery broker does not support stoppable jobs and stopping will likely not work. To resolve this, use RabbitMQ as a celery message broker."{% endif %}class="btn btn-primary btn-danger status-running-toggle status-submitted-toggle status-pending-toggle" name="celery-command" value="stop" type="submit">
                         <span class="glyphicon glyphicon-stop" aria-hidden="true"></span> {% trans "Stop" %}
                     </button>
-<!--                     Removing the two buttons re-run and resubmit until we find their use for us -->
+<!--                     Removing the two buttons re-run and resubmit until we find its use for us -->
 <!--                     <button class="btn btn-primary btn-warning status-completed-toggle status-revoked-toggle status-failure-toggle" name="celery-command" value="rerun" type="submit">
                         <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> {% trans "Re-run" %}
                     </button> -->
