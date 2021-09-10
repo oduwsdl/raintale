@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Jones"
+  given-names: "Shawn"
+  orcid: "0000-0002-4372-870X"
+- family-names: "Nelson"
+  given-names: "Michael"
+  orcid: "0000-0003-3749-8116"
+- family-names: "Weigle"
+  given-names: "Michele"
+  orcid: "0000-0002-2787-7166"
+- family-names: "Klein"
+  given-names: "Martin"
+  orcid: "0000-0003-0130-2097"
+- family-names: "Jayanetti"
+  given-names: "Himarsha"
+  orcid: "0000-0003-4748-9176"
+title: "Raintale: A Python Utility for Visualizing a Set of Archived Web Pages as a Social Media Story."
+version: 0.2020.09.30.223626
+date-released: 2020-09-30
+url: "https://github.com/oduwsdl/raintale"
