@@ -13,7 +13,6 @@ import requests_cache
 import ffmpeg
 
 from PIL import ImageFile, Image, ImageFont, ImageDraw
-
 from .storyteller import FileStoryteller, get_story_elements
 
 module_logger = logging.getLogger('raintale.storytellers.video')
@@ -242,7 +241,7 @@ class VideoStoryTeller(FileStoryteller):
 
 
     def publish_story(self, story_output_data):
-
+        from raintale import package_directory
         module_logger.info("incoming story data:\n{}".format(pprint.pformat(story_output_data, indent=4)))
 
         requests_cache.install_cache('videostory_test')
@@ -256,7 +255,7 @@ class VideoStoryTeller(FileStoryteller):
         if not os.path.exists(framesdir):
             os.makedirs(framesdir)
 
-        fontfile = "raintale/fonts/OpenSans-Regular.ttf"
+        fontfile = package_directory + "/fonts/OpenSans-Regular.ttf"
 
         # 864 x 480 is SD according to https://learn.g2.com/youtube-video-size
         video_height = 480

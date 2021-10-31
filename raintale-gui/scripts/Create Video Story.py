@@ -262,6 +262,7 @@ if __name__ == '__main__':
 
     print(start_message)
     logger.info(start_message)
+    #print("My current directory is: " + os.getcwd())
 
     story_filename = args.story_filename.name
 
@@ -272,12 +273,13 @@ if __name__ == '__main__':
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
 
     #story_template = args.story_template_filename.read()
-    story_template = choose_story_template("video", "default",None)
+    story_template = choose_story_template("video", "default", None)
 
     story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
     #print(output_location)
+
     end_message = "Done telling your video story. Output is available at {}. THE END.".format(output_location)
 
     logger.info(end_message)
