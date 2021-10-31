@@ -40,11 +40,6 @@ parser.add_argument('--title', dest='title',
     help="The title used for the story. If JSON story file is submitted, this value will be overriden by the title in that JSON input."
 )
 
-# parser.add_argument('-o', '--output-file', dest='output_file',
-#     required=False, default="output.dat",
-#     help="If needed by the storyteller, the output file to which raintale will write the story contents."
-# )
-
 parser.add_argument('--collection-url', dest='collection_url',
     required=False, default=None,
     help="The URL of the collection from which the story is derived."
