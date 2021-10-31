@@ -36,8 +36,80 @@
         <div class="pull-right">
 
             <div class="btn-toolbar" role="toolbar" >
-<!--                     We are removing the download button from the job view. We will be implementing a "View Story" button in #26 which will make the existing Download button redundant. --> 
-<!--                 <div class="btn-group status-completed-toggle">
+
+<!--                 We are adding a more useful download/share/viewstory button to the job view for based on the scripts. --> 
+    
+                    {% if job_info.job.script_version.script.script_name == 'Create HTML Story From Preset' or job_info.job.script_version.script.script_name == 'Create Story From Template' or job_info.job.script_version.script.script_name == 'Create Video Story' %}
+
+                    <div class="btn-group status-completed-toggle">
+                    <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download" %}
+                    </a>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">{% trans "Toggle Dropdown" %}</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">                        
+                        {% for file in job_info.all_files %}
+                        {% if 'output' in file.url %}
+                                    <li><a href="{{ file.url }}" download><span class="glyphicon glyphicon-file"></span>Story Output</a></li>
+                        {% endif %}
+                        {% endfor %}                        
+                        {% for archive in job_info.archives %}
+                            <li><a href="{{ archive.url }}"><span class="glyphicon glyphicon-compressed"></span> {% if archive.url|endswith:"zip" %}.zip{% else %}.tar.gz{% endif %}</a></li>
+                        {% endfor %}
+                    </ul>                   
+                    </div>  
+
+                    <div class="btn-group status-completed-toggle">
+                    {% for file in job_info.all_files %}
+                        {% if 'output' in file.url %}
+                    <a href="{{ file.url }}" target="_blank" role="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-share" aria-hidden="true"></span> {% trans "View Story" %}
+                    </a>
+                        {% endif %}
+                    {% endfor %}    
+                    </div>  
+
+                    {% elif job_info.job.script_version.script.script_name == 'Tell Story With Twitter' or job_info.job.script_version.script.script_name == 'Tell Story With Facebook' %}
+
+                    <div class="btn-group status-completed-toggle">
+                    <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-share" aria-hidden="true"></span> {% trans "Share" %}
+                    </a>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">{% trans "Toggle Dropdown" %}</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">                    
+                        {% for file in job_info.all_files %}
+                        {% if 'output' in file.url %}
+                                    <li><a href="{{ file.url }}" download><span class="glyphicon glyphicon-file"></span>Story Output</a></li>
+                        {% endif %}
+                        {% endfor %}                        
+                        {% for archive in job_info.archives %}
+                            <li><a href="{{ archive.url }}"><span class="glyphicon glyphicon-compressed"></span> {% if archive.url|endswith:"zip" %}.zip{% else %}.tar.gz{% endif %}</a></li>
+                        {% endfor %}
+                    </ul>   
+                    <!-- <li><a href="""><span class="glyphicon glyphicon-figshare"></span> Figshare</a></li>
+                    <li>
+                        <a href="{{ permalink }}" onclick="$('#modal-permalink').modal(); return false;"><span class="glyphicon glyphicon-link"></span> {% trans "Permalink" %}</a>
+                    </li>
+
+                    <li>
+                        <a href="mailto:?subject={% blocktrans with job_id=job_info.job.id job_status=job_info.job.status %}Wooey Job #{{ job_id }} is {{ job_status }}{% endblocktrans %}&body={% blocktrans with permalink=permalink %}You can see the result and any outputs at the following link:%0D%0A{{ permalink }}{% endblocktrans %}"><span class="glyphicon glyphicon-envelope"></span> {% trans "Email" %}</a>
+                    </li> -->
+<!--                     <li>
+                    <a href="{{ permalink }}" onclick="$('#modal-permalink').modal(); return false;"><span class="glyphicon glyphicon-link"></span> {% trans "Permalink" %}</a>
+                    </li>
+                    </ul> -->
+                    </div>  
+
+                    {% endif %}    
+
+<!--            We are removing the download button from the job view. We will be implementing a "View Story" button in #26 which will make the existing Download button redundant. --> 
+
+<!--            <div class="btn-group status-completed-toggle">
                     <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-primary">
                         <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download" %}
                     </a>
@@ -51,7 +123,10 @@
                         {% endfor %}
                     </ul>
                 </div> -->
+  
 
+<!--            We are removing the share button from the job view.--> 
+<!--                 
                 <div class="btn-group status-completed-toggle">
                     <a href="{{ job_info.archives.0.url }}" role="button" class="btn btn-success">
                         {% url 'wooey:celery_results_uuid' job_info.job.uuid as permalink %}
@@ -63,7 +138,7 @@
                         <span class="sr-only">{% trans "Toggle Dropdown" %}</span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <!-- <li><a href="""><span class="glyphicon glyphicon-figshare"></span> Figshare</a></li> -->
+                    <li><a href="""><span class="glyphicon glyphicon-figshare"></span> Figshare</a></li>
                     <li>
                         <a href="{{ permalink }}" onclick="$('#modal-permalink').modal(); return false;"><span class="glyphicon glyphicon-link"></span> {% trans "Permalink" %}</a>
                     </li>
@@ -72,7 +147,9 @@
                         <a href="mailto:?subject={% blocktrans with job_id=job_info.job.id job_status=job_info.job.status %}Wooey Job #{{ job_id }} is {{ job_status }}{% endblocktrans %}&body={% blocktrans with permalink=permalink %}You can see the result and any outputs at the following link:%0D%0A{{ permalink }}{% endblocktrans %}"><span class="glyphicon glyphicon-envelope"></span> {% trans "Email" %}</a>
                     </li>
                     </ul>
-                </div>
+                </div>  -->
+
+
 
                 <div class="btn-group clone-job">
                     <a href="{%  url 'wooey:wooey_script_clone' slug=job_info.job.script_version.script.slug job_id=job_info.job.id %}" role="button" class="btn btn-primary">
@@ -240,7 +317,7 @@
                 var $console = $('.panel-body.console');
                 {% if job_info.job.status|lower == 'completed' %}
                     {% if job_info.job.stdout %}
-                        $console.append('<pre id="console-stdout" class="console-body console-stdout">{{ job_info.job.stdout|linebreaks|escapejs }}</pre>');
+                        $console.append('<pre id="console-stdout" class="console-body console-stdout">{{ job_info.job.stdout|linebreaks|escapejs|urlize}}</pre>');
                     {% endif %}
                     {% if job_info.job.stderr %}
                         $console.append('<pre id="console-stderr" class="console-body console-stderr">{{ job_info.job.stderr|linebreaks|escapejs }}</pre>');
