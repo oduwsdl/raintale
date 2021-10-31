@@ -152,6 +152,7 @@ def format_data(input_filename, title, collection_url, generated_by, parser, gen
             
             if 'title' not in story_data:
                 parser.error("No story title found in JSON input, a title is required.")
+                print("No story title found in JSON input, a title is required.")
                 sys.exit(errno.EINVAL)
 
             if title is not None:
@@ -174,7 +175,7 @@ def format_data(input_filename, title, collection_url, generated_by, parser, gen
 
             logger.warning("story data is not JSON, attempting to read as "
                 "a list of memento URLs in a text file")
-
+           
             if title == None:
                 parser.error("Text file format requires a title be supplied on the command line.")
                 sys.exit(errno.EINVAL)
@@ -201,6 +202,7 @@ def format_data(input_filename, title, collection_url, generated_by, parser, gen
             ))
 
             logger.info("creating story elements")
+            print("Creating story elements")
 
             for line in f:
 
@@ -224,8 +226,10 @@ def format_data(input_filename, title, collection_url, generated_by, parser, gen
                     )
 
             logger.warning("list of memento URLs has been built successfully")
+            print("List of memento URLs has been built successfully.")
         
         logger.info("data loaded for story with title {}".format(story_data['title']))
+        print("data loaded for story with title {}".format(story_data['title']))
 
     story_data['generation_date'] = generation_date
 
@@ -263,6 +267,9 @@ def choose_story_template(storyteller, preset):
     return story_template
 
 if __name__ == '__main__':
+
+    print("Beginning parse.")
+    
     args = parser.parse_args()
 
     start_message = "Beginning raintale to tell your story."
@@ -280,6 +287,7 @@ if __name__ == '__main__':
     story_filename = args.story_filename.name
     credentials_filename = args.credentials_file.name
 
+    print("")
     storyteller_class = TwitterStoryTeller
 
     storyteller = None
@@ -292,6 +300,7 @@ if __name__ == '__main__':
     else:
         storyteller = storyteller_class(credentials_filename)
 
+    print("The story file & credentials were successfully provided.")
     mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
 
     if args.story_template_filename is None:
@@ -299,7 +308,15 @@ if __name__ == '__main__':
     else:
         story_template = args.story_template_filename.read()
 
+    print("Story template ready.")
+
+
+    print("Beginning to load story data.")
+    
     story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+
+
+    print("Beginning to generate Twitter story.")
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 
