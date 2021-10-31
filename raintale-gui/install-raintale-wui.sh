@@ -128,14 +128,7 @@ if [ $JUST_TEMPLATES -eq 1 ]; then
     echo "changing to ${WOOEY_DIR}"
     cd ${WOOEY_DIR}
 
-    echo "adding scripts to Wooey"
-    oldIFS=$IFS
-    # do not edit the spacing with these '', it is significant!
-    IFS='
-'
-    for script in `ls ${SCRIPT_DIR}/scripts/*.py`; do
-        echo "adding script ${script}"
-        python ./manage.py addscript "${script}"
-    done
-    IFS=$oldIFS
+    # adding scripts to Wooey
+    "${SCRIPT_DIR}/add-raintale-scripts.sh"
+
 fi
