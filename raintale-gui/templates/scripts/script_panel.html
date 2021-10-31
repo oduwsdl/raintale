@@ -7,7 +7,7 @@
     {% with group_show=script.script_group|valid_user:request.user %}
         {% if group_show != 'hide' %}
 
-        <div class="panel {% if script.id in favorite_script_ids %}panel-warning is-favorite{% else %}panel-default{% endif %} thumbnail wooey_script_thumbnail {% if not script.is_active or group_show == 'disabled' %}wooey_script_disabled {% endif %}"  id="favorite-{{ script|app_model_id }}">
+        <div class="panel {% if script.id in favorite_script_ids %}panel-warning is-favorite{% else %}panel-default{% endif %} thumbnail wooey_script_thumbnail {% if not script.is_active or group_show == 'disabled' %}wooey_script_disabled {% endif %}"  id="favorite-{{ script|app_model_id }}" style="height: 135px;">
             <div class="panel-heading">
 
                 {% if script.is_active and group_show == True %}
