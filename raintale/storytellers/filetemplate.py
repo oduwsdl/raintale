@@ -13,11 +13,21 @@ class FileTemplateStoryTellerTemplateUnsupportedElement(Exception):
     def __init__(self, message):
         self.message = message
 
+class WrongTemplateTypeError(Exception):
+    
+    def __init__(self, message):
+        self.message = message
+
 class FileTemplateStoryTeller(FileStoryteller):
     
     description = "Given input data and a template file, this storyteller generates a story formatted based on the template and saves it to an output file."
 
     def generate_story(self, story_data, mementoembed_api, story_template, session=None):
+        
+        if template_contents[0:34] == '{# RAINTALE MULTIPART TEMPLATE #}\n':
+            msg = "Multipart Template submitted but this type of story requires a simple template, cannot continue..."
+            module_logger.critical(msg)
+            raise WrongTemplateTypeError(msg)
 
         story_elements = get_story_elements(story_data)
 
