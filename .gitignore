@@ -121,3 +121,4 @@ _build/
 # Raintale testing
 raintale_with_wooey/
 hand-testing/
+installer/
