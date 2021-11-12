@@ -24,7 +24,7 @@ class FileTemplateStoryTeller(FileStoryteller):
 
     def generate_story(self, story_data, mementoembed_api, story_template, session=None):
         
-        if template_contents[0:34] == '{# RAINTALE MULTIPART TEMPLATE #}\n':
+        if story_template[0:34] == '{# RAINTALE MULTIPART TEMPLATE #}\n':
             msg = "Multipart Template submitted but this type of story requires a simple template, cannot continue..."
             module_logger.critical(msg)
             raise WrongTemplateTypeError(msg)
