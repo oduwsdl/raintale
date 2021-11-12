@@ -7,6 +7,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 INSTALL_ALL=1
 SKIP_WOOEY_INSTALL=1
 JUST_TEMPLATES=1
+SKIP_SCRIPT_INSTALL=1
 OVERRIDE_VIRTUALENV_CHECK=0
 WOOEY_DIR=${SCRIPT_DIR}/../raintale_with_wooey
 
@@ -30,6 +31,9 @@ while test $# -gt 0; do
         --just-templates) echo "just-templates"
         SKIP_WOOEY_INSTALL=0
         JUST_TEMPLATES=0
+        ;;
+        --skip-script-install) echo "skip-script-install"
+        SKIP_SCRIPT_INSTALL=0
         ;;
     esac
     shift
@@ -128,7 +132,11 @@ if [ $JUST_TEMPLATES -eq 1 ]; then
     echo "changing to ${WOOEY_DIR}"
     cd ${WOOEY_DIR}
 
-    # adding scripts to Wooey
-    "${SCRIPT_DIR}/add-raintale-scripts.sh"
+    if [ ${SKIP_SCRIPT_INSTALL} -eq 1 ]; then
+
+        # adding scripts to Wooey
+        "${SCRIPT_DIR}/add-raintale-scripts.sh"
+
+    fi
 
 fi

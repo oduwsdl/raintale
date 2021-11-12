@@ -122,3 +122,6 @@ _build/
 raintale_with_wooey/
 hand-testing/
 installer/
+
+# installer builds
+source-distro/

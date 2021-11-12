@@ -302,6 +302,7 @@ function perform_install() {
     test_command "tar"
     test_command "dirname"
     test_command "python"
+    test_command "grep"
     test_command "virtualenv"
 
     test_access `dirname ${INSTALL_DIRECTORY}`
@@ -319,7 +320,7 @@ function perform_install() {
     run_command "creating ${INSTALL_DIRECTORY}/var/run" "mkdir -p $INSTALL_DIRECTORY/var/run"
     run_command "creating ${INSTALL_DIRECTORY}/var/log" "mkdir -p $INSTALL_DIRECTORY/var/log"
     run_command "removing existing virtualenv, if present" "rm -rf $INSTALL_DIRECTORY/raintale-virtualenv"
-    run_command "creating virtualenv for Raintale" "virtualenv $INSTALL_DIRECTORY/raintale-virtualenv"
+    run_command "creating virtualenv for Raintale" "virtualenv -p $PYTHON_EXE $INSTALL_DIRECTORY/raintale-virtualenv"
 
     run_command "discovering Raintale CLI and libraries archive" "ls raintale*.tar.gz | grep -v 'gui'"
     CLI_TARBALL=`cat ${command_output_file}`
@@ -337,7 +338,11 @@ function perform_install() {
     # run_command "setting permissions on Raintale database configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-database.sh"
     # run_command "setting permissions on Raintale queueing service configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-queueing-service.sh"
 
-    run_command "creating Raintale WUI" "(source ${INSTALL_DIRECTORY}/raintale-virtualenv/bin/activate && ${INSTALL_DIRECTORY}/raintale-gui/install-raintale-wui.sh)"
+    if [ ${SKIP_SCRIPT_INSTALL} -eq 0 ]; then
+        run_command "creating Raintale WUI" "(source ${INSTALL_DIRECTORY}/raintale-virtualenv/bin/activate && ${INSTALL_DIRECTORY}/raintale-gui/install-raintale-wui.sh --skip-script-install)"
+    else
+        run_command "creating Raintale WUI" "(source ${INSTALL_DIRECTORY}/raintale-virtualenv/bin/activate && ${INSTALL_DIRECTORY}/raintale-gui/install-raintale-wui.sh)"
+    fi
     # TODO: set Debug=False in django_settings.py
 
     if [ $FORCE_SYSTEMD -eq 0 ]; then
@@ -377,6 +382,9 @@ DJANGO_IP="0.0.0.0"
 RAINTALE_USER="root"
 WRAPPER_SCRIPT_PATH="/usr/local/bin"
 FORCE_SYSTEMD=1
+FORCE_INITD=1
+PYTHON_EXE="/usr/bin/python"
+SKIP_SCRIPT_INSTALL=1
 
 while test $# -gt 0; do
 
@@ -398,8 +406,11 @@ while test $# -gt 0; do
         RAINTALE_USER=$1
         ;;
         --force-systemd)
-        shift
         FORCE_SYSTEMD=0
+        ;;
+        --python-exe)
+        shift
+        PYTHON_EXE=$1
         ;;
         --force-initd)
         shift
@@ -408,6 +419,9 @@ while test $# -gt 0; do
         --django_IP)
         shift
         DJANGO_IP=$1
+        ;;
+        --skip-script-install)
+        SKIP_SCRIPT_INSTALL=0
         ;;
     esac
     shift
