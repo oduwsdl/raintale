@@ -86,6 +86,18 @@ If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
 
+### Ubuntu 21.04
+
+If you would like to use the DEB installer for RHEL 8 and CentOS 8 systems:
+
+1. Download the RPM and save it to the Linux server (e.g., `raintale-0.20211113202900.deb`)
+2. Type `apt-get install raintale-0.20211113202900.deb`
+3. Type `systemctl enable raintale-celery.service`
+4. Type `systemctl enable raintale-django.service`
+4. Type `systemctl start raintale-django.service`
+
+To stop Raintale, type `systemctl stop raintale-django.service`.
+
 ### Generic Unix
 
 We also support a generic Unix installer which downloads many dependencies from the web. Unfortunately, these dependencies are not always version-locked and results on your system may vary.
@@ -119,7 +131,7 @@ Once the installation is complete, to start the Raintale GUI, do the following:
 
 To stop Raintale GUI, type `raintale-gui/stop-gui.sh`.
 
-# Configuring Raintale
+# Improving the performance of the Raintale WUI
 
 Once installed, Raintale's WUI performance can be improved in a few ways.
 
@@ -140,3 +152,15 @@ For optimal process control, the Raintale WUI can use a queueing service like Ra
 
 1. Install RabbitMQ on a system accessible to the server that the Raintale WUI is running on. Record that system's hostname and the port that RabbitMQ is running on -- the default port is 5672.
 2. Run `/opt/raintale/raintale-gui/set-raintale-queueing-service.sh --amqp-url amqp://[HOST]:[PORT]/` where HOST is the host of the RabbitMQ server and PORT is its port
+
+# Enabling Raintale's Experimental Video Stories for the Raintale WUI on CentOS 8
+
+By default, Raintale's video stories are not enabled in the Raintale WUI in CentOS 8 installs. Generating these stories requires ffmpeg. Installing ffmpeg on Ubuntu is easy. Installing ffmpeg on CentOS 8 requires using YUM/DNF repositories outside of those provided by CentOS, as detailed in [https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/](these instructions). Rather than force all Centos 8 Raintale administrators to go through this process, we have disabled video stories through the Raintale WUI.
+
+To enable them:
+1. install ffmpeg
+2. Open `/opt/raintale/raintale-gui/add-raintale-scripts.sh` in an editor and remove the # and space from the line containing `Create Video Story.py` so it looks like this (spaces are significant):
+```
+python ${WOOEY_DIR}/manage.py addscript "${SCRIPT_DIR}/scripts/Create Video Story.py"
+```
+3. Run `/opt/raintale/raintale-gui/add-raintale-scripts.sh`

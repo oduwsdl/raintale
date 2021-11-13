@@ -56,16 +56,20 @@ rpm: source
 	-docker rm rpmbuild_raintale
 	@echo "an RPM structure exists in the installer/rpmbuild directory"
 
-# deb: generic_installer
-# 	-rm -rf installer/debbuild
-# 	mkdir -p installer/debbuild
-# 	docker build -t debbuild:dev -f build-deb-Dockerfile . --build-arg mementoembed_version=$(me_version) --progress=plain
-# 	docker container run --name deb_mementoembed --rm -it -v $(CURDIR)/installer/debbuild:/root/debbuild
+deb: generic_installer
+	-rm -rf installer/debbuild
+	mkdir -p installer/debbuild
+	docker build -t raintale_debbuild:dev -f build-deb-Dockerfile . --build-arg raintale_version=$(me_version) --progress=plain
+	docker container run --name deb_raintale --rm -it -v $(CURDIR)/installer/debbuild:/buildapp/debbuild raintale_debbuild:dev
+	-docker stop deb_raintale
+	-docker rm deb_raintale
+	@echo "a DEB exists in the installer/debbuild directory"
 
-release: source build generic_installer rpm
+release: source build generic_installer rpm deb
 	-rm -rf release
 	-mkdir release
 	cp ./installer/install-raintale.sh release/install-raintale-${me_version}.sh
 	cp ./source-distro/raintale-${me_version}.tar.gz release/
 	cp ./installer/rpmbuild/RPMS/x86_64/raintale-${me_version}-1.el8.x86_64.rpm release/
-	cp ./installer/rpmbuild/SRPMS/raintale-${me_version}-1.el8.src.rpm release/	
+	cp ./installer/rpmbuild/SRPMS/raintale-${me_version}-1.el8.src.rpm release/
+	cp ./installer/debbuild/raintale-${me_version}.deb release/

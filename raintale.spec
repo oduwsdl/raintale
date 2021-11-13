@@ -35,6 +35,7 @@ bash ./installer/install-raintale.sh -- --install-directory ${RPM_BUILD_ROOT}/op
 mv /etc/systemd/system/raintale-celery.service ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-celery.service
 mv /etc/systemd/system/raintale-django.service ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-django.service
 find ${RPM_BUILD_ROOT}/opt/raintale/raintale-virtualenv/bin -type f -exec sed -i "s?${RPM_BUILD_ROOT}??g" {} \;
+echo 'MEMENTOEMBED_ENDPOINT="https://localhost:5550"' > ${RPM_BUILD_ROOT}/etc/raintale.conf
 sed -i "s?${RPM_BUILD_ROOT}??g" ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-django.service
 sed -i "s?${RPM_BUILD_ROOT}??g" ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-celery.service
 sed -i "s?^python ?/opt/raintale/raintale-virtualenv/bin/python ?g" ${RPM_BUILD_ROOT}/opt/raintale/raintale-gui/add-raintale-scripts.sh

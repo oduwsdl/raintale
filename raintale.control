@@ -1,0 +1,7 @@
+Package: raintale
+Version: {{ raintale_version }}
+Depends: python3, nodejs, postgresql, ffmpeg, libjpeg-turbo8, zlib1g, libtiff5, libfreetype6, liblcms2-2, libwebp6, tcl, tk, libopenjp2-7, libfribidi0, libharfbuzz0b, libxcb1
+Architecture: amd64
+Maintainer: Shawn M. Jones <jones.shawn.m@gmail.com>
+Description: Raintale is a Python utility for publishing a social media story built from archived web pages to multiple services.
+ Raintale is a utility for publishing social media stories from groups of archived web pages (mementos). Raintale uses MementoEmbed to extract memento information and then publishes a story to the given storyteller, a static file or an online social media service.
