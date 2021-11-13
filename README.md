@@ -34,7 +34,7 @@ Railtale also supports a number of presets for formatting a story for output to 
 
 Note that not all file formats support all presets.
 
-# Running Raintale
+<!-- # Running Raintale
 
 Raintale uses docker-compose to load and execute all dependencies. To run Raintale, do the following:
 1. Create a directory on your system
@@ -65,10 +65,33 @@ Once that is done, type the following within the Docker prompt:
 
 ``
 docker-compose run raintale tellstory -i story_mementos.txt --storyteller twitter --title "This is My Story Title"	--generated-by "Me” -c twitter-credentials.yml
-``
-# Installing Raintale without Docker
+`` -->
 
-### Command Line Tool
+# Installing Raintale
+
+## Native CentOS 8 RPM
+
+If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
+
+1. download the RPM and save it to the Linux server (e.g., `raintale-0.20211106041644-1.el8.x86_64.rpm`)
+2. type `dnf install raintale-0.20211106041644-1.el8.x86_64.rpm`
+3. type `systemctl enable raintale-celery.service`
+4. type `systemctl enable raintale-django.service`
+4. type `systemctl start raintale-django.service`
+
+To stop Raintale, type `systemctl stop raintale-django.service`.
+
+## Generic Unix Installer
+
+We also support a generic Unix installer which downloads many dependencies from the web. Unfortunately, these dependencies are not always version-locked and results on your system may vary.
+
+1. download the generic Unix installer (e.g., `install-raintale.sh`)
+2. type `install-raintale.sh`
+3. to start the Raintale GUI, type `/opt/raintale/start-raintale-wui.sh`
+
+To stop raintale, type `/opt/raintale/stop-raintale-wui.sh`.
+
+## Command Line Tool
 
 Raintale uses ```pip``` for build and installation. Clone this repository and type the following from the root of the source code:
 
@@ -76,7 +99,7 @@ Raintale uses ```pip``` for build and installation. Clone this repository and ty
 
 to build and install the version from the source code on your machine.
 
-### Graphical User Interface
+## Graphical User Interface
 
 Make sure that the [MementoEmbed](https://github.com/oduwsdl/MementoEmbed) service is running.
 
