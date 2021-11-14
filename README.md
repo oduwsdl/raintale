@@ -86,7 +86,9 @@ If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
 
-To remove Raintale, type `dnf remove raintale`.
+To remove Raintale, type `dnf remove raintale`. Removing Raintale stops the associated raintale service and its celery companion. Be patient, sometimes celery takes a long time to stop.
+
+During removal, the directory `/opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads` is saved to `/opt/raintale/user_uploads-backup-[DATE].tar.gz where [DATE] was the date and time of removal. This is where all story outputs are stored. The administrator may wish to delete or backup this file for future use.
 
 ### Ubuntu 21.04
 

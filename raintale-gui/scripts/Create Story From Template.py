@@ -81,7 +81,7 @@ if __name__ == '__main__':
         output_filename = output_file + pathlib.Path(args.story_template_filename.name).suffix
 
     storyteller = FileTemplateStoryTeller(output_filename)
-    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    mementoembed_api = choose_mementoembed_api([])
 
     story_template = args.story_template_filename.read()
 

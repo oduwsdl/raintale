@@ -65,10 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /etc/systemd/system/raintale-django.service
 %attr(0755, root, root) /etc/systemd/system/raintale-celery.service
 %attr(0755, raintale, dsa) /usr/bin/tellstory
-%attr(4755, raintale, dsa) /opt/raintale/raintale-gui/add-raintale-scripts.sh
 
 %post
-/opt/raintale/raintale-gui/add-raintale-scripts.sh
+su -l raintale -s /bin/bash /opt/raintale/raintale-gui/add-raintale-scripts.sh
 /usr/bin/systemctl enable raintale-celery.service
 /usr/bin/systemctl enable raintale-django.service
 
@@ -80,3 +79,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun
 /usr/sbin/userdel raintale
+if [ -d /opt/raintale/raintale_with_wooey/__pycache__ ]; then
+    rm -rf /opt/raintale/raintale_with_wooey/__pycache__
+fi
+if [ -e  /opt/raintale/raintale_with_wooey/celerybeat-schedule ]; then
+    rm /opt/raintale/raintale_with_wooey/celerybeat-schedule
+fi
+if [ -d /opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads ]; then
+    tar -C /opt/raintale/raintale_with_wooey/user_uploads cvfz /opt/raintale/user_uploads-backup-`date '+%Y%m%d%H%M%S'`.tar.gz user_uploads
+    rm -rf /opt/raintale/raintale_with_wooey
+fi
