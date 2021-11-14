@@ -80,9 +80,7 @@ If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 1. Download the RPM and save it to the Linux server (e.g., `raintale-0.20211106041644-1.el8.x86_64.rpm`)
 2. Type `dnf install raintale-0.20211106041644-1.el8.x86_64.rpm`
-3. Type `systemctl enable raintale-celery.service`
-4. Type `systemctl enable raintale-django.service`
-4. Type `systemctl start raintale-django.service`
+3. Type `systemctl start raintale-django.service`
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
 

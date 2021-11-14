@@ -1,4 +1,4 @@
-from ubuntu:21.04
+FROM ubuntu:21.04
 
 ARG raintale_version
 ARG DEBIAN_FRONTEND=noninteractive
@@ -22,6 +22,8 @@ RUN echo 'MEMENTOEMBED_ENDPOINT="https://localhost:5550"' > /buildapp/raintale_a
 RUN sed -i "s?/buildapp/raintale_amd64??g" /buildapp/raintale_amd64/etc/systemd/system/raintale-celery.service
 RUN sed -i "s?/buildapp/raintale_amd64??g" /buildapp/raintale_amd64/etc/systemd/system/raintale-django.service
 RUN find /buildapp/raintale_amd64/opt/raintale/raintale-virtualenv/bin -type f -exec sed -i "s?/buildapp/raintale_amd64??g" {} \;
+RUN sed -i "s?^python ?/opt/raintale/raintale-virtualenv/bin/python ?g" /buildapp/raintale_amd64/opt/raintale/raintale-gui/add-raintale-scripts.sh
+RUN sed -i "s?^python ?/opt/raintale/raintale-virtualenv/bin/python ?g" /buildapp/raintale_amd64/opt/raintale/raintale-gui/set-raintale-database.sh
 RUN mkdir raintale_amd64/DEBIAN
 COPY raintale.control .
 RUN sed "s?{{ raintale_version }}?${raintale_version}?g" /buildapp/raintale.control > raintale_amd64/DEBIAN/control
@@ -29,3 +31,6 @@ RUN printf "#!/bin/bash\ndpkg-deb --root-owner-group --build raintale_amd64 debb
 RUN chmod 0700 /buildapp/build-deb.sh
 
 CMD ["/buildapp/build-deb.sh"]
+
+# keep running for debugging
+# ENTRYPOINT [ "tail", "-f", "/dev/null"]

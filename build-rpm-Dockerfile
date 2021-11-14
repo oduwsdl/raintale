@@ -24,7 +24,7 @@ RUN sed "s/{{ raintale_version }}/${raintale_version}/g" ./raintale.spec > /root
 RUN ls -l ./rpmbuild/SPECS/
 RUN rpmlint ./rpmbuild/SPECS/raintale.spec
 
-# keep running
+# keep running -- for debugging
 # ENTRYPOINT [ "tail", "-f", "/dev/null"]
 
 CMD ["/root/build-rpms.sh"]

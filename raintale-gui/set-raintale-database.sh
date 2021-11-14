@@ -104,7 +104,10 @@ raintale_conf=/etc/raintale.conf
 
 echo "writing database information to ${settings_file}"
 
+ME_line=`grep MEMENTOEMBED_ENDPOINT`
+
 cat >> ${raintale_conf} <<- EOF
+${ME_line}
 DATABASE_NAME="${DBNAME}"
 DATABASE_PORT="${DBPORT}"
 DATABASE_HOST="${DBHOST}"

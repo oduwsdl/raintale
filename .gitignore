@@ -122,6 +122,10 @@ _build/
 raintale_with_wooey/
 hand-testing/
 installer/
+release/
 
 # installer builds
 source-distro/
+
+# directory for comparing functions
+difftest

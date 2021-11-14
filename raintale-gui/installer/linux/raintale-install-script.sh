@@ -277,6 +277,7 @@ Requires=raintale-celery.service
 ExecStart=${INSTALL_DIRECTORY}/raintale-virtualenv/bin/python manage.py runserver ${DJANGO_IP}:${DJANGO_PORT}
 User=${RAINTALE_USER}
 WorkingDirectory=${INSTALL_DIRECTORY}/raintale_with_wooey
+EnvironmentFile=/etc/raintale.conf
 
 [Install]
 WantedBy=multi-user.target
@@ -329,14 +330,14 @@ function perform_install() {
 
     # in some environments --no-cache-dir avoids the enormous memory consumption of pytorch installation
     # see: https://github.com/pytorch/pytorch/issues/1022
-    run_command "installing Raintale CLI and libraries in virtualenv" "(source ${INSTALL_DIRECTORY}/raintale-virtualenv/bin/activate && pip install --no-cache-dir ${CLI_TARBALL})"
+    run_command "installing Raintale CLI and libraries in virtualenv" "(${INSTALL_DIRECTORY}/raintale-virtualenv/bin/pip install --no-cache-dir ${CLI_TARBALL})"
     run_command "extracting Raintale WUI" "tar -C ${INSTALL_DIRECTORY} -x -v -z -f ${GUI_TARBALL}"
 
     create_tellstory_wrapper_script "${WRAPPER_SCRIPT_PATH}"
 
     run_command "setting permissions on Raintale CLI wrapper script" "chmod 0755 ${WRAPPER_SCRIPT_PATH}/tellstory"
-    # run_command "setting permissions on Raintale database configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-database.sh"
-    # run_command "setting permissions on Raintale queueing service configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-queueing-service.sh"
+    run_command "setting permissions on Raintale database configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-database.sh"
+    run_command "setting permissions on Raintale queueing service configuration script" "chmod 0755 ${INSTALL_DIRECTORY}/raintale-gui/set-raintale-queueing-service.sh"
 
     if [ ${SKIP_SCRIPT_INSTALL} -eq 0 ]; then
         run_command "creating Raintale WUI" "(source ${INSTALL_DIRECTORY}/raintale-virtualenv/bin/activate && ${INSTALL_DIRECTORY}/raintale-gui/install-raintale-wui.sh --skip-script-install)"
@@ -348,6 +349,8 @@ function perform_install() {
     if [ $FORCE_SYSTEMD -eq 0 ]; then
         create_systemd_startup
     fi
+
+    run_command "setting permissions on Raintale directories" "find ${INSTALL_DIRECTORY} -type d -exec chmod 0755 {} \;"
 
     # check_for_systemctl
     # if [ $systemctl_check -ne 0 ]; then
