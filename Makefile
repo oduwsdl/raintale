@@ -20,8 +20,8 @@ source:
 	cp /tmp/raintale-$(me_version).tar.gz source-distro
 	
 clean:
-	-docker stop rpmbuild_mementoembed
-	-docker rm rpmbuild_mementoembed
+	-docker stop rpmbuild_raintale
+	-docker rm rpmbuild_raintale
 	-rm -rf .eggs
 	-rm -rf eggs/
 	-rm -rf build/
@@ -39,12 +39,14 @@ clean:
 	-rm -rf source-distro
 	-rm -rf rpmbuild
 	-rm -rf raintale_with_wooey
-	python ./setup.py clean
 
-build:
+clean-all: clean
+	-rm -rf release
+
+build-sdist: check-virtualenv
 	python ./setup.py sdist
 
-generic_installer:
+generic_installer: check-virtualenv
 	./raintale-gui/installer/linux/create-raintale-installer.sh
 
 rpm: source
@@ -65,7 +67,7 @@ deb: generic_installer
 	-docker rm deb_raintale
 	@echo "a DEB exists in the installer/debbuild directory"
 
-release: source build generic_installer rpm deb
+release: source build-sdist generic_installer rpm deb
 	-rm -rf release
 	-mkdir release
 	cp ./installer/install-raintale.sh release/install-raintale-${me_version}.sh
@@ -73,3 +75,15 @@ release: source build generic_installer rpm deb
 	cp ./installer/rpmbuild/RPMS/x86_64/raintale-${me_version}-1.el8.x86_64.rpm release/
 	cp ./installer/rpmbuild/SRPMS/raintale-${me_version}-1.el8.src.rpm release/
 	cp ./installer/debbuild/raintale-${me_version}.deb release/
+
+check-virtualenv:
+ifndef VIRTUAL_ENV
+	$(error VIRTUAL_ENV is undefined, please establish a virtualenv before building)
+endif
+
+clean-virtualenv: check-virtualenv
+	-pip uninstall -y raintale
+	@for p in $(shell pip freeze | awk -F== '{ print $$1 }'); do \
+		pip uninstall -y $$p ; \
+	done
+	@echo "done removing all packages from virtualenv"

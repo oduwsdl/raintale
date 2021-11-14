@@ -25,6 +25,7 @@ Raintale is a utility for publishing social media stories from groups of archive
 
 %build
 rm -rf $RPM_BUILD_ROOT
+export VIRTUAL_ENV=system
 make generic_installer
 
 # thanks -- https://fedoraproject.org/wiki/Packaging%3aUsersAndGroups
@@ -64,8 +65,18 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /etc/systemd/system/raintale-django.service
 %attr(0755, root, root) /etc/systemd/system/raintale-celery.service
 %attr(0755, raintale, dsa) /usr/bin/tellstory
+%attr(4755, raintale, dsa) /opt/raintale/raintale-gui/add-raintale-scripts.sh
 
 %post
 /opt/raintale/raintale-gui/add-raintale-scripts.sh
 /usr/bin/systemctl enable raintale-celery.service
 /usr/bin/systemctl enable raintale-django.service
+
+%preun
+/usr/bin/systemctl stop raintale-django.service
+/usr/bin/systemctl stop raintale-celery.service
+/usr/bin/systemctl disable raintale-django.service
+/usr/bin/systemctl disable raintale-celery.service
+
+%postun
+/usr/sbin/userdel raintale

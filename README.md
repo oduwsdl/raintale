@@ -72,6 +72,8 @@ Before installing Raintale, make sure that the [MementoEmbed](https://github.com
 
 ## Installing Raintale on Linux or Unix
 
+Before installing Raintale, you must have an instance of MementoEmbed running on a machine, either locally or elsewhere. If you do not have MementoEmbed, please install [the latest release of MementoEmbed](https://github.com/oduwsdl/MementoEmbed).
+
 To install Raintale on Linux or Unix, choose your target platform below.
 
 ### CentOS 8
@@ -84,6 +86,8 @@ If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
 
+To remove Raintale, type `dnf remove raintale`.
+
 ### Ubuntu 21.04
 
 If you would like to use the DEB installer for RHEL 8 and CentOS 8 systems:
@@ -95,6 +99,8 @@ If you would like to use the DEB installer for RHEL 8 and CentOS 8 systems:
 4. Type `systemctl start raintale-django.service`
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
+
+To remove Raintale, type `apt-get remove raintale`.
 
 ### Generic Unix
 
