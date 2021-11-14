@@ -1,12 +1,15 @@
 import argparse
 import sys
+import os
 import logging
+import errno
 
 from argparse import RawTextHelpFormatter
 from datetime import datetime
 
-from raintale.utils import choose_mementoembed_api, choose_story_template, format_data
+from raintale.utils import choose_mementoembed_api, format_data
 from raintale.version import __appversion__
+from raintale import package_directory
 from raintale.storytellers.twitter import TwitterStoryTeller
 
 DEFAULT_LOGFILE="./creating-story.log"
@@ -60,6 +63,28 @@ parser.add_argument('--generation-date', dest='generation_date',
 #     help="The URL of the MementoEmbed instance used for generating surrogates"
 # )
 
+def choose_story_template(storyteller, preset):
+
+    story_template = ""
+
+    story_template_filename = "{}/templates/{}.{}".format(
+        package_directory, preset, storyteller
+    )
+
+    logger.info("using story template filename {}".format(story_template_filename))
+
+    try:
+
+        with open(story_template_filename) as f:
+            story_template = f.read()
+
+    except FileNotFoundError:
+
+        logger.error("Cannot locate given template filename of {}".format(story_template_filename))
+        print("EXITING DUE TO ERROR.")
+        sys.exit(errno.EINVAL)
+
+    return story_template, story_template_filename
 
 if __name__ == '__main__':
 
@@ -96,20 +121,22 @@ if __name__ == '__main__':
         storyteller = storyteller_class(credentials_filename)
 
     print("The story file & credentials were successfully provided.")
-    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    mementoembed_api = choose_mementoembed_api([])
 
     if args.story_template_filename is None:
-        story_template = choose_story_template("twitter", "default")
+        story_template, story_template_filename = choose_story_template("twitter", "default")
     else:
         story_template = args.story_template_filename.read()
+        story_template_filename = args.story_template_filename.name
 
-    print("Story template ready.")
+    print("applying story template file {}".format(story_template_filename))
+    print("applying credentials file {}".format(os.path.basename(credentials_filename)))
 
-    print("Beginning to load story data.")
+    print("formatting story data from story file {}".format(os.path.basename(story_filename)))
     
     story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
 
-    print("Beginning to generate Twitter story.")
+    print("generating Twitter story")
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 

@@ -86,6 +86,6 @@ if [ -e  /opt/raintale/raintale_with_wooey/celerybeat-schedule ]; then
     rm /opt/raintale/raintale_with_wooey/celerybeat-schedule
 fi
 if [ -d /opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads ]; then
-    tar -C /opt/raintale/raintale_with_wooey/user_uploads cvfz /opt/raintale/user_uploads-backup-`date '+%Y%m%d%H%M%S'`.tar.gz user_uploads
+    tar -C /opt/raintale/raintale_with_wooey/user_uploads -c -v -z -f /opt/raintale/user_uploads-backup-`date '+%Y%m%d%H%M%S'`.tar.gz user_uploads
     rm -rf /opt/raintale/raintale_with_wooey
 fi
