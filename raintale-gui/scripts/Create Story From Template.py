@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 import logging
 import pathlib
 
@@ -83,9 +84,16 @@ if __name__ == '__main__':
     storyteller = FileTemplateStoryTeller(output_filename)
     mementoembed_api = choose_mementoembed_api([])
 
+    print("using MementoEmbed at {}".format(mementoembed_api))
+    print("applying story template file {}".format(os.path.basename(args.story_template_filename.name)))
+
     story_template = args.story_template_filename.read()
 
+    print("formatting story data from story file {}".format(os.path.basename(story_filename)))
+
     story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+
+    print("generating story from template")
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
 

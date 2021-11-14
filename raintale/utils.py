@@ -42,6 +42,8 @@ def choose_mementoembed_api(mementoembed_api_candidates):
                 line = line.strip()
                 if 'MEMENTOEMBED_ENDPOINT' in line:
                     variable, mementoembed_api = [ s.strip() for s in line.split('=') ]
+                    mementoembed_api = mementoembed_api.strip("'")
+                    mementoembed_api = mementoembed_api.strip('"')
                     return mementoembed_api
 
     mementoembed_api = ""

@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 import logging
 import errno
 
@@ -29,7 +30,7 @@ parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
     formatter_class=RawTextHelpFormatter
     )
 
-parser.add_argument('-i', '--input', dest='input_filename',
+parser.add_argument('-i', '--input', dest='story_filename',
     required=True,
     help="An input file containing the memento URLs for use in the story.",
     type=argparse.FileType('r')
@@ -102,22 +103,30 @@ if __name__ == '__main__':
     print(start_message)
     logger.info(start_message)
 
-    input_filename = args.input_filename.name
+    story_filename = args.story_filename.name
     storyteller = FileTemplateStoryTeller(output_file)
 
-    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    mementoembed_api = choose_mementoembed_api([])
+
+    print("using MementoEmbed at {}".format(mementoembed_api))
 
     if type(mementoembed_api) == int:
         print("Error Number:" + str(mementoembed_api))
         sys.exit(mementoembed_api)
 
     story_template_filename = args.story_preset
+    print("applying story template file {}".format(story_template_filename))
+
     story_template = choose_story_template(story_template_filename)
 
-    story_data = format_data(input_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+    print("formatting story data from story file {}".format(os.path.basename(story_filename)))
 
-    #output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
-    #print(output_location)
+    print("generating story from preset")
+
+    story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
+
+    output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)
+    
     end_message = "Done telling your story. Output is available at {}. THE END.".format(output_file)
 
     logger.info(end_message)
