@@ -1,9 +1,0 @@
-find /opt/raintale -type d -exec chmod 0755 {} \;
-find /opt/raintale -exec chown raintale:dsa {} \;
-chmod 0755 /usr/bin/tellstory
-chown raintale:dsa /usr/bin/tellstory
-chmod 644 /etc/raintale.conf
-chown raintale:dsa /etc/raintale.conf
-su -l raintale -s /bin/bash /opt/raintale/raintale-gui/add-raintale-scripts.sh
-/usr/bin/systemctl enable raintale-celery.service
-/usr/bin/systemctl enable raintale-django.service

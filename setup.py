@@ -25,7 +25,7 @@ setup(
     license='MIT',
     packages=find_packages(),
     package_data={
-        'raintale': [ 'templates/*', 'fonts/*' ]
+        'raintale': [ 'templates/*' ]
     },
     scripts=[
         'bin/tellstory',

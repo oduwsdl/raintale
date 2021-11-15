@@ -1,7 +1,0 @@
-/usr/sbin/userdel raintale
-find /opt/raintale -name __pycache__ -exec rm -rf {} \;
-find /opt/raintale -name celerybeat-schedule -exec rm -rf {} \;
-if [ -d /opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads ]; then
-    tar -C /opt/raintale/raintale_with_wooey/raintale_with_wooey -c -v -z -f /opt/raintale/user_uploads-backup-`date '+%Y%m%d%H%M%S'`.tar.gz user_uploads
-    rm -rf /opt/raintale/raintale_with_wooey
-fi
