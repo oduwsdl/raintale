@@ -109,8 +109,8 @@ By default, Raintale's video stories are not enabled in the Raintale WUI in Cent
 
 To enable them:
 1. install ffmpeg
-2. Open `/opt/raintale/raintale-gui/add-raintale-scripts.sh` in an editor and remove the # and space from the line containing `Create Video Story.py` so it looks like this (spaces are significant):::
+2. Open ``/opt/raintale/raintale-gui/add-raintale-scripts.sh`` in an editor and remove the # and space from the line containing ``Create Video Story.py`` so it looks like this (spaces are significant):::
 
     python ${WOOEY_DIR}/manage.py addscript "${SCRIPT_DIR}/scripts/Create Video Story.py"
 
-3. Run `/opt/raintale/raintale-gui/add-raintale-scripts.sh`
+3. Run ``/opt/raintale/raintale-gui/add-raintale-scripts.sh``
