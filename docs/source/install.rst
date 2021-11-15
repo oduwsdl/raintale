@@ -105,7 +105,7 @@ For optimal process control, the Raintale WUI can use a queueing service like Ra
 Enabling Raintale's Experimental Video Stories for the Raintale WUI on CentOS 8
 ```````````````````````````````````````````````````````````````````````````````
 
-By default, Raintale's video stories are not enabled in the Raintale WUI in CentOS 8 installs. Generating these stories requires ffmpeg. Installing ffmpeg on Ubuntu is easy. Installing ffmpeg on CentOS 8 requires using YUM/DNF repositories outside of those provided by CentOS, as detailed in [https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/](these instructions). Rather than force all Centos 8 Raintale administrators to go through this process, we have disabled video stories through the Raintale WUI.
+By default, Raintale's video stories are not enabled in the Raintale WUI in CentOS 8 installs. Generating these stories requires ffmpeg. Installing ffmpeg on Ubuntu is easy. Installing ffmpeg on CentOS 8 requires using YUM/DNF repositories outside of those provided by CentOS, as detailed in `these instructions <https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/>`_. Rather than force all Centos 8 Raintale administrators to go through this process, we have disabled video stories through the Raintale WUI.
 
 To enable them:
 1. install ffmpeg

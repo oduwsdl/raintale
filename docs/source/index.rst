@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Raintale: Storytelling for Web Archives
-====================================
+=======================================
 
 .. image:: images/raintale-logo.png
 
