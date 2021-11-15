@@ -102,7 +102,7 @@ echo " --- Raintale version is ${raintale_version}"
 
 run_command "cleaning Raintale CLI and library build environment" "(cd ${CLI_SRC_DIR} && python ./setup.py clean 2>&1)"
 run_command "cleaning Raintale CLI and library build environment" "(cd ${CLI_SRC_DIR} && rm -rf build dist 2>&1)"
-run_command "cleaning installer directory" "rm -rf ${CLI_SRC_DIR}/installer"
+run_command "cleaning installer directory" "rm -rf ${CLI_SRC_DIR}/installer/generic-unix"
 run_command "building Raintale CLI and library install" "(cd ${CLI_SRC_DIR} && python ./setup.py sdist 2>&1)"
 
 normalized_raintale_version=${raintale_version}
@@ -118,8 +118,8 @@ echo " --- ${CLI_SRC_DIR}/dist/raintale-gui-${normalized_raintale_version}.tar.g
 run_command "copying install script to archive directory" "cp ${CLI_SRC_DIR}/raintale-gui/installer/linux/raintale-install-script.sh ${CLI_SRC_DIR}/dist"
 run_command "setting install script permissions" "chmod 0755 ${CLI_SRC_DIR}/raintale-gui/installer/linux/raintale-install-script.sh"
 
-run_command "creating directory for installer" "mkdir ${CLI_SRC_DIR}/installer"
+run_command "creating directory for installer" "mkdir -p ${CLI_SRC_DIR}/installer/generic-unix"
 
-run_command "executing makeself" "makeself ${CLI_SRC_DIR}/dist/ ${CLI_SRC_DIR}/installer/install-raintale.sh 'Raintale from the Dark and Stormy Archives Project' ./raintale-install-script.sh"
+run_command "executing makeself" "makeself ${CLI_SRC_DIR}/dist/ ${CLI_SRC_DIR}/installer/generic-unix/install-raintale.sh 'Raintale from the Dark and Stormy Archives Project' ./raintale-install-script.sh"
 installer_file=`cat ${command_output_file} | grep "successfully created" | sed 's/Self-extractable archive "//g' | sed 's/" successfully created.//g'`
 echo "DONE: installer available at in ${installer_file}"

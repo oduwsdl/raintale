@@ -70,7 +70,7 @@ deb: generic_installer
 release: source build-sdist generic_installer rpm deb
 	-rm -rf release
 	-mkdir release
-	cp ./installer/install-raintale.sh release/install-raintale-${me_version}.sh
+	cp ./installer/generic-unix/install-raintale.sh release/install-raintale-${me_version}.sh
 	cp ./source-distro/raintale-${me_version}.tar.gz release/
 	cp ./installer/rpmbuild/RPMS/x86_64/raintale-${me_version}-1.el8.x86_64.rpm release/
 	cp ./installer/rpmbuild/SRPMS/raintale-${me_version}-1.el8.src.rpm release/

@@ -75,10 +75,12 @@ if __name__ == '__main__':
 
     storyteller = storyteller_class(output_file)
 
-    mementoembed_api = choose_mementoembed_api(args.mementoembed_api)
+    mementoembed_api = choose_mementoembed_api([])
+    print("using MementoEmbed at {}".format(mementoembed_api))
 
     story_template = choose_story_template("video", "default", None)
 
+    print("generating video story")
     story_data = format_data(story_filename, args.title, args.collection_url, args.generated_by, parser, args.generation_date)
 
     output_location = storyteller.tell_story(story_data, mementoembed_api, story_template)

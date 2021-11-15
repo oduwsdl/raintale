@@ -41,7 +41,7 @@ echo RPM_BUILD_ROOT is $RPM_BUILD_ROOT
 mkdir -p ${RPM_BUILD_ROOT}/opt/raintale
 mkdir -p ${RPM_BUILD_ROOT}/etc/systemd/system
 mkdir -p ${RPM_BUILD_ROOT}/usr/bin
-bash ./installer/install-raintale.sh -- --install-directory ${RPM_BUILD_ROOT}/opt/raintale --python-exe /usr/bin/python --skip-script-install --raintale-user raintale --cli-wrapper-path ${RPM_BUILD_ROOT}/usr/bin/
+bash ./installer/generic-unix/install-raintale.sh -- --install-directory ${RPM_BUILD_ROOT}/opt/raintale --python-exe /usr/bin/python --skip-script-install --raintale-user raintale --cli-wrapper-path ${RPM_BUILD_ROOT}/usr/bin/
 # TODO: fix this, everything should stay in RPM_BUILD_ROOT
 mv /etc/systemd/system/raintale-celery.service ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-celery.service
 mv /etc/systemd/system/raintale-django.service ${RPM_BUILD_ROOT}/etc/systemd/system/raintale-django.service
@@ -79,12 +79,8 @@ su -l raintale -s /bin/bash /opt/raintale/raintale-gui/add-raintale-scripts.sh
 
 %postun
 /usr/sbin/userdel raintale
-if [ -d /opt/raintale/raintale_with_wooey/__pycache__ ]; then
-    rm -rf /opt/raintale/raintale_with_wooey/__pycache__
-fi
-if [ -e  /opt/raintale/raintale_with_wooey/celerybeat-schedule ]; then
-    rm /opt/raintale/raintale_with_wooey/celerybeat-schedule
-fi
+find /opt/raintale -name __pycache__ -exec rm -rf {} \;
+find /opt/raintale -name celerybeat-schedule -exec rm -rf {} \;
 if [ -d /opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads ]; then
     tar -C /opt/raintale/raintale_with_wooey/raintale_with_wooey -c -v -z -f /opt/raintale/user_uploads-backup-`date '+%Y%m%d%H%M%S'`.tar.gz user_uploads
     rm -rf /opt/raintale/raintale_with_wooey
