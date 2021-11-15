@@ -60,20 +60,20 @@ Raintale uses ``pip`` for build and installation. Clone this repository and type
 1. Clone this repository.
 2. Change into the directory where it was cloned.
 3. `Create a virtualenv <https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/>`_ to separate Raintale's install from other Python installations.
-4. Type ```pip install .``` 
+4. Type ``pip install .`` 
 
 Installing the Raintale Web User Interface (WUI) in a Python Environment
 ------------------------------------------------------------------------
 
 To install the Raintale WUI, do the following:
 1. Follow the above instructions for installing Raintale in a Python Environment.
-2. Type ``raintale-gui/install-gui.sh``
+2. Type ``raintale-gui/install-raintale-wui.sh``
 
 This installation script will install `Wooey <https://github.com/wooey/Wooey>`_ and other dependencies required to run the Raintale WUI.
 
-Once the installation is complete, to start the Raintale GUI, do the following:
-1. Run `raintale-gui/start-gui.sh`.
-2. Once the service is started, you can access the Raintale GUI at http://127.0.0.1:8000/. 
+Once the installation is complete, to start the Raintale WUI, do the following:
+1. Run ``raintale-gui/start-gui.sh``
+2. Once the service is started, you can access the Raintale WUI at http://127.0.0.1:8000/. 
 
 To stop the Raintale WUI, type `raintale-gui/stop-gui.sh`.
 
@@ -91,7 +91,7 @@ By default, the Raintale WUI uses SQLite, which does not perform well for multip
 2. Log into Postgres and create a database with postgres for Raintale.
 3. Create a user and password.
 4. Grant all privileges on the database from step 2 in step 3.
-5. Run `/opt/raintale/raintale-gui/set-raintale-database.sh --dbuser [DBUSER] --dbname [DBNAME] --dbhost [DBHOST] --dbport [DBPORT]` -- with DBUSER created from step 3, DBNAME replaced by the database you created in step 2, DBHOST and DBPORT recorded from step 1. The script will prompt you for the password.
+5. Run ``/opt/raintale/raintale-gui/set-raintale-database.sh --dbuser [DBUSER] --dbname [DBNAME] --dbhost [DBHOST] --dbport [DBPORT]`` -- with DBUSER created from step 3, DBNAME replaced by the database you created in step 2, DBHOST and DBPORT recorded from step 1. The script will prompt you for the password.
 6. Restart Raintale as appropriate for your system.
 
 Configuring the Raintale WUI for RabbitMQ
@@ -100,7 +100,7 @@ Configuring the Raintale WUI for RabbitMQ
 For optimal process control, the Raintale WUI can use a queueing service like RabbitMQ.
 
 1. Install RabbitMQ on a system accessible to the server that the Raintale WUI is running on. Record that system's hostname and the port that RabbitMQ is running on -- the default port is 5672.
-2. Run `/opt/raintale/raintale-gui/set-raintale-queueing-service.sh --amqp-url amqp://[HOST]:[PORT]/` where HOST is the host of the RabbitMQ server and PORT is its port
+2. Run ``/opt/raintale/raintale-gui/set-raintale-queueing-service.sh --amqp-url amqp://[HOST]:[PORT]/`` where HOST is the host of the RabbitMQ server and PORT is its port
 
 Enabling Raintale's Experimental Video Stories for the Raintale WUI on CentOS 8
 ```````````````````````````````````````````````````````````````````````````````
@@ -109,8 +109,8 @@ By default, Raintale's video stories are not enabled in the Raintale WUI in Cent
 
 To enable them:
 1. install ffmpeg
-2. Open `/opt/raintale/raintale-gui/add-raintale-scripts.sh` in an editor and remove the # and space from the line containing `Create Video Story.py` so it looks like this (spaces are significant):
-```
-python ${WOOEY_DIR}/manage.py addscript "${SCRIPT_DIR}/scripts/Create Video Story.py"
-```
+2. Open `/opt/raintale/raintale-gui/add-raintale-scripts.sh` in an editor and remove the # and space from the line containing `Create Video Story.py` so it looks like this (spaces are significant):::
+
+    python ${WOOEY_DIR}/manage.py addscript "${SCRIPT_DIR}/scripts/Create Video Story.py"
+
 3. Run `/opt/raintale/raintale-gui/add-raintale-scripts.sh`
