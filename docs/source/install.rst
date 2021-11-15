@@ -108,6 +108,7 @@ Enabling Raintale's Experimental Video Stories for the Raintale WUI on CentOS 8
 By default, Raintale's video stories are not enabled in the Raintale WUI in CentOS 8 installs. Generating these stories requires `ffmpeg <https://www.ffmpeg.org>`_. Installing ffmpeg on Ubuntu is easy. Installing ffmpeg on CentOS 8 requires using YUM/DNF repositories outside of those provided by CentOS, as detailed in `these instructions <https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/>`_. Rather than force all CentOS 8 Raintale administrators to go through this process, we have disabled video stories through the Raintale WUI.
 
 To enable them:
+
 1. install ffmpeg
 2. Open ``/opt/raintale/raintale-gui/add-raintale-scripts.sh`` in an editor and remove the # and space from the line containing ``Create Video Story.py`` so it looks like this (spaces are significant):::
 
