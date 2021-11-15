@@ -88,7 +88,7 @@ To stop Raintale, type `systemctl stop raintale-django.service`.
 
 To remove Raintale, type `dnf remove raintale`. Removing Raintale stops the associated raintale service and its celery companion. Be patient, sometimes celery takes a long time to stop.
 
-During removal, the directory `/opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads` is saved to `/opt/raintale/user_uploads-backup-[DATE].tar.gz where [DATE] was the date and time of removal. This is where all story outputs are stored. The administrator may wish to delete or backup this file for future use.
+During removal, the directory `/opt/raintale/raintale_with_wooey/raintale_with_wooey/user_uploads` is saved to `/opt/raintale/user_uploads-backup-[DATE].tar.gz` where [DATE] was the date and time of removal. This is where all story outputs are stored. The administrator may wish to delete or backup this file for future use.
 
 ### Ubuntu 21.04
 
@@ -110,7 +110,7 @@ We also support a generic Unix installer which downloads many dependencies from 
 
 1. Download the generic Unix installer (e.g., `install-raintale.sh`)
 2. Type `install-raintale.sh`
-3. To start the Raintale GUI, type `/opt/raintale/start-raintale-wui.sh`
+3. To start the Raintale WUI, type `/opt/raintale/start-raintale-wui.sh`
 
 To stop raintale, type `/opt/raintale/stop-raintale-wui.sh`.
 
@@ -128,14 +128,11 @@ Raintale uses ```pip``` for build and installation. Clone this repository and ty
 To install the Raintale WUI, do the following:
 1. Follow the above instructions for installing Raintale in a Python Environment.
 2. Type `raintale-gui/install-gui.sh`
+4.
 
-This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale GUI.
+This installation script will install [Wooey](https://github.com/wooey/Wooey) and other dependencies required to run the Raintale WUI.
 
-Once the installation is complete, to start the Raintale GUI, do the following:
-1. Run `raintale-gui/start-gui.sh`.
-2. Once the service is started, you can access the Raintale GUI at http://127.0.0.1:8000/. 
-
-To stop Raintale GUI, type `raintale-gui/stop-gui.sh`.
+To stop Raintale WUI, type `raintale-gui/stop-gui.sh`.
 
 # Improving the performance of the Raintale WUI
 

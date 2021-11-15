@@ -29,6 +29,7 @@ The Twitter storyteller will use the default preset to publish the story to Twit
 .. toctree::
    :maxdepth: 2
 
+   install
    getting_started
    creating_story
    raintale_options
