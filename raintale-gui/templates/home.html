@@ -1,0 +1,69 @@
+{% extends "wooey/base.html" %}
+{% load i18n %}
+{% load wooey_tags %}
+
+{% block extra_style %}
+    {{ block.super }}
+    .wooey-script-dropdown {
+        display: inline-block;
+    }
+
+{% endblock extra_style %}
+
+{% block outer_content %}
+    {{ block.super }}
+    {% if not request.user.is_authenticated %}
+        <div class="jumbotron frontpage raintale-masthead">
+          <h1 class="raintale-center-page">Raintale</h1>
+          <p class="raintale-subtitle">What story will you tell with web archives?</p>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block left_sidebar %}{% endblock left_sidebar %}
+{% block center_content_class %}col-md-12 col-xs-12{% endblock center_content_class %}
+
+{% block center_content %}
+    {{ block.super }}
+
+    <div class="row" id="script-list">
+
+    {% for script in scripts %}
+        {% include 'wooey/scripts/script_panel.html' %}
+    {% endfor %}
+
+    </div>
+
+
+
+{% endblock center_content %}
+
+{% block inline_js %}
+{{ block.super }}
+<script  type="text/javascript">
+
+    $(document).ready(function(){
+        $("#searchform").bindWithDelay("keyup", function(event){
+            var query = $('#searchform').val();
+            $.ajax({
+                url: '{% url 'wooey:wooey_search_script_jsonhtml' %}',
+                method: 'GET',
+                data: {q: query},
+                dataType: 'json',
+                async: true,
+                cache: false,
+                contentType: false,
+                success: function(data){
+                    $("#script-list").empty()
+                    for (var i in data['results']) {
+                        $("#script-list").append(data['results'][i]);
+                    }
+                    $("a[data-favorite]").click(toggleFavorite);
+                }
+            });
+
+
+        }, 100);
+    });
+</script>
+{% endblock inline_js %}

@@ -245,5 +245,3 @@ class FileStoryteller(Storyteller):
 
     def reset_output_filename(self, output_filename):
         self.output_filename = output_filename
-
-

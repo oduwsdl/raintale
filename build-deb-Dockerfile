@@ -1,0 +1,43 @@
+FROM ubuntu:21.04
+
+ARG raintale_version
+ARG DEBIAN_FRONTEND=noninteractive
+
+# dpkg build dependencies
+RUN apt-get update -y
+RUN apt-get install -y python3 python3-virtualenv sed grep tar python-is-python3 npm
+
+# build the dpkg - directions from https://www.internalpointers.com/post/build-binary-deb-package-practical-guide
+WORKDIR /buildapp
+RUN mkdir raintale_amd64
+RUN mkdir -p raintale_amd64/opt/raintale
+RUN mkdir -p raintale_amd64/usr/bin
+RUN mkdir -p raintale_amd64/etc/systemd/system
+RUN mkdir -p debbuild
+COPY installer/generic-unix/install-raintale.sh .
+RUN ./install-raintale.sh -- --install-directory /buildapp/raintale_amd64/opt/raintale --python-exe /usr/bin/python --skip-script-install --raintale-user raintale --cli-wrapper-path /buildapp/raintale_amd64/usr/bin/
+# TODO: fix this, building a DEB should not mangle a system
+RUN mv /etc/systemd/system/raintale-celery.service /buildapp/raintale_amd64/etc/systemd/system/
+RUN mv /etc/systemd/system/raintale-django.service /buildapp/raintale_amd64/etc/systemd/system/
+RUN find /buildapp/raintale_amd64/opt/raintale/raintale-virtualenv/bin -type f -exec sed -i "s?/buildapp/raintale_amd64??g" {} \;
+RUN echo 'MEMENTOEMBED_ENDPOINT="http://localhost:5550"' > /buildapp/raintale_amd64/etc/raintale.conf
+RUN sed -i "s?/buildapp/raintale_amd64??g" /buildapp/raintale_amd64/etc/systemd/system/raintale-celery.service
+RUN sed -i "s?/buildapp/raintale_amd64??g" /buildapp/raintale_amd64/etc/systemd/system/raintale-django.service
+RUN sed -i "s?/buildapp/raintale_amd64??g" /buildapp/raintale_amd64/usr/bin/tellstory
+RUN sed -i "s?^python ?/opt/raintale/raintale-virtualenv/bin/python ?g" /buildapp/raintale_amd64/opt/raintale/raintale-gui/add-raintale-scripts.sh
+RUN sed -i "s?^python ?/opt/raintale/raintale-virtualenv/bin/python ?g" /buildapp/raintale_amd64/opt/raintale/raintale-gui/set-raintale-database.sh
+RUN mkdir raintale_amd64/DEBIAN
+COPY raintale.control .
+COPY raintale.preinst raintale_amd64/DEBIAN/preinst
+RUN chmod 0755 raintale_amd64/DEBIAN/preinst
+COPY raintale.postinst raintale_amd64/DEBIAN/postinst
+RUN chmod 0755 raintale_amd64/DEBIAN/postinst
+
+RUN sed "s?{{ raintale_version }}?${raintale_version}?g" /buildapp/raintale.control > raintale_amd64/DEBIAN/control
+RUN printf "#!/bin/bash\ndpkg-deb --root-owner-group --build raintale_amd64 debbuild/raintale-${raintale_version}.deb" > /buildapp/build-deb.sh
+RUN chmod 0700 /buildapp/build-deb.sh
+
+CMD ["/buildapp/build-deb.sh"]
+
+# keep running for debugging
+# ENTRYPOINT [ "tail", "-f", "/dev/null"]
