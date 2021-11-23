@@ -248,6 +248,7 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 ExecStart=${INSTALL_DIRECTORY}/raintale-virtualenv/bin/celery -A raintale_with_wooey worker --beat -l info
 User=${RAINTALE_USER}
 WorkingDirectory=${INSTALL_DIRECTORY}/raintale_with_wooey
+EnvironmentFile=/etc/raintale.conf
 
 [Install]
 WantedBy=multi-user.target
