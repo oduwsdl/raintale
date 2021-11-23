@@ -39,6 +39,7 @@ setup(
         'jinja2',
         'oauth2client',
         'Pillow',
+        'psycopg2',
         'pyyaml',
         'python-twitter',
         'requests',
