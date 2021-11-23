@@ -86,7 +86,7 @@ CELERY_PROJECT_NAME=`basename ${WOOEY_DIR}`
 cd ${WOOEY_DIR}
 
 # TODO: make this work, it is the preferred way of daemonizing celery
-# celery multi start worker1 -A hypercane_with_wooey -c 1 --beat -l info --logfile=celery-wooey.log --pidfile=celery-wooey.pid
+# celery multi start worker1 -A raintale_with_wooey -c 1 --beat -l info --logfile=celery-wooey.log --pidfile=celery-wooey.pid
 set +e
 celery -A ${CELERY_PROJECT_NAME} worker --beat -l info > celery-output.log 2>&1 &
 status=$?

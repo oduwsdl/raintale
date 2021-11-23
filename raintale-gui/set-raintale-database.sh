@@ -28,7 +28,7 @@ echo "Configuring Raintale WUI for Postgres database"
 echo
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-WOOEY_DIR="${SCRIPT_DIR}/../hypercane_with_wooey"
+WOOEY_DIR="${SCRIPT_DIR}/../raintale_with_wooey"
 
 test_command "psql"
 
@@ -99,12 +99,12 @@ else
     echo "database is empty, continuing"
 fi
 
-settings_file=${WOOEY_DIR}/hypercane_with_wooey/settings/user_settings.py
+settings_file=${WOOEY_DIR}/raintale_with_wooey/settings/user_settings.py
 raintale_conf=/etc/raintale.conf
 
 echo "writing database information to ${settings_file}"
 
-ME_line=`grep MEMENTOEMBED_ENDPOINT`
+ME_line=`grep MEMENTOEMBED_ENDPOINT ${settings_file}`
 
 cat >> ${raintale_conf} <<- EOF
 ${ME_line}
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS "wooey_cache_table" (
 ALTER TABLE "wooey_cache_table" OWNER TO ${DBUSER}
 EOF
 
-# add Hypercane scripts
+# add Raintale scripts
 "${SCRIPT_DIR}/add-raintale-scripts.sh"
 
 echo
