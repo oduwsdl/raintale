@@ -81,7 +81,7 @@ To install Raintale on Linux or Unix, choose your target platform below.
 If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 1. Download the RPM and save it to the Linux server (e.g., `raintale-0.20211106041644-1.el8.x86_64.rpm`)
-2. Type `dnf install raintale-0.20211106041644-1.el8.x86_64.rpm`
+2. Type `dnf install ./raintale-0.20211106041644-1.el8.x86_64.rpm`
 3. Type `systemctl start raintale-django.service`
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
@@ -92,13 +92,11 @@ During removal, the directory `/opt/raintale/raintale_with_wooey/raintale_with_w
 
 ### Ubuntu 21.04
 
-If you would like to use the DEB installer for RHEL 8 and CentOS 8 systems:
+If you would like to use the DEB installer for Ubuntu 21.04 systems:
 
-1. Download the RPM and save it to the Linux server (e.g., `raintale-0.20211113202900.deb`)
-2. Type `apt-get install raintale-0.20211113202900.deb`
-3. Type `systemctl enable raintale-celery.service`
-4. Type `systemctl enable raintale-django.service`
-4. Type `systemctl start raintale-django.service`
+1. Download the DEB and save it to the Linux server (e.g., `raintale-0.20211113202900.deb`)
+2. Type `apt-get install ./raintale-0.20211113202900.deb`
+3. Type `systemctl start raintale-django.service`
 
 To stop Raintale, type `systemctl stop raintale-django.service`.
 

@@ -10,7 +10,7 @@ Installing on a CentOS 8 System
 If you would like to use the RPM installer for RHEL 8 and CentOS 8 systems:
 
 1. `download the RPM <https://github.com/oduwsdl/raintale/releases>`_ and save it to the Linux server (e.g., ``raintale-0.20211106041644-1.el8.x86_64.rpm``)
-2. type ``dnf install raintale-0.20211106041644-1.el8.x86_64.rpm``
+2. type ``dnf install ./raintale-0.20211106041644-1.el8.x86_64.rpm``
 3. type ``systemctl start raintale-django.service``
 
 Raintale can now be accessed from ``http://localhost:8100``.
@@ -24,7 +24,7 @@ During removal, the directory ``/opt/raintale/raintale_with_wooey/raintale_with_
 Installing on an Ubuntu 21.04+ System
 -------------------------------------
 
-If you would like to use the deb installer for RHEL 8 and CentOS 8 systems:
+If you would like to use the deb installer for Ubuntu 21.04 systems:
 
 1. `download the DEB <https://github.com/oduwsdl/MementoEmbed/releases>`_ and save it to the Linux server (e.g., ``raintale-0.20211113202900.deb``)
 2. type ``apt-get update`` ⬅️ this may not be necessary, but is needed in some cases to make sure dependencies are loaded

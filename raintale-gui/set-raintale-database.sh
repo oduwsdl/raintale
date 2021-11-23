@@ -132,6 +132,8 @@ echo "creating database schema"
 startdir=`pwd`
 echo "changing to ${WOOEY_DIR}"
 cd ${WOOEY_DIR}
+source "${raintale_conf}"
+export DATABASE_NAME DATABASE_PORT DATABASE_HOST DATABASE_USER DATABASE_PASSWORD
 python ./manage.py migrate
 cd ${startdir}
 
