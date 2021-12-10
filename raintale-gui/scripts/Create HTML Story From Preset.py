@@ -32,9 +32,15 @@ parser = argparse.ArgumentParser(prog="{}".format(sys.argv[0]),
 
 parser.add_argument('-i', '--input', dest='story_filename',
     required=True,
-    help="An input file containing the memento URLs for use in the story.",
+    help="An input file containing URLs of archived web pages (e.g., mementos, captures, snapshots, URI-Ms) for use in the story.",
     type=argparse.FileType('r')
 )
+
+# parser.add_argument('-i', '--inputlist', dest='inputlist',
+#     required=True,
+#     help="memento list.",
+#     type=str
+# )
 
 parser.add_argument('--title', dest='title',
     required=True,
