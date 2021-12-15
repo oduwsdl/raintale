@@ -31,6 +31,7 @@ The Twitter storyteller will use the default preset to publish the story to Twit
 
    install
    getting_started
+   getting_started_wui
    creating_story
    raintale_options
    templates
